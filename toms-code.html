@@ -1,0 +1,69 @@
+<html>
+	<head>
+		<script type="text/javascript">
+			
+			function fetchData(method, url, data, callback) {
+			  var httpRequest = new XMLHttpRequest();
+			  httpRequest.onreadystatechange = function() {
+			      if (httpRequest.readyState === 4) {
+			          if (httpRequest.status === 200) {
+			              var data = JSON.parse(httpRequest.responseText);
+			              if (callback) callback(data);
+			          }
+			      }
+			  };
+			  httpRequest.open(method, url, true);
+			  httpRequest.withCredentials = true;
+			  if(data != null) {
+			  	var sendData = JSON.stringify(data);
+			  	httpRequest.send(sendData);
+			} else {
+				httpRequest.send();
+				}
+			  
+			}
+			function retrieveSeats() {
+				event.preventDefault();
+				var loader = document.getElementById('loader');
+				var seatResults = document.getElementById('seat-results');
+				var surname = document.getElementById('surname').value;
+				var ref = document.getElementById('ref').value;
+				var iframe = document.createElement('iframe');
+				seatResults.style.display = "none";
+				loader.style.display = "block";
+				iframe.onload = function() {
+					var url = "https://merch.fabrix.xmltravel.com";
+	        		fetchData("GET", url + '/jam/historicbasket?ref='+ref+'&system=ATCORE&surname='+surname+'', '', function(basket) {
+	        			console.log(basket);
+		        			fetchData("POST", url + '/jam/search', {"journey":"Seats"}, 
+		        				function(search) {
+		        					fetchData("GET", url + '/jam/results/Seats','', function(seats) {
+		        						seatResults.innerHTML = JSON.stringify(seats);
+		        						seatResults.style.display = "block";
+		        						loader.style.display = "none";
+		        					});
+		        				}
+		        			);
+	        			
+	        		});
+				};
+				iframe.style.display = 'none';
+				iframe.src = 'http://merch.fabrix.xmltravel.com/jam/session/create?session=null'; 
+				document.body.appendChild(iframe);
+			}
+		</script>
+	</head>
+	<body>
+		<form id="retrievalForm" onsubmit="retrieveSeats(event);">
+			<label for="surname">Surname</label><br>
+    		<input id="surname" name="surname" vallue="" /><br><br>
+    		<label for="ref">Ref</label><br>
+    		<input id="ref" name="ref" value="" /><br>
+    		<input type="submit" name="submit" value="Get my seats, yo!" />
+		</form>
+		<div id="seat-selection">
+			<img src="https://cdnjs.cloudflare.com/ajax/libs/galleriffic/2.0.1/css/loader.gif" id="loader"  style="display:none;"/>
+			<div id="seat-results" style="display:none;"></div>
+		</div>
+	</body>
+</html>
