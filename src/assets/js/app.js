@@ -1,33 +1,36 @@
-import { person, sayHello } from './lib';
+//import { person, sayHello } from './seats';
 
-alert(sayHello('Max!! =)'));
+//console.log(sayHello('Dude - this is the seats widget app!'));
 
 
-const fetchData = async(method, url, data, callback) => {
- 	const httpRequest = new XMLHttpRequest();
+// const fetchData = async(method, url, data, callback) => {
+//  	const httpRequest = new XMLHttpRequest();
 
- 	httpRequest.onreadystatechange = function() {   	
-	   	if (httpRequest.readyState === 4) {
-	    	if (httpRequest.status === 200) {
-	            let data = JSON.parse(httpRequest.responseText);
-	            if (callback) callback(data);
-	        }
-	    }
-	};
+//  	httpRequest.onreadystatechange = function() {   	
+// 	   	if (httpRequest.readyState === 4) {
+// 	    	if (httpRequest.status === 200) {
+// 	            let data = JSON.parse(httpRequest.responseText);
+// 	            if (callback) callback(data);
+// 	        }
+// 	    }
+// 	};
 
-  	httpRequest.open(method, url, true);
-  	httpRequest.withCredentials = true;
+//   	httpRequest.open(method, url, true);
+//   	httpRequest.withCredentials = true;
   
-  	if (data != null) {
-    	let sendData = JSON.stringify(data);
-    	httpRequest.send(sendData);
-	} else {
-    	httpRequest.send();
-	}
+//   	if (data != null) {
+//     	let sendData = JSON.stringify(data);
+//     	httpRequest.send(sendData);
+// 	} else {
+//     	httpRequest.send();
+// 	}
+// }
+
+function max() {
+    alert('here we are');
 }
 
-
-const retrieveSeats = () => {
+function retrieveSeats() {
     event.preventDefault();
 
     const loader = document.getElementById('loader');

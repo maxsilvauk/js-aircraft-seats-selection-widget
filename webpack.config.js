@@ -4,21 +4,22 @@ module.exports = {
   entry: {
     app: [
       'babel-polyfill',
-      './src/assets/js/app.js',
-    ],
+      './src/assets/js/app.js'
+    ]
   },
   output: {
     path: path.resolve(__dirname, 'dist/js'),
-    filename: 'app.bundle.js',
+    filename: 'app.bundle.js'
   },
+  watch: true,
   module: {
     loaders: [{
-        test: /\.js?$/,
-        exclude: /node_modules/,
+        test: /\.js$/,
+        exclude: ['dist', 'node_modules'],
         loader: 'babel-loader',
         query: {
            presets: ['env', 'stage-0']
         }
     }]
   }
-}
+};
