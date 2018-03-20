@@ -8,8 +8,8 @@
 <p align="center">
     <img src="https://img.shields.io/badge/node-8.0.0^-blue.svg" />
     <img src="https://img.shields.io/badge/npm-v5.5.1^-blue.svg" />
-    <img src="https://img.shields.io/badge/npm-v3.8.1^-blue.svg" />
-    <img src="https://img.shields.io/badge/bbel-v6.26.0^-orange.svg" />
+    <img src="https://img.shields.io/badge/webpack-v3.8.1^-blue.svg" />
+    <img src="https://img.shields.io/badge/babel-v6.26.0^-orange.svg" />
 </p>
 
 ## Table of Contents
