@@ -11,7 +11,6 @@ module.exports = {
     path: path.resolve(__dirname, 'dist/js'),
     filename: 'app.bundle.js'
   },
-  watch: true,
   module: {
     loaders: [{
         test: /\.js$/,

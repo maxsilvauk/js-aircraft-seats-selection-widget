@@ -1,0 +1,10 @@
+class SeatsClass {
+
+    constructor() {
+
+    }
+
+    changeMe() {
+
+    }
+}
