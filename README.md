@@ -1,45 +1,85 @@
-**Edit a file, create a new file, and clone from Bitbucket in under 2 minutes**
+<h1 align="center">Seating Widget</h1>
+<br>
+<p align="center">
+  <a href="https://gitpoint.co/">
+    <img alt="Paxport" title="Paxport" src="http://resources.mynewsdesk.com/image/upload/t_open_graph_image/slgrkmbsgubxld6iwcoija.jpg" width="350">
+  </a>
+</p>
+<p align="center">
+    <img src="https://img.shields.io/badge/node-8.0.0^-blue.svg" />
+    <img src="https://img.shields.io/badge/npm-v5.5.1^-blue.svg" />
+    <img src="https://img.shields.io/badge/npm-v3.8.1^-blue.svg" />
+    <img src="https://img.shields.io/badge/bbel-v6.26.0^-orange.svg" />
+</p>
 
-When you're done, you can delete the content in this README and update the file with details for others getting started with your repository.
+## Table of Contents
 
-*We recommend that you open this README in another tab as you perform the tasks below. You can [watch our video](https://youtu.be/0ocf7u76WSo) for a full demo of all the steps in this tutorial. Open the video in a new tab to avoid leaving Bitbucket.*
+- [Introduction](#introduction)
+- [Built With](#built-with)
+- [Full Install](#full-install)
+- [Quick Install](#quick-install)
 
----
+## Introduction
 
-## Edit a file
+An ES6 seating widget. 
 
-You’ll start by editing this README file to learn how to edit a file in Bitbucket.
+## Built-With
 
-1. Click **Source** on the left side.
-2. Click the README.md link from the list of files.
-3. Click the **Edit** button.
-4. Delete the following text: *Delete this line to make a change to the README from Bitbucket.*
-5. After making your change, click **Commit** and then **Commit** again in the dialog. The commit page will open and you’ll see the change you just made.
-6. Go back to the **Source** page.
+- Node v8.0.0
+- NPM v5.5.1
+- Webpack v3.8.1
+- Babel v6.26.0
 
----
+## Full-Install 
 
-## Create a file
+* Install <a href="https://itunes.apple.com/us/app/xcode/id497799835?mt=12">x-code</a>
+* Install homebrew
+```
+ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+```
+* Install node
+```
+brew install node
+```
+* Update node and npm
+```
+brew update node
+```
+* Install packages from package.json
+```
+npm install
+```
+* Build
+```
+npm run build
+```
+* Want to uglify the build?
+```
+webpack -p
+```
+* Start server and watch
+```
+npm start
+```
+* Navigate to application in browser.
+```
+http://localhost:8080
+```
+## Quick-Install 
 
-Next, you’ll add a new file to this repository.
-
-1. Click the **New file** button at the top of the **Source** page.
-2. Give the file a filename of **contributors.txt**.
-3. Enter your name in the empty file space.
-4. Click **Commit** and then **Commit** again in the dialog.
-5. Go back to the **Source** page.
-
-Before you move on, go ahead and explore the repository. You've already seen the **Source** page, but check out the **Commits**, **Branches**, and **Settings** pages.
-
----
-
-## Clone a repository
-
-Use these steps to clone from SourceTree, our client for using the repository command-line free. Cloning allows you to work on your files locally. If you don't yet have SourceTree, [download and install first](https://www.sourcetreeapp.com/). If you prefer to clone from the command line, see [Clone a repository](https://confluence.atlassian.com/x/4whODQ).
-
-1. You’ll see the clone button under the **Source** heading. Click that button.
-2. Now click **Check out in SourceTree**. You may need to create a SourceTree account or log in.
-3. When you see the **Clone New** dialog in SourceTree, update the destination path and name if you’d like to and then click **Clone**.
-4. Open the directory you just created to see your repository’s files.
-
-Now that you're more familiar with your Bitbucket repository, go ahead and add a new file locally. You can [push your change back to Bitbucket with SourceTree](https://confluence.atlassian.com/x/iqyBMg), or you can [add, commit,](https://confluence.atlassian.com/x/8QhODQ) and [push from the command line](https://confluence.atlassian.com/x/NQ0zDQ).
+* Build
+```
+npm run build
+```
+* Want to uglify the build?
+```
+webpack -p
+```
+* Start server and watch
+```
+npm start
+```
+* Navigate to application in browser.
+```
+http://localhost:8080
+```
