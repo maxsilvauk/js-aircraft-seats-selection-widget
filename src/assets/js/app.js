@@ -7,4 +7,8 @@ import RetrieveAvailabilityClass from './RetrieveAvailabilityClass.js';
 //document.getElementById('retrievalForm').addEventListener('submit', new RetrieveSeatsClass());
 
 {/* On window load get the seats data  */}
-window.addEventListener('load', () => new RetrieveAvailabilityClass());
+window.addEventListener('load', () => new RetrieveAvailabilityClass({
+	surname: 	'Smith',
+	ref: 		'1111',
+	siteUrl: 	'merch.fabrix.xmltravel.com'
+}));
