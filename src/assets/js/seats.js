@@ -1,3 +1,15 @@
+/*
+NOTES
+- This still relies on some wrapper HTML to be on the page, so I think we need a class before this is called to handle building the wrapper?
+-- The templates are using es5 and I want to swap this to es6
+- Some of the templates I've swapped in use <wicket:messages> - we need to think about how we want do this - whether these string become configs (with defaults).
+-- which reminds me, we need some sort of extend function at the top of the app
+- Once the above is done, most of the templating stuff should be done
+-- then it's just a case of swapping $http for fetch and change relative links etc
+--- relative links will need to have access to siteUrl config param.
+
+Think that's it for the time being
+*/
 function Seats(data,jam, callbacks){
     var _this = this;
     var planeBodyColor = 'white';
