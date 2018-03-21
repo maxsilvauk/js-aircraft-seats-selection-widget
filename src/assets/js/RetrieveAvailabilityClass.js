@@ -15,10 +15,10 @@ import RequestServiceClass from './RequestServiceClass.js';
 }  
 export default class RetrieveAvailabilityClass {
 
-    constructor() {
-        this.ref = '1111';
-        this.surname = 'SMITH';
-        this.siteUrl = 'https://merch.fabrix.xmltravel.com';
+    constructor(config) {
+        this.ref = config.ref;
+        this.surname = config.surname;
+        this.siteUrl = 'https://'+config.siteUrl;
         this.loader = document.getElementById('loader');
         this.seatResults = document.getElementById('seat-results');
 
@@ -26,7 +26,7 @@ export default class RetrieveAvailabilityClass {
         this.iFrame.addEventListener('load', () => this.setHistoricBasketUrl());
 
         this.iFrame.style.display = 'none';
-        this.iFrame.src = 'http://merch.fabrix.xmltravel.com/jam/session/create?session=null'; 
+        this.iFrame.src = `${this.siteUrl}/jam/session/create?session=null`
 
         document.body.appendChild(this.iFrame);
     }
