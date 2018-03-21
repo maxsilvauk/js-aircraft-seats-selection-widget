@@ -3,6 +3,8 @@
    'use strict';
 }());
 
+import RequestServiceClass from './RequestServiceClass.js';
+
 {
   /**
    * Retrieve Availability Class
@@ -29,12 +31,12 @@ export default class RetrieveAvailabilityClass {
     }
 
     setHistoricBasketUrl() {
-        let fetchUrl = `${this.siteUrl}/jam/historicbasket?ref=${this.ref}&system=ATCORE&surname=${this.surname}`;
+        const fetchUrl = `${this.siteUrl}/jam/historicbasket?ref=${this.ref}&system=ATCORE&surname=${this.surname}`;
         this.getHistoricBasket(fetchUrl);
     }
 
     setSearchUrl() {
-        let fetchUrl = `${this.siteUrl}/jam/search`;
+        const fetchUrl = `${this.siteUrl}/jam/search`;
         this.getSearch(fetchUrl);
     }
 
@@ -46,6 +48,8 @@ export default class RetrieveAvailabilityClass {
            this.setSearchUrl();
         })
         .catch((err) => console.log('error: ', err));
+
+        //console.log(RequestService.getRequest(fetchUrl));
     }
 
     getSearch(fetchUrl) {
