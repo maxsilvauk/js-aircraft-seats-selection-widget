@@ -1,7 +1,6 @@
 /*
 NOTES
 - This still relies on some wrapper HTML to be on the page, so I think we need a class before this is called to handle building the wrapper?
--- The templates are using es5 and I want to swap this to es6
 - Some of the templates I've swapped in use <wicket:messages> - we need to think about how we want do this - whether these string become configs (with defaults).
 -- which reminds me, we need some sort of extend function at the top of the app
 - Once the above is done, most of the templating stuff should be done
@@ -212,24 +211,24 @@ function Seats(data,jam, callbacks){
         //flight info
         //var infoTemplate = document.querySelector('#flightinfo');   
         var infoTemplate = document.createElement('template');
-        infoTemplate.innerHTML =    '<div>'+
-                                        '<div class="flight-number">'+
-                                            '<i class="icon-outbound-plane"></i>'+
-                                            '<wicket:message key="seatSelection.flightInfo.flightNumber.label"></wicket:message>'+
-                                            '<span class="number"></span>'+
-                                        '</div>'+
-                                        '<div class="flight-departure">'+
-                                            '<i class="icon-date-time"></i>'+
-                                            '<wicket:message key="seatSelection.flightInfo.departure.label"></wicket:message>'+
-                                            '<span class="departure"></span>'+
-                                        '</div>'+
-                                        '<div class="flight-departure-point flight-point">'+
-                                            '<i class="icon-circle-empty"></i> <span class="points"></span>'+
-                                        '</div>'+
-                                        '<div class="flight-arrival-point flight-point">'+
-                                            '<i class="icon-circle-empty"></i> <span class="points"></span>'+
-                                        '</div>'+
-                                    '</div>';  
+        infoTemplate.innerHTML =    `<div>
+                                        <div class="flight-number">
+                                            <i class="icon-outbound-plane"></i>
+                                            <wicket:message key="seatSelection.flightInfo.flightNumber.label"></wicket:message>
+                                            <span class="number"></span>
+                                        </div>
+                                        <div class="flight-departure">
+                                            <i class="icon-date-time"></i>
+                                            <wicket:message key="seatSelection.flightInfo.departure.label"></wicket:message>
+                                            <span class="departure"></span>
+                                        </div>
+                                        <div class="flight-departure-point flight-point">
+                                            <i class="icon-circle-empty"></i> <span class="points"></span>
+                                        </div>
+                                        <div class="flight-arrival-point flight-point">
+                                            <i class="icon-circle-empty"></i> <span class="points"></span>
+                                        </div>
+                                    </div>`; 
         var info = RESULT_ITEM.legs[CURRENT_LEG].info;
         
         if(!info.start){
@@ -277,44 +276,44 @@ function Seats(data,jam, callbacks){
         //     staticBandEle = staticBandsTemplate.cloneNode(true).querySelector('*'); 
         // }
         var staticBandEle = document.createElement('div');
-        staticBandEle.innerHTML =   '<div>'+
-                                        '<a href="javascript:void(0);" class="close-info">'+
-                                            '<i class="icon-close"></i>'+
-                                        '</a>'+
-                                        '<div class="band">'+
-                                            '<div class="seat selected"></div>'+
-                                            '<div class="details">'+
-                                                '<span class="name">'+
-                                                    '<wicket:message key="seatSelection.seat.selected"></wicket:message>'+
-                                                '</span>'+
-                                                '<span class="price"></span>'+
-                                            '</div>'+
-                                        '</div>'+
-                                        '<div class="band">'+
-                                            '<div class="seat unavailable"></div>'+
-                                            '<div class="details">'+
-                                                '<span class="name">'+
-                                                    '<wicket:message key="seatSelection.seat.unavailable"></wicket:message>'+
-                                                '</span>'+
-                                                '<span class="price"></span>'+
-                                            '</div>'+
-                                        '</div>'+
-                                    '</div>';
+        staticBandEle.innerHTML =   `<div>
+                                        <a href="javascript:void(0);" class="close-info">
+                                            <i class="icon-close"></i>
+                                        </a>
+                                        <div class="band">
+                                            <div class="seat selected"></div>
+                                            <div class="details">
+                                                <span class="name">
+                                                    <wicket:message key="seatSelection.seat.selected"></wicket:message>
+                                                </span>
+                                                <span class="price"></span>
+                                            </div>
+                                        </div>
+                                        <div class="band">
+                                            <div class="seat unavailable"></div>
+                                            <div class="details">
+                                                <span class="name">
+                                                    <wicket:message key="seatSelection.seat.unavailable"></wicket:message>
+                                                </span>
+                                                <span class="price"></span>
+                                            </div>
+                                        </div>
+                                    </div>`;
         bandsWrapper.appendChild(staticBandEle);
         
         //infant band
         if(PARTY_HAS_INFANT){
             //var infantBandsTemplate = document.querySelector('#infant-band');
             var infantBandsTemplate = document.createElement('template');
-            infantBandsTemplate.innerHTML = '<div class="band">'+
-                                                '<div class="seat infant" style="background-color: transparent;"></div>'+
-                                                '<div class="details">'+
-                                                    '<span class="name">'+
-                                                        '<wicket:message key="seatSelection.seat.infant"></wicket:message>'+
-                                                    '</span>'+
-                                                    '<span class="price"></span>'+
-                                                '</div>'+
-                                            '</div>';
+            infantBandsTemplate.innerHTML = `<div class="band">
+                                                <div class="seat infant" style="background-color: transparent;"></div>
+                                                <div class="details">
+                                                    <span class="name">
+                                                        <wicket:message key="seatSelection.seat.infant"></wicket:message>
+                                                    </span>
+                                                    <span class="price"></span>
+                                                </div>
+                                            </div>`;
             var infantBandEle;
             if('content' in document.createElement('template')) {
                 infantBandEle = infantBandsTemplate.content.cloneNode(true);
@@ -327,13 +326,13 @@ function Seats(data,jam, callbacks){
         // Dynamic
         //var bandTemplate = document.querySelector('#band'); 
         var bandTemplate = document.createElement('template');
-        bandTemplate.innerHTML =    '<div class="band">'+
-                                        '<div class="seat"></div>'+
-                                        '<div class="details">'+
-                                            '<span class="name"></span>'+
-                                            '<span class="price"></span>'+
-                                        '</div>'+
-                                    '</div>';
+        bandTemplate.innerHTML =    `<div class="band">
+                                        <div class="seat"></div>
+                                        <div class="details">
+                                            <span class="name"></span>
+                                            <span class="price"></span>
+                                        </div>
+                                    </div>`;
         var bands = RESULT_ITEM.legs[CURRENT_LEG].bands;
         for(var band in bands){
             var bandEle;
@@ -355,23 +354,22 @@ function Seats(data,jam, callbacks){
     var paxWrapper = document.querySelector('#paxes');
     //var paxTemplate = document.querySelector('#pax');   
     var paxTemplate = document.createElement('template');
-    paxTemplate.innerHTML = '<div class="passenger">'+
-                                '<span class="pax-number">'+
-                                    '<span class="number"></span>'+
-                                    '<span class="icon-guest-outlines"></span>'+
-                                '</span>'+
-                                
-                                '<span>'+
-                                    '<span class="pax-info">'+
-                                        '<span class="name"></span>'+
-                                        '<span class="type"></span>'+
-                                    '</span>'+
-                                    '<span class="choice">'+
-                                        '<span class="selected-seat"></span>'+
-                                    '</span>'+
-                                '</span>'+
-                                '<div class="clear-fix"></div>'+
-                            '</div>';
+    paxTemplate.innerHTML = `<div class="passenger">
+                                <span class="pax-number">
+                                    <span class="number"></span>
+                                    <span class="icon-guest-outlines"></span>
+                                </span>
+                                <span>
+                                    <span class="pax-info">
+                                        <span class="name"></span>
+                                        <span class="type"></span>
+                                    </span>
+                                    <span class="choice">
+                                        <span class="selected-seat"></span>
+                                    </span>
+                                </span>
+                                <div class="clear-fix"></div>
+                            </div>`;
 
     var paxes = [];
     for(var i = 0; i< RESULT_ITEM.passengers.length; i++){
@@ -412,23 +410,23 @@ function Seats(data,jam, callbacks){
         var paxWrapper = document.getElementById('paxes');
         //var paxTemplate = document.getElementById('pax');   
         var paxTemplate = document.createElement('template');
-        paxTemplate.innerHTML = '<div class="passenger">'+
-                                    '<span class="pax-number">'+
-                                        '<span class="number"></span>'+
-                                        '<span class="icon-guest-outlines"></span>'+
-                                    '</span>'+
+        paxTemplate.innerHTML = `<div class="passenger">
+                                    <span class="pax-number">
+                                        <span class="number"></span>
+                                        <span class="icon-guest-outlines"></span>
+                                    </span>
                                     
-                                    '<span>'+
-                                        '<span class="pax-info">'+
-                                            '<span class="name"></span>'+
-                                            '<span class="type"></span>'+
-                                        '</span>'+
-                                        '<span class="choice">'+
-                                            '<span class="selected-seat"></span>'+
-                                        '</span>'+
-                                    '</span>'+
-                                    '<div class="clear-fix"></div>'+
-                                '</div>';
+                                    <span>
+                                        <span class="pax-info">
+                                            <span class="name"></span>
+                                            <span class="type"></span>
+                                        </span>
+                                        <span class="choice">
+                                            <span class="selected-seat"></span>
+                                        </span>
+                                    </span>
+                                    <div class="clear-fix"></div>
+                                </div>`;
         var paxType = SEAT_LANGUAGES['seatSelection.pax.type.' + pax.type.toLowerCase()];
         var paxEle;
         if('content' in document.createElement('template')) {
@@ -497,18 +495,18 @@ function Seats(data,jam, callbacks){
     var flightWrapper = document.querySelector('#flights .flights-wrapper');
     //var flightTemplate = document.querySelector('#flight'); 
     var flightTemplate = document.createElement('template');
-    flightTemplate.innerHTML =   '<div class="flight flip-trigger" data-count="">'+
-                                    '<span class="carrier">PaxAir</span>'+
-                                    '<span class="name">'+
-                                        '<span class="route">'+
-                                            '<span class="departure"></span>'+
-                                            '<span class="departure-code"></span>'+
-                                            '<i class="icon-arrow-right"></i>'+
-                                            '<span class="arrival"></span>'+
-                                            '<span class="arrival-code"></span>'+
-                                        '</span>'+
-                                    '</span>'+
-                                '</div>';
+    flightTemplate.innerHTML =   `<div class="flight flip-trigger" data-count="">
+                                    <span class="carrier">PaxAir</span>
+                                    <span class="name">
+                                        <span class="route">
+                                            <span class="departure"></span>
+                                            <span class="departure-code"></span>
+                                            <i class="icon-arrow-right"></i>
+                                            <span class="arrival"></span>
+                                            <span class="arrival-code"></span>
+                                        </span>
+                                    </span>
+                                </div>`;
 
     var flights = [];
 
@@ -606,12 +604,12 @@ function Seats(data,jam, callbacks){
         var _this = this;
         //var template = document.querySelector('#plane');
         var planeTemplate = document.createElement('template');
-        planeTemplate.innerHTML =   '<div class="flipper result" data-count="">'+
-                                    '<div class="plane">'+
-                                    '<div class="seats"></div>'+
-                                    '<canvas></canvas>'+
-                                    '</div>'+
-                                    '</div> ';
+        planeTemplate.innerHTML =   `<div class="flipper result" data-count="">
+                                    <div class="plane">
+                                    <div class="seats"></div>
+                                    <canvas></canvas>
+                                    </div>
+                                    </div>`;
         //clone the plane template
         var planeEle;
         if('content' in document.createElement('template')) {
