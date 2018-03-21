@@ -12,9 +12,19 @@ module.exports = {
     filename: 'app.bundle.js'
   },
   module: {
+    rules: [{
+      test: /\.js$/,
+      enforce: "pre",
+      exclude: [/dist/, /node_modules/],
+      use: [
+        {
+          loader: "jshint-loader"
+        }
+      ]
+    }],
     loaders: [{
         test: /\.js$/,
-        exclude: ['dist', 'node_modules'],
+        exclude: [/dist/, /node_modules/],
         loader: 'babel-loader',
         query: {
            presets: ['env', 'stage-0']

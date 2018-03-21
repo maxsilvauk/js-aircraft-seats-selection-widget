@@ -11,15 +11,15 @@
   "author": "Paxportal ",
   "license": "ISC",
   "devDependencies": {
-    "webpack": "^3.8.1",
-    "webpack-dev-server": "^2.9.4",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-0": "^6.24.1",
-    "jshint": "^2.9.5"
+    "jshint": "^2.9.5",
+    "jshint-loader": "^0.8.4",
+    "webpack": "^3.8.1",
+    "webpack-dev-server": "^2.9.4"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }

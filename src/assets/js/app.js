@@ -1,4 +1,7 @@
-'use strict'
+/*jshint esversion: 6 */
+(function () {
+   'use strict';
+}());
 
 { /* Import Classes */ }
 import RetrieveAvailabilityClass from './RetrieveAvailabilityClass.js';

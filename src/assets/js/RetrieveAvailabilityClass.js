@@ -1,4 +1,7 @@
-'use strict'
+/*jshint esversion: 6 */
+(function () {
+   'use strict';
+}());
 
 {
   /**
@@ -26,12 +29,12 @@ export default class RetrieveAvailabilityClass {
     }
 
     setHistoricBasketUrl() {
-        let fetchUrl = `${this.siteUrl}/jam/historicbasket?ref=${this.ref}&system=ATCORE&surname=${this.surname}`
+        let fetchUrl = `${this.siteUrl}/jam/historicbasket?ref=${this.ref}&system=ATCORE&surname=${this.surname}`;
         this.getHistoricBasket(fetchUrl);
     }
 
     setSearchUrl() {
-        let fetchUrl = `${this.siteUrl}/jam/search`
+        let fetchUrl = `${this.siteUrl}/jam/search`;
         this.getSearch(fetchUrl);
     }
 
