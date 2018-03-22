@@ -12,23 +12,21 @@ module.exports = {
     filename: 'app.bundle.js'
   },
   module: {
-    rules: [{
-      test: /\.js$/,
-      enforce: "pre",
-      exclude: [/dist/, /node_modules/],
-      use: [
-        {
-          loader: "jshint-loader"
-        }
-      ]
-    }],
-    loaders: [{
+    rules: [
+      {
         test: /\.js$/,
-        exclude: [/dist/, /node_modules/],
+        exclude: ['/node_modules/','/dist/'],
         loader: 'babel-loader',
         query: {
-           presets: ['env', 'stage-0']
+          presets: ['env', 'stage-0']
         }
-    }]
+      },
+      {
+        enforce: 'pre',
+        test: /\.js$/,
+        exclude: ['/node_modules/','/dist/'],
+        loader: 'eslint-loader'
+      }
+    ]
   }
 };
