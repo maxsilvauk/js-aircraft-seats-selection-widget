@@ -3,7 +3,7 @@
 }());
 
 // async function
-export async function getRequestMax(url) {
+export async function getRequestData(url) {
 	console.log('we get here');
 	let data = await (await (fetch(url, {credentials:'include'})
 		.then(response => {

@@ -3,6 +3,7 @@
 }());
 
 { /* Import Classes */ }
+import aHelper from './aHelper.js';
 import RetrieveAvailabilityClass from './RetrieveAvailabilityClass.js';
 
 {/* On window load get the seats data  */}

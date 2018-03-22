@@ -1,18 +1,3 @@
-(function () {
-   'use strict';
-}());
-
-
-import * as RequestServiceHelper from './RequestServiceHelper.js';
-
-{
-  /**
-   * Retrieve Availability Class
-   *
-   * Fetches historic basket and search data.
-   **/
-}  
-
 /*
 NOTES
 - This still relies on some wrapper HTML to be on the page, so I think we need a class before this is called to handle building the wrapper?
@@ -24,81 +9,7 @@ NOTES
 
 Think that's it for the time being
 */
-function selectionRequired(){
-    document.querySelector('#continueButton').style.display="none";
-    if(seats.isFirstLeg()){
-        // if(FLOW.active && FLOW.stepsVisited !== 1) {
-        //     document.querySelector('.button__back').onclick = function(){
-        //         window.history.back();
-        //     };
-        //     document.querySelector('.button__back').innerHTML = SEAT_LANGUAGES['seatSelection.nav.back'];
-        // } else {
-        //     document.querySelector('.button__back').style.display="none";
-        // }
-        // if(!FLOW.active) {
-        //     document.querySelector('.button__home__cta').style.display="block";
-        // }
-    }
-    if (!seats.isFirstLeg()) {
-        document.querySelector('.button__back').style.display="block";
-        document.querySelector('.button__back').onclick = function(){
-            seats.prevPlane();
-        };
-        document.querySelector('.button__back').innerHTML = SEAT_LANGUAGES['seatSelection.nav.previous'];
-    }
-}
-function allPaxSelected(){
-    var skipButton = document.querySelector('.button__skip__cta');
-    if(skipButton) {
-        skipButton.style.display="none";
-    }
-    document.querySelector('#continueButton').style.display="block";
-    document.querySelector('#continueButton').onclick = function(){
-        seats.validate(function(){
-            seats.nextIncompletePlane();
-        });
-    };
-    document.querySelector('#continueButton').innerHTML = SEAT_LANGUAGES['seatSelection.nav.next'];
-}
 
-function allSelected(){
-    document.querySelector('#continueButton').style.display="block";
-    if(seats.isLastLeg()){
-        document.querySelector('#continueButton').onclick = function(){
-            seats.validate(function(){
-                seats.addToBasket();
-            });
-        };
-        document.querySelector('#continueButton').innerHTML = SEAT_LANGUAGES['seatSelection.nav.basketBtn'];
-    }else{
-        document.querySelector('#continueButton').onclick = function(){
-           seats.validate(function(){
-                seats.nextPlane();
-           });
-        };
-        var skipButton = document.querySelector('.button__skip__cta');
-        if(skipButton) {
-            skipButton.style.display="none";
-        }
-        document.querySelector('#continueButton').innerHTML = SEAT_LANGUAGES['seatSelection.nav.next'];
-    }
-}
-
-function afterBasket(){
-    console.log('After Basket');
-    var $http = angular.injector(["ng"]).get("$http");
-    $http.get('/jam/upsellFlow/next')
-        .success(
-            function(o){
-                console.log(o);
-                if(o.nextPage && o.active) {
-                    window.location = "/" + o.nextPage;
-                } else {
-                    window.location = "/index";
-                }
-            });
-    
-}
 class Seats {
     constructor() {
         console.log('Im literally just here for a laugh');
@@ -108,7 +19,7 @@ class Seats {
         console.log('cooa;kdjaed');
         var _this = this;
         var planeBodyColor = 'white';
-        //var $http = angular.injector(["ng"]).get("$http"); fetch here
+        //var $http = angular.injector(["ng"]).get("$http");
         var carriers = {
             'FPO':  '/sharedimages/Suppliers/Suppliers - Flight/fpo',
             'ENT':  '/sharedimages/Suppliers/Suppliers - Flight/ent',
@@ -243,23 +154,9 @@ class Seats {
                         //hideAllSplashes();
                     });
             
-        }
+        };
 
-        function afterBasket(){
-            console.log('After Basket');
-            var $http = angular.injector(["ng"]).get("$http");
-            $http.get('/jam/upsellFlow/next')
-                .success(
-                    function(o){
-                        console.log(o);
-                        if(o.nextPage && o.active) {
-                            window.location = "/" + o.nextPage;
-                        } else {
-                            window.location = "/index";
-                        }
-                    });
-            
-        }
+        
 
         /**
          *  Called after selecting/reselecting a seat for a pax
@@ -1047,74 +944,5 @@ class Seats {
             }
             return this;
         }
-    }
-}
-export default class RetrieveAvailabilityClass {
-
-    constructor(config) {
-        this.ref = config.ref;
-        this.surname = config.surname;
-        this.siteUrl = 'https://'+config.siteUrl;
-        this.loader = document.getElementById('loader');
-        this.seatResults = document.getElementById('seat-results');
-
-        this.iFrame = document.createElement('iframe');
-        this.iFrame.addEventListener('load', () => this.setHistoricBasketUrl());
-
-        this.iFrame.style.display = 'none';
-        this.iFrame.src = `${this.siteUrl}/jam/session/create?session=null`;
-        this.seats = new Seats();
-        document.body.appendChild(this.iFrame);
-    }
-
-    setHistoricBasketUrl() {
-        const fetchUrl = `${this.siteUrl}/jam/historicbasket?ref=${this.ref}&system=ATCORE&surname=${this.surname}`;
-        this.getHistoricBasket(fetchUrl);
-    }
-
-    setSearchUrl() {
-        const fetchUrl = `${this.siteUrl}/jam/search`;
-        this.getSearch(fetchUrl);
-    }
-
-    getHistoricBasket(fetchUrl) {
-        fetch(fetchUrl, {credentials:'include'})
-        .then(response => response.json())
-        .then(response => {
-           console.log('getHistoricBasket: ', response);
-           this.setSearchUrl();
-        })
-        .catch((err) => console.log('error: ', err));
-        console.log('getHistoricBasket', RequestServiceHelper.getRequestData(fetchUrl));
-    }
-
-    getSearch(fetchUrl) {
-        fetch(fetchUrl, {
-            credentials: 'include',
-            method: 'POST',
-            body: JSON.stringify({'journey':'seats'})
-        })
-        .then(response => response.json())
-        .then(response => {
-
-            console.log('getSearch: ', response);
-            
-            // const callBacks = {
-            //     // selectionRequired: selectionRequired,
-            //     allPaxSelected: allPaxSelected,
-            //     allSelected: allSelected, 
-            //     afterBasket: afterBasket
-            // };
-
-            // const seats = new Seats(response, null, callBacks);
-            this.seats.buildSeatSelection(response, null, {
-                selectionRequired: selectionRequired,
-                allPaxSelected: allPaxSelected,
-                allSelected: allSelected, 
-                afterBasket: afterBasket
-            });
-            console.log('seats', seats);
-        })
-        .catch((err) => console.log('error: ', err));
     }
 }
