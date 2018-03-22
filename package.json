@@ -8,16 +8,40 @@
     "build": "webpack",
     "start": "webpack-dev-server --output-public-path=/dist/js"
   },
-  "author": "Paxportal ",
+  "eslintConfig": {
+    "extends": [
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 8,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    },
+    "env": {
+      "es6": true,
+      "node": true,
+      "browser": true
+    },
+    "rules": {
+      "semi": [2, "always"],
+      "no-mixed-spaces-and-tabs": [0, "smart-tabs"],
+      "no-console": 1
+    }
+  },
+  "author": "Paxportal",
   "license": "ISC",
   "devDependencies": {
     "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.4",
+    "babel-loader": "^7.1.2",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
+    "babel-preset-latest": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
-    "jshint": "^2.9.5",
-    "jshint-loader": "^0.8.4",
+    "bluebird": "^3.5.1",
+    "eslint": "^4.19.1",
+    "eslint-loader": "^2.0.0",
     "webpack": "^3.8.1",
     "webpack-dev-server": "^2.9.4"
   },
