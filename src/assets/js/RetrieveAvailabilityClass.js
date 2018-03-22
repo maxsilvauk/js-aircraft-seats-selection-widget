@@ -1,10 +1,8 @@
-/*jshint esversion: 6 */
-
 (function () {
    'use strict';
 }());
 
-//import RequestServiceClass from './RequestServiceClass.js';
+const RequestServiceClass = require('./RequestServiceClass.js');
 
 {
   /**
@@ -26,7 +24,7 @@ export default class RetrieveAvailabilityClass {
         this.iFrame.addEventListener('load', () => this.setHistoricBasketUrl());
 
         this.iFrame.style.display = 'none';
-        this.iFrame.src = `${this.siteUrl}/jam/session/create?session=null`
+        this.iFrame.src = `${this.siteUrl}/jam/session/create?session=null`;
 
         document.body.appendChild(this.iFrame);
     }
@@ -42,15 +40,14 @@ export default class RetrieveAvailabilityClass {
     }
 
     getHistoricBasket(fetchUrl) {
-        fetch(fetchUrl, {credentials:'include'})
-        .then(response => response.json())
-        .then(response => {
-           console.log('getHistoricBasket: ', response);
-           this.setSearchUrl();
-        })
-        .catch((err) => console.log('error: ', err));
-
-        //console.log(RequestService.getRequest(fetchUrl));
+        // fetch(fetchUrl, {credentials:'include'})
+        // .then(response => response.json())
+        // .then(response => {
+        //    console.log('getHistoricBasket: ', response);
+        //    this.setSearchUrl();
+        // })
+        // .catch((err) => console.log('error: ', err));
+        console.log('getHistoricBasket', RequestServiceClass.getRequestMax(fetchUrl));
     }
 
     getSearch(fetchUrl) {
@@ -62,6 +59,15 @@ export default class RetrieveAvailabilityClass {
         .then(response => response.json())
         .then(response => {
            console.log('getSearch: ', response);
+            // var seats = new Seats(
+            //     RESULTS.results[0], //response
+            //     null, //a (shared) jam client instance
+            //     {
+            //         selectionRequired: selectionRequired, //called when the current plane has missing selections
+            //         allPaxSelected: allPaxSelected, //called when the current plane has completed it's selections
+            //         allSelected: allSelected, //called when the all plane have completed selections 
+            //         afterBasket: afterBasket //called when the add to basket has completed (navigate to next page here)
+            //     });
         })
         .catch((err) => console.log('error: ', err));
     }
