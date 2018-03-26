@@ -2,7 +2,7 @@
    'use strict';
 }());
 
-import * as CacheHelper from './CacheHelper.js';
+import * as CacheServiceHelper from './CacheServiceHelper.js';
 import * as SeatsCallBacksHelper from './SeatsCallBacksHelper.js';
 import * as SeatsBuilder from './Seats.js';
 //import * as RequestServiceHelper from './RequestServiceHelper.js';
@@ -116,8 +116,33 @@ export default class RetrieveAvailabilityClass {
      * Get airports data.
      **/
     getAirports(fetchUrl) {
-        CacheHelper.putData(fetchUrl);
-        console.log('localStorage', localStorage.getItem(fetchUrl));
+        CacheServiceHelper.putData(fetchUrl);
+        this.setSeatLanguagesUrl();
+    }
+
+    /**
+     * getSeatLanguages
+     *
+     * @param { string } fetchUrl
+     * @return setSplashesUrl()
+     *
+     * Get airports data.
+     **/
+    getSeatLanguages(fetchUrl) {
+        CacheServiceHelper.putData(fetchUrl);
+        this.setSplashesUrl();
+    }
+
+    /**
+     * getSplashes
+     *
+     * @param { string } fetchUrl
+     * @return setSerachUrl()
+     *
+     * Get airports data.
+     **/
+    getSplashes(fetchUrl) {
+        CacheServiceHelper.putData(fetchUrl);
         this.setSearchUrl();
     }
 
