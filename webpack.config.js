@@ -20,13 +20,13 @@ module.exports = {
         query: {
           presets: ['env', 'stage-0']
         }
-      }//,
-      // {
-      //   enforce: 'pre',
-      //   test: /\.js$/,
-      //   exclude: ['/node_modules/','/dist/'],
-      //   loader: 'eslint-loader'
-      // }
+      },
+      {
+        enforce: 'pre',
+        test: /\.js$/,
+        exclude: ['/node_modules/','/dist/'],
+        loader: 'eslint-loader'
+      }
     ]
   }
 };
