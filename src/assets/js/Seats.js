@@ -247,8 +247,8 @@ export function Seats(data,jam, callbacks) {
         return true;
     }
 
-    function month(date) {
-        let month = new Array();
+    // function month(date) {
+    //     let month = new Array();
         // month[0] = SEAT_LANGUAGES['seatSelection.month.jan'];
         // month[1] = SEAT_LANGUAGES['seatSelection.month.feb'];
         // month[2] = SEAT_LANGUAGES['seatSelection.month.mar'];
@@ -261,8 +261,8 @@ export function Seats(data,jam, callbacks) {
         // month[9] = SEAT_LANGUAGES['seatSelection.month.oct'];
         // month[10] = SEAT_LANGUAGES['seatSelection.month.nov'];
         // month[11] = SEAT_LANGUAGES['seatSelection.month.dec'];  
-        return month[date.getMonth()];
-    }
+    //     return month[date.getMonth()];
+    // }
 
     // function time(time) {
     //     return (time<10?'0':'') + time;
@@ -316,8 +316,8 @@ export function Seats(data,jam, callbacks) {
             infoEle.querySelector('.number').innerHTML = info.designation;
             flightInfoWrapper.appendChild(infoEle);
         } else {
-            const start = new Date(info.start.replace(/-/g, '\/').replace(/T.+/, ''));  // EShint uncessary escape character
-            let startDate = start.getDate() + ' ' + month(start) + ' ' + start.getFullYear();
+            //const start = new Date(info.start.replace(/-/g, '\/').replace(/T.+/, ''));  // EShint uncessary escape character \/
+            //let startDate = start.getDate() + ' ' + month(start) + ' ' + start.getFullYear();
             //const startTime = time(start.getHours()) + ':' + time(start.getMinutes());
             
             //const end = new Date(info.end.replace(/-/g, '\/').replace(/T.+/, ''));  // EShint uncessary escape character
@@ -332,7 +332,7 @@ export function Seats(data,jam, callbacks) {
             }
 
             infoEle.querySelector('.number').innerHTML = info.designation;
-            infoEle.querySelector('.departure').innerHTML = startDate;
+            //infoEle.querySelector('.departure').innerHTML = startDate;
             //infoEle.querySelector('.flight-departure-point .points').innerHTML = startTime + ' ' + AIRPORTS[info.origin].name + ' (' + info.origin + ')';
             //infoEle.querySelector('.flight-arrival-point .points').innerHTML = endTime + ' ' + AIRPORTS[info.destination].name + ' (' + info.destination + ')';
             flightInfoWrapper.appendChild(infoEle);
@@ -557,7 +557,7 @@ export function Seats(data,jam, callbacks) {
 
         this.update = function(){
             let seat = jamResponse.legs[CURRENT_LEG].selections[index];
-            let price = pricing.legs[CURRENT_LEG].selections[index];
+            //let price = pricing.legs[CURRENT_LEG].selections[index];
 
             if (seat == null){
                 paxEle.querySelector('.choice .selected-seat').innerHTML = "";
@@ -582,9 +582,9 @@ export function Seats(data,jam, callbacks) {
     }
 
     //BUILD flights picker
-    var flightWrapper = document.querySelector('#flights .flights-wrapper');
-    //var flightTemplate = document.querySelector('#flight'); 
-    var flightTemplate = document.createElement('template');
+    let flightWrapper = document.querySelector('#flights .flights-wrapper');
+    //let flightTemplate = document.querySelector('#flight'); 
+    let flightTemplate = document.createElement('template');
     flightTemplate.innerHTML =   `<div class="flight flip-trigger" data-count="">
                                     <span class="carrier">PaxAir</span>
                                     <span class="name">
@@ -598,46 +598,53 @@ export function Seats(data,jam, callbacks) {
                                     </span>
                                 </div>`;
 
-    var flights = [];
+    let flights = [];
 
     function buildFlights(){
-    
-        for(var i = 0; i< RESULT_ITEM.legs.length; i++){
+        for(let i = 0; i < RESULT_ITEM.legs.length; i++){
             flights.push(new Flight(i,RESULT_ITEM.legs[i].info));
         }
+
         flights[CURRENT_LEG].select();
     }
 
     function Flight(index, flight){
-        var flightEle;
-        if('content' in document.createElement('template')) {
+        let flightEle;
+
+        if ('content' in document.createElement('template')) {
             flightEle = flightTemplate.content.cloneNode(true).querySelector('*');  
         } else {
             flightEle = flightTemplate.cloneNode(true).querySelector('*');  
         }
+
         this.ele = flightEle;
         
         var carrier;
-        for(var key in carriers) {
-            if(flight.designation.substring(0, key.length) === key) {
+
+        for (let key of carriers) {
+            if (flight.designation.substring(0, key.length) === key) {
                 carrier = carriers[key];
             }
         }
+
         console.log(flight.designation);
         //imagesToLoad['carrierLogo'] = carrier;
         flightEle.querySelector('.carrier').innerHTML = '<img src="' + carrier + '" />';
-        flightEle.querySelector('.name .route .departure').innerHTML = AIRPORTS[flight.origin].name;
+        //flightEle.querySelector('.name .route .departure').innerHTML = AIRPORTS[flight.origin].name;
         flightEle.querySelector('.name .route .departure-code').innerHTML = flight.origin;
-        flightEle.querySelector('.name .route .arrival').innerHTML = AIRPORTS[flight.destination].name;
+        //flightEle.querySelector('.name .route .arrival').innerHTML = AIRPORTS[flight.destination].name;
         flightEle.querySelector('.name .route .arrival-code').innerHTML = flight.destination;
         flightEle.setAttribute('data-count', index + 1);
-        var plane = new Plane(index, RESULT_ITEM.legs[index]);
+        
+        let plane = new Plane(index, RESULT_ITEM.legs[index]);
             
         this.select = function(){
             //highlight
-            for(var flight in flights)
+            for (let flight of flights) {
                 flights[flight].ele.classList.remove("active");
-            CURRENT_LEG=index;
+            }
+
+            CURRENT_LEG = index;
             flightEle.classList.add("active");
             //show the plane
             plane.show();
@@ -646,38 +653,42 @@ export function Seats(data,jam, callbacks) {
             //select a pax
             selectNextPax();
             //update pax info
-            for(var pax in paxes){
+            for (let pax of paxes) {
                 paxes[pax].update();
             }
+
             //update band info
             buildBands();
-            Flipper.resetFlip(CURRENT_LEG + 1);
-        }
+            //Flipper.resetFlip(CURRENT_LEG+1);
+        };
 
         this.highlightAvailble = plane.highlightAvailble;
 
-        flightEle.onclick=this.select;
-
+        flightEle.onclick = this.select;
         flightWrapper.appendChild(flightEle);
     }
             
     //preload images
 
-    var images = [];
+    let images = [];
     let promises = [];
+    
     console.log(imagesToLoad);
-    for(let id in imagesToLoad){
+
+    for (let id in imagesToLoad) {
         let img = new Image();
         var url = imagesToLoad[id];
         images[id] = img;
         promises.push(new Promise(function(resolve, reject){
-            img.onload = function(){
-                resolve(id)
-            }
-            img.onerror = function(){
-                reject(id)
-            }
-            img.src = url
+            img.onload = function() {
+                resolve(id);
+            };
+
+            img.onerror = function() {
+                reject(id);
+            };
+
+            img.src = url;
         }));                
     }
 
@@ -685,13 +696,13 @@ export function Seats(data,jam, callbacks) {
     Promise.all(promises).then(function(){
         setTimeout(function() {
             buildFlights(); 
-            new PassengerSelection();
-            new Flipper.init();
-        },200);
+            //new PassengerSelection();
+            //new Flipper.init();
+        }, 200);
     });
 
     function Plane(legNumber, flight){
-        let _this = this;
+        //let _this = this;
         //var template = document.querySelector('#plane');
         var planeTemplate = document.createElement('template');
         planeTemplate.innerHTML =   `<div class="flipper result" data-count="">
@@ -701,54 +712,60 @@ export function Seats(data,jam, callbacks) {
                                     </div>
                                     </div>`;
         //clone the plane template
-        var planeEle;
-        if('content' in document.createElement('template')) {
+        let planeEle;
+        
+        if ('content' in document.createElement('template')) {
             planeEle = planeTemplate.content.cloneNode(true).querySelector('*');
         } else {
             planeEle = planeTemplate.cloneNode(true).querySelector('*');
         }
+
         this.ele = planeEle;
         planeEle.setAttribute('data-count', legNumber + 1);
         document.querySelector('#planes').appendChild(planeEle);
 
-        var seatsWrapper = planeEle.querySelector('.seats');
-        var restrictedWarning = document.querySelector('.restricted-seat-warning');
-        var confirmRestriction = document.querySelector('#accept-seat-restrictions');
-        var rejectRestriction = document.querySelector('#cancel-seat-selection');
+        let seatsWrapper = planeEle.querySelector('.seats');
+        //let restrictedWarning = document.querySelector('.restricted-seat-warning');
+        //let confirmRestriction = document.querySelector('#accept-seat-restrictions');
+        //let rejectRestriction = document.querySelector('#cancel-seat-selection');
         
-        var planeWrapper = planeEle.querySelector('.plane');
+        let planeWrapper = planeEle.querySelector('.plane');
         
         //push the selctions object across onto our basket request object
         jamResponse.legs.push({"selections":flight.selections});
         var seats = flight.options;
         //check for row numbers that contain no seats at all...
         var validRows = [];
-        for(var s in seats){
-            var seat = seats[s];
-            for(var selection=0;selection<flight.selections.length;selection++) {
-                if(seat.seat == flight.selections[selection]) {
+
+        for (let s of seats) {
+            let seat = seats[s];
+            for (let selection = 0;selection < flight.selections.length;selection++) {
+                if (seat.seat == flight.selections[selection]) {
                     updatePrice(seat, legNumber, selection);
                 }   
             }
             validRows[seat.row] = true;
         }
+
         var letters = [];
         //build blocks and add row elements
         var blockrows = [];
-        for(var b =0; b<flight.layout.blocks; b++){
+        
+        for (let b = 0; b < flight.layout.blocks; b++) {
             //create element
             var div = document.createElement('div');
             div.classList.add('block');
             //add the rows to the block
             blockrows.push([]);
             letters.push([]);
-            for(var r =0; r<flight.layout.rows; r++){
-                var div2 = document.createElement('div');
+
+            for (let r = 0; r < flight.layout.rows; r++){
+                let div2 = document.createElement('div');
                 div2.classList.add('plane-row');
                 
                 // Add aisle number
-                if(b<flight.layout.blocks-1){
-                    var div3 = document.createElement('div');
+                if (b < flight.layout.blocks-1){
+                    let div3 = document.createElement('div');
                     div3.classList.add('aisle');
                     div3.innerHTML = ""+(r+1);
                     div2.appendChild(div3);
@@ -757,8 +774,10 @@ export function Seats(data,jam, callbacks) {
                 blockrows[b].push(div2);
                 
                 //don't display rows with no seats at all
-                if(!validRows[r+1])
+                if (!validRows[r+1]) {
                     continue;
+                }
+
                 div.appendChild(div2);
             }
             //add it to the dom
@@ -766,69 +785,74 @@ export function Seats(data,jam, callbacks) {
         }
 
         //add the seats to the rows
-        for(var s in seats){
+        for (var s in seats){
             //make the seat element
-            var seat = seats[s];
-            var seatDiv = document.createElement('span');
-            var rowEle = blockrows[seat.block-1][seat.row-1];
+            let seat = seats[s];
+            let seatDiv = document.createElement('span');
+            let rowEle = blockrows[seat.block-1][seat.row-1];
             seatDiv.classList.add('seat');
+
             //set data attributes
             seatDiv.setAttribute("data-id", seat.seat);
-            
             seatDiv.setAttribute("data-band", BAND_CLASS[seat.band]);
+
             // add window class
-            if(seat.type=="WINDOW"){
+            if (seat.type == "WINDOW"){
                 seatDiv.classList.add('window');
                 rowEle.classList.add('window');
             }
+
             // add restricted class
-            if(seat.access=="RESTRICTED"){
+            if (seat.access == "RESTRICTED"){
                 seatDiv.classList.add('restricted');
                 rowEle.classList.add('exit');
-                rowEle.setAttribute('data-exit-text',SEAT_LANGUAGES['seatSelection.exit.text']);
+                //rowEle.setAttribute('data-exit-text', SEAT_LANGUAGES['seatSelection.exit.text']);
             }
+
             // mark seats with no avaibility at all
-            if(seat.available==null || seat.available.length==0){
+            if (seat.available == null || seat.available.length == 0) {
                 seatDiv.classList.add('unavailable');
-            }else if(PARTY_HAS_INFANT){
+            } else if (PARTY_HAS_INFANT) {
                 //check if any pax has an infant, and they can sit here
                 //todo will be able to check seat.infant in the future (4.7?)
-                var infant= false;
-                for(var idx = 0; idx<seat.available.length; idx++){
+                //const infant = false;
+                for (let idx = 0; idx < seat.available.length; idx++) {
                   //  console.log(RESULT_ITEM.passengers, seat.available, idx, seat.available[idx]-1, RESULT_ITEM.passengers[seat.available[idx]-1]);
-                    var pax = RESULT_ITEM.passengers[seat.available[idx]-1];
-                    if(pax.infant)
+                    const pax = RESULT_ITEM.passengers[seat.available[idx]-1];
+                    if (pax.infant) {
                         seatDiv.classList.add('infant');
+                    }
                 }
             }
         
             // wire the onclick event
             // wrapper function to define fixed seat scope variable (as it is a loop var)
-            seatDiv.onclick = function(_seat){
-                return function(){
-                    if($(this).attr('data-pax')){
-                        _this.unselectSeat(_seat, this);
-                    } else {
+            // seatDiv.onclick = function(_seat){
+            //     return function(){
+            //         // if($(this).attr('data-pax')){
+            //         //     _this.unselectSeat(_seat, this);
+            //         // } else {
                         
-                        if(_seat.access=="RESTRICTED") {
-                            restrictedWarning.style.display = "block";
-                            confirmRestriction.onclick = function() {
-                                restrictedWarning.style.display = "none";
-                                 _this.selectSeat(_seat);
-                            }
-                            rejectRestriction.onclick = function() {
-                                restrictedWarning.style.display = "none";
-                            }
-                            //_this.selectSeat(_seat);
-                        } else {
-                            _this.selectSeat(_seat);
-                        }
-                    }
-                }
-            }(seat);
+            //         //     if(_seat.access=="RESTRICTED") {
+            //         //         restrictedWarning.style.display = "block";
+            //         //         confirmRestriction.onclick = function() {
+            //         //             restrictedWarning.style.display = "none";
+            //         //              _this.selectSeat(_seat);
+            //         //         };
+            //         //         rejectRestriction.onclick = function() {
+            //         //             restrictedWarning.style.display = "none";
+            //         //         };
+            //         //         //_this.selectSeat(_seat);
+            //         //     } else {
+            //         //         _this.selectSeat(_seat);
+            //         //     }
+            //         // }
+            //     };
+            // }(seat);
+
             // highlight already selectd seats
-            for(var idx = 0; idx<flight.selections.length; idx++){
-                if(flight.selections[idx]==seat.seat){
+            for (let idx = 0; idx < flight.selections.length; idx++){
+                if (flight.selections[idx]==seat.seat){
                     seatDiv.classList.add('selected');
                     seatDiv.setAttribute("data-pax", (idx+1));
                 }
@@ -845,12 +869,12 @@ export function Seats(data,jam, callbacks) {
 
         //push out the letters
         
-        for(var i = 0; i< letters.length; i++){
-            var firstrow = blockrows[i][0];
-            var div = document.createElement('div');
+        for (let i = 0; i < letters.length; i++){
+            let firstrow = blockrows[i][0];
+            let div = document.createElement('div');
             div.classList.add('letter-row');
-            for(var letter in letters[i]){
-                var l = letters[i][letter];
+            for (let letter of letters[i]){
+                let l = letters[i][letter];
                 div.innerHTML+="<span class='row-letter'>"+l+"<span>";
             }
             firstrow.parentNode.insertBefore(div, firstrow);
@@ -858,7 +882,7 @@ export function Seats(data,jam, callbacks) {
         
 
         //DRAW THE PLANE BACKGROUND
-        var planeBody = {
+        const planeBody = {
             width: seatsWrapper.offsetWidth,
             height: seatsWrapper.offsetHeight - 300,
             color: planeBodyColor
@@ -867,64 +891,73 @@ export function Seats(data,jam, callbacks) {
         //we can hide this now
         //planeEle.classList.add("inactive");
 
-        var planeNose = {
+        const planeNose = {
             height:440
-        }
+        };
 
-        var planeWalls = {
+        const planeWalls = {
             width: 16,
             height: 20
-        }
+        };
 
-        var planeWing = {
+        const planeWing = {
             width: 115,
             height: 431
-        }
-        var carrierLogo = {
+        };
+
+        const carrierLogo = {
             width: 866,
             height: 75
-        }
-        var planeTail = {
+        };
+
+        const planeTail = {
             height: 700,
             width: 1023
-        }
-        var plane = planeEle.querySelector('canvas');
-        var ctx = plane.getContext("2d");
+        };
+
+        let plane = planeEle.querySelector('canvas');
+        let ctx = plane.getContext("2d");
         console.log(legNumber);
         plane.width = planeBody.width+ planeWalls.width*2 + planeWing.width*2; // 2* wall + TWO WINGS
         plane.mask = planeBody.width+ planeWalls.width*2 + planeWing.width*2;
         plane.height = planeBody.height+ planeNose.height+planeTail.height +planeWalls.height*2; // tail + nose
-            
         
-        //draw fuselage
+        // raw fuselage
         ctx.fillStyle = planeBody.color;
         
         ctx.beginPath();
+
         //left side
         ctx.moveTo(plane.width/2-planeBody.width/2-planeWalls.width, planeNose.height);
         ctx.lineTo(plane.width/2-planeBody.width/2-planeWalls.width, planeNose.height+planeBody.height+planeWalls.height*2);
+        
         //tail
-        var tailheight = planeTail.height;
-        var h = planeNose.height+planeBody.height+planeWalls.height*2;
-        var x1 = planeBody.width/2+planeWalls.width;
+        const tailheight = planeTail.height;
+        const h = planeNose.height+planeBody.height+planeWalls.height*2;
+        const x1 = planeBody.width/2+planeWalls.width;
+
         ctx.bezierCurveTo(plane.width/2 - x1*0.95, h+tailheight*0.1,
             plane.width/2 - x1*0.7, h+tailheight*0.55,
             plane.width/2,      h+tailheight*0.6);
         ctx.bezierCurveTo(plane.width/2 + x1*0.7, h+tailheight*0.55,
             plane.width/2 + x1*0.95, h+tailheight*0.2,
             plane.width/2 + x1,         h+tailheight*0.0);
+
         //right side
         ctx.lineTo(plane.width/2+planeBody.width/2+planeWalls.width, planeNose.height+planeBody.height+planeWalls.height*2);
         ctx.lineTo(plane.width/2+planeBody.width/2+planeWalls.width, planeNose.height);
+        
         //nose
-        var x = planeBody.width/2+planeWalls.width;
-            ctx.bezierCurveTo(plane.width/2 + x, planeNose.height*0.75,
-            plane.width/2 + x*0.5, planeNose.height*0.0,
-            plane.width/2, 0);
+        const x = planeBody.width/2+planeWalls.width;
 
-            ctx.bezierCurveTo(plane.width/2-x*0.5, 0,
-            plane.width/2-x, planeNose.height*0.75,
-            plane.width/2-x, planeNose.height);
+        ctx.bezierCurveTo(plane.width/2 + x, planeNose.height*0.75,
+        plane.width/2 + x*0.5, planeNose.height*0.0,
+        plane.width/2, 0);
+
+        ctx.bezierCurveTo(plane.width/2-x*0.5, 0,
+        plane.width/2-x, planeNose.height*0.75,
+        plane.width/2-x, planeNose.height);
+
         ctx.fill();
         
         // We must take stock and save before doing some rotations
@@ -958,30 +991,35 @@ export function Seats(data,jam, callbacks) {
         //ctx.drawImage(images['tailBottom'], plane.width/2-planeTail.width/2, planeBody.height+ planeNose.height+planeWalls.height*2 -100);
         ctx.restore();
         //position the seats DOM element correctly
-        seatsWrapper.style.top = (planeNose.height+planeWalls.height) + "px"
-        seatsWrapper.style.left = (planeWalls.width + planeWing.width) + "px"
+        seatsWrapper.style.top = (planeNose.height+planeWalls.height) + "px";
+        seatsWrapper.style.left = (planeWalls.width + planeWing.width) + "px";
 
         //force the width of the parent elements to be correct
         planeWrapper.style.width=plane.width+ "px";
-        planeEle.style.width="100%";
-        planeEle.style.height=plane.height+ "px";
+        planeEle.style.width = "100%";
+        planeEle.style.height = plane.height+ "px";
         
         this.selectSeat = function(seat){
             //grab the seat for this
-            var ele = planeEle.querySelector('.seat.selectable[data-id="'+seat.seat+'"]');
-            if(ele==null)
+            let ele = planeEle.querySelector('.seat.selectable[data-id="'+seat.seat+'"]');
+            
+            if (ele == null) {
                 return;
+            }
                 
             //cannot select already slected seats
-            if(ele.dataset.pax!=null && ele.dataset.pax!='')
+            if (ele.dataset.pax != null && ele.dataset.pax != '') {
                 return;
+            }
             
             //remove selection from this pax's previous seat (if there was one)
-            var oldSeat = planeEle.querySelector('.seat[data-pax="'+(PAX_INDEX+1)+'"]');
-            if(oldSeat!=null){
+            let oldSeat = planeEle.querySelector('.seat[data-pax="'+(PAX_INDEX+1)+'"]');
+
+            if (oldSeat != null) {
                 oldSeat.classList.remove('selected');
                 oldSeat.removeAttribute("data-pax");
             }
+
             updatePrice(seat, legNumber, PAX_INDEX);
             jamResponse.legs[CURRENT_LEG].selections[PAX_INDEX] = seat.seat;
             //mark seat as selected
@@ -990,39 +1028,43 @@ export function Seats(data,jam, callbacks) {
 
             //selectNext pax
             selectNextPax();
-        }
+        };
+
         this.unselectSeat = function(seat, seatDiv) {
-            var currentPax = seatDiv.getAttribute('data-pax');
+            const currentPax = seatDiv.getAttribute('data-pax');
             seatDiv.classList.remove('selected');
             seatDiv.removeAttribute("data-pax");
             jamResponse.legs[legNumber].selections[currentPax-1] = null;
             pricing.legs[legNumber].selections[currentPax-1] = null;
             paxes[currentPax-1].unallocateSeat();
             paxes[currentPax-1].active();
-            selectionRequired();
-        }
+            //selectionRequired();
+        };
+
         this.highlightAvailble = function(){
             //update seat class list based on if they can be selected
-            for(var s in seats){
-                var seat = seats[s];
-
-                var ele = planeEle.querySelector('.seat[data-id="'+seat.seat+'"]');
-                if(seat.available.indexOf((PAX_INDEX+1)+"")>=0){
+            for (let s of seats){
+                let seat = seats[s];
+                let ele = planeEle.querySelector('.seat[data-id="'+seat.seat+'"]');
+                
+                if (seat.available.indexOf((PAX_INDEX+1)+"")>=0){
                     ele.classList.add("selectable");
-                }else{
+                } else {
                     ele.classList.remove("selectable");
                 }
             }
-        }
+        };
+
         this.show = function(){
             //mark all other planes as hidden
-            var planes = document.querySelectorAll('#planes .plane');
-            for(var i = 0; i< planes.length; i++){
-                var p = planes[i];
+            const planes = document.querySelectorAll('#planes .plane');
+            for (let i = 0; i < planes.length; i++) {
+                //let p = planes[i];
                 //p.classList.remove('active');
                 //p.classList.add('inactive');
             }
-        }
+        };
+
         return this;
     }
 }
