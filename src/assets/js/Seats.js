@@ -14,12 +14,17 @@ Think that's it for the time being
    'use strict';
 }());
 
+import * as CacheServiceHelper from './CacheServiceHelper.js';
+
 export function Seats(data,jam, callbacks) {
            
     console.log('Seats.js Called and Loaded');
     let _this = this;
     const planeBodyColor = 'white';
-    
+    const AIRPORTS = CacheServiceHelper.getData('https://merch.fabrix.xmltravel.com/jam/splashes');
+    const SEAT_LANGUAGES = CacheServiceHelper.getData('https://merch.fabrix.xmltravel.com/jam/splashes');
+
+
     const carriers = {
         'FPO':  '/sharedimages/Suppliers/Suppliers - Flight/fpo',
         'ENT':  '/sharedimages/Suppliers/Suppliers - Flight/ent',
