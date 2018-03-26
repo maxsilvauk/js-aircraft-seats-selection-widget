@@ -17,7 +17,6 @@ Think that's it for the time being
 export function Seats(data,jam, callbacks) {
            
     console.log('Seats.js Called and Loaded');
-
     let _this = this;
     const planeBodyColor = 'white';
     //var $http = angular.injector(["ng"]).get("$http");
