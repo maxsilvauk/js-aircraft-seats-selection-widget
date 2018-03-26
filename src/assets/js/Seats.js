@@ -19,7 +19,7 @@ export function Seats(data,jam, callbacks) {
     console.log('Seats.js Called and Loaded');
     let _this = this;
     const planeBodyColor = 'white';
-    //var $http = angular.injector(["ng"]).get("$http");
+    
     const carriers = {
         'FPO':  '/sharedimages/Suppliers/Suppliers - Flight/fpo',
         'ENT':  '/sharedimages/Suppliers/Suppliers - Flight/ent',
