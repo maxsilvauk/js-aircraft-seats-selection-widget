@@ -105,7 +105,7 @@ export function allSelected() {
  * Does something.
  **/
 export function afterBasket(){
-    console.log('After Basket');
+    console.log('After Basket'); // eslint-disable-line
 
     /* We need to place a fetch here
     var $http = angular.injector(['ng']).get('$http');

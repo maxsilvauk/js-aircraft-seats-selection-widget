@@ -14,16 +14,13 @@ Think that's it for the time being
    'use strict';
 }());
 
-import * as CacheServiceHelper from './CacheServiceHelper.js';
+import { getData } from './CacheServiceHelper.js';
 
-export function Seats(data,jam, callbacks) {
-           
-    console.log('Seats.js Called and Loaded');
+export function Seats(data, jam, callbacks, config) {
     let _this = this;
     const planeBodyColor = 'white';
-    const AIRPORTS = CacheServiceHelper.getData('https://merch.fabrix.xmltravel.com/jam/splashes');
-    const SEAT_LANGUAGES = CacheServiceHelper.getData('https://merch.fabrix.xmltravel.com/jam/splashes');
-
+    const AIRPORTS = getData(`${config.siteUrl}${config.airportsJam}`);
+    const SEAT_LANGUAGES = getData(`${config.siteUrl}${config.seatLangJam}`);
 
     const carriers = {
         'FPO':  '/sharedimages/Suppliers/Suppliers - Flight/fpo',
@@ -181,7 +178,7 @@ export function Seats(data,jam, callbacks) {
                 //nb probably in a nicer way....  
             }
         })
-        .catch((err) => console.log('error: ', err));
+        .catch((err) => console.log(`error: `, err));  // eslint-disable-line
     };
 
     this.addToBasket = function(){
@@ -207,7 +204,7 @@ export function Seats(data,jam, callbacks) {
             response.json();
             callbacks.afterBasket();
         })
-        .catch((err) => console.log('error: ', err));
+        .catch((err) => console.log(`error: `, err));  // eslint-disable-line
     };
 
     /**
@@ -337,8 +334,8 @@ export function Seats(data,jam, callbacks) {
 
             infoEle.querySelector('.number').innerHTML = info.designation;
             infoEle.querySelector('.departure').innerHTML = startDate;
-            infoEle.querySelector('.flight-departure-point .points').innerHTML = `${startTime} ${AIRPORTS[info.origin].name} (${info.origin})`;
-            infoEle.querySelector('.flight-arrival-point .points').innerHTML = `${endTime} ${AIRPORTS[info.destination].name} (${info.destination})`;
+            infoEle.querySelector('.flight-departure-point .points').innerHTML = `${startTime} ${AIRPORTS[info.origin].name} ${info.origin}`;
+            infoEle.querySelector('.flight-arrival-point .points').innerHTML = `${endTime} ${AIRPORTS[info.destination].name} ${info.destination}`;
             flightInfoWrapper.appendChild(infoEle);
         }
         
@@ -631,7 +628,7 @@ export function Seats(data,jam, callbacks) {
             }
         }
 
-        console.log(flight.designation);
+        console.log(flight.designation); // eslint-disable-line
         //imagesToLoad['carrierLogo'] = carrier;
         flightEle.querySelector('.carrier').innerHTML = '<img src="' + carrier + '" />';
         //flightEle.querySelector('.name .route .departure').innerHTML = AIRPORTS[flight.origin].name;
@@ -677,7 +674,7 @@ export function Seats(data,jam, callbacks) {
     let images = [];
     let promises = [];
     
-    console.log(imagesToLoad);
+    console.log(imagesToLoad); // eslint-disable-line
 
     for (let id in imagesToLoad) {
         let img = new Image();
@@ -921,7 +918,7 @@ export function Seats(data,jam, callbacks) {
 
         let plane = planeEle.querySelector('canvas');
         let ctx = plane.getContext("2d");
-        console.log(legNumber);
+        console.log(legNumber); // eslint-disable-line
         plane.width = planeBody.width+ planeWalls.width*2 + planeWing.width*2; // 2* wall + TWO WINGS
         plane.mask = planeBody.width+ planeWalls.width*2 + planeWing.width*2;
         plane.height = planeBody.height+ planeNose.height+planeTail.height +planeWalls.height*2; // tail + nose
@@ -976,7 +973,7 @@ export function Seats(data,jam, callbacks) {
         ctx.globalCompositeOperation = 'source-atop';
         ctx.translate(-(planeWing.width-(planeWalls.width*1.5)), (planeNose.height+carrierLogo.width)-200); 
         ctx.rotate(270 * Math.PI/180);
-        console.log(images['leg'+legNumber+'Carrier']);
+        console.log(images['leg'+legNumber+'Carrier']); // eslint-disable-line
         ctx.drawImage(images['leg'+legNumber+'Carrier'], -(planeNose.height/4), planeNose.height, carrierLogo.width, carrierLogo.height);
         // Restore the plan to correct rotation
         ctx.restore();
