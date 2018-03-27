@@ -11,17 +11,19 @@
  * Check if the fetchUrl already exists in
  * local storage. If not set data. 
  **/
-export function putData(fetchUrl) {
+export function putData(fetchUrl, log) {
 	if (localStorage.getItem(fetchUrl) === null) {
   		fetch(fetchUrl, {credentials:'include'})
       .then(response => response.json())
       .then(response => {
          localStorage.setItem(fetchUrl, JSON.stringify(response));
       })
-      .catch((err) => console.log('error: ', err));
+      .catch((err) => console.log(`error: `, err)); // eslint-disable-line
   }
 
-  console.log(`${fetchUrl}:`, localStorage.getItem(fetchUrl));
+  if (log) {
+    console.log(`${fetchUrl}:`, localStorage.getItem(fetchUrl)); // eslint-disable-line
+  }
 }
 
 /**
@@ -35,9 +37,9 @@ export function putData(fetchUrl) {
  **/
 export function getData(key) {
 	if (localStorage.getItem(key) !== null) {
-		return localStorage.getItem(key);
+	   return localStorage.getItem(key);
 	} else {
-		console.err('Error - data with key of "' + key + '" not found');
-		return false;
+	   console.error(`Error: data with key of '${key}' not found`); // eslint-disable-line
+	   return false;
 	}
 }
