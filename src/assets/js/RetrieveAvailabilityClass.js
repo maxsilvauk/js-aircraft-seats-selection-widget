@@ -2,7 +2,7 @@
    'use strict';
 }());
 
-import * as CacheServiceHelper from './CacheServiceHelper.js';
+import { putData } from './CacheServiceHelper.js';
 import * as SeatsCallBacksHelper from './SeatsCallBacksHelper.js';
 import * as SeatsBuilder from './Seats.js';
 //import * as RequestServiceHelper from './RequestServiceHelper.js';
@@ -116,7 +116,7 @@ export default class RetrieveAvailabilityClass {
      * Get airports data.
      **/
     getAirports(fetchUrl) {
-        CacheServiceHelper.putData(fetchUrl);
+        putData(fetchUrl);
         this.setSeatLanguagesUrl();
     }
 
@@ -129,7 +129,7 @@ export default class RetrieveAvailabilityClass {
      * Get airports data.
      **/
     getSeatLanguages(fetchUrl) {
-        CacheServiceHelper.putData(fetchUrl);
+        putData(fetchUrl);
         this.setSplashesUrl();
     }
 
@@ -142,7 +142,7 @@ export default class RetrieveAvailabilityClass {
      * Get airports data.
      **/
     getSplashes(fetchUrl) {
-        CacheServiceHelper.putData(fetchUrl);
+        putData(fetchUrl);
         this.setSearchUrl();
     }
 
