@@ -15,17 +15,15 @@ import * as SeatsBuilder from './Seats.js';
 export default class RetrieveAvailabilityClass {
 
     constructor(config) {
-        this.ref = config.ref;
-        this.surname = config.surname;
-        this.siteUrl = 'https://'+config.siteUrl;
+        this.config = config;
+        this.config.siteUrl = 'https://'+this.config.siteUrl;
         this.loader = document.getElementById('loader');
         this.seatResults = document.getElementById('seat-results');
 
         this.iFrame = document.createElement('iframe');
         this.iFrame.addEventListener('load', () => this.setHistoricBasketUrl());
-
         this.iFrame.style.display = 'none';
-        this.iFrame.src = `${this.siteUrl}/jam/session/create?session=null`;
+        this.iFrame.src = `${this.config.siteUrl}/jam/session/create?session=null`;
         document.body.appendChild(this.iFrame);
     }
 
@@ -37,7 +35,7 @@ export default class RetrieveAvailabilityClass {
      * Create historic basket jam url.
      **/
     setHistoricBasketUrl() {
-        const fetchUrl = `${this.siteUrl}/jam/historicbasket?ref=${this.ref}&system=ATCORE&surname=${this.surname}`;
+        const fetchUrl = `${this.config.siteUrl}/jam/historicbasket?ref=${this.config.ref}&system=ATCORE&surname=${this.config.surname}`;
         this.getHistoricBasket(fetchUrl);
     }
 
@@ -49,7 +47,8 @@ export default class RetrieveAvailabilityClass {
      * Create airports jam url.
      **/
     setAirportsUrl() {
-        const fetchUrl = `${this.siteUrl}/jam/airports`;
+        this.config.airportsJam = `/jam/airports`;
+        const fetchUrl = `${this.config.siteUrl}${this.config.airportsJam}`;
         this.getAirports(fetchUrl);
     }
 
@@ -61,7 +60,8 @@ export default class RetrieveAvailabilityClass {
      * Create seat languages jam url.
      **/
     setSeatLanguagesUrl() {
-        const fetchUrl = `${this.siteUrl}/jam/languages/seat-selection/results`;
+        this.config.seatLangJam = `/jam/languages/seat-selection/results`;
+        const fetchUrl = `${this.config.siteUrl}${this.config.seatLangJam}`;
         this.getSeatLanguages(fetchUrl);
     }
 
@@ -73,7 +73,8 @@ export default class RetrieveAvailabilityClass {
      * Create splashes jam url.
      **/
     setSplashesUrl() {
-        const fetchUrl = `${this.siteUrl}/jam/splashes`;
+        this.config.splashesJam = `/jam/splashes`;
+        const fetchUrl = `${this.config.siteUrl}${this.config.splashesJam}`;
         this.getSplashes(fetchUrl);
     }
 
@@ -85,7 +86,7 @@ export default class RetrieveAvailabilityClass {
      * Create search jam url.
      **/
     setSearchUrl() {
-        const fetchUrl = `${this.siteUrl}/jam/search`;
+        const fetchUrl = `${this.config.siteUrl}/jam/search`;
         this.getSearch(fetchUrl);
     }
 
@@ -101,10 +102,10 @@ export default class RetrieveAvailabilityClass {
         fetch(fetchUrl, {credentials:'include'})
         .then(response => response.json())
         .then(response => {
-           console.log('getHistoricBasket: ', response);
+           console.log('getHistoricBasket: ', response); // eslint-disable-line
            this.setAirportsUrl();
         })
-        .catch((err) => console.log('error: ', err));
+        .catch((err) => console.log('error: ', err));  // eslint-disable-line
     }
 
     /**
@@ -162,14 +163,14 @@ export default class RetrieveAvailabilityClass {
         })
         .then(response => response.json())
         .then(response => {
-            console.log('getSearch: ', response);
+            console.log('getSearch: ', response);  // eslint-disable-line
             SeatsBuilder.Seats(response.results, null, {
                 selectionRequired: SeatsCallBacksHelper.selectionRequired,
                 allPaxSelected: SeatsCallBacksHelper.allPaxSelected,
                 allSelected: SeatsCallBacksHelper.allSelected, 
                 afterBasket: SeatsCallBacksHelper.afterBasket
-            });
+            },this.config);
         })
-        .catch((err) => console.log('error: ', err));
+        .catch((err) => console.log(`error: `, err)); // eslint-disable-line
     }
 }
