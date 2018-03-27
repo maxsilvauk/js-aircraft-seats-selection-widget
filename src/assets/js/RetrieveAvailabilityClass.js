@@ -163,7 +163,6 @@ export default class RetrieveAvailabilityClass {
         })
         .then(response => response.json())
         .then(response => {
-            console.log('getSearch: ', response);  // eslint-disable-line
             SeatsBuilder.Seats(response.results, null, {
                 selectionRequired: SeatsCallBacksHelper.selectionRequired,
                 allPaxSelected: SeatsCallBacksHelper.allPaxSelected,
