@@ -251,26 +251,26 @@ export function Seats(data,jam, callbacks) {
         return true;
     }
 
-    // function month(date) {
-    //     let month = new Array();
-        // month[0] = SEAT_LANGUAGES['seatSelection.month.jan'];
-        // month[1] = SEAT_LANGUAGES['seatSelection.month.feb'];
-        // month[2] = SEAT_LANGUAGES['seatSelection.month.mar'];
-        // month[3] = SEAT_LANGUAGES['seatSelection.month.apr'];
-        // month[4] = SEAT_LANGUAGES['seatSelection.month.may'];
-        // month[5] = SEAT_LANGUAGES['seatSelection.month.jun'];
-        // month[6] = SEAT_LANGUAGES['seatSelection.month.july'];
-        // month[7] = SEAT_LANGUAGES['seatSelection.month.aug'];
-        // month[8] = SEAT_LANGUAGES['seatSelection.month.sep'];
-        // month[9] = SEAT_LANGUAGES['seatSelection.month.oct'];
-        // month[10] = SEAT_LANGUAGES['seatSelection.month.nov'];
-        // month[11] = SEAT_LANGUAGES['seatSelection.month.dec'];  
-    //     return month[date.getMonth()];
-    // }
+    function month(date) {
+        let month = new Array();
+        month[0] = SEAT_LANGUAGES['seatSelection.month.jan'];
+        month[1] = SEAT_LANGUAGES['seatSelection.month.feb'];
+        month[2] = SEAT_LANGUAGES['seatSelection.month.mar'];
+        month[3] = SEAT_LANGUAGES['seatSelection.month.apr'];
+        month[4] = SEAT_LANGUAGES['seatSelection.month.may'];
+        month[5] = SEAT_LANGUAGES['seatSelection.month.jun'];
+        month[6] = SEAT_LANGUAGES['seatSelection.month.july'];
+        month[7] = SEAT_LANGUAGES['seatSelection.month.aug'];
+        month[8] = SEAT_LANGUAGES['seatSelection.month.sep'];
+        month[9] = SEAT_LANGUAGES['seatSelection.month.oct'];
+        month[10] = SEAT_LANGUAGES['seatSelection.month.nov'];
+        month[11] = SEAT_LANGUAGES['seatSelection.month.dec'];  
+        return month[date.getMonth()];
+    }
 
-    // function time(time) {
-    //     return (time<10?'0':'') + time;
-    // }
+    function time(time) {
+        return (time<10?'0':'') + time;
+    }
 
     //BUILD bands box info
     function buildBands(){
@@ -320,12 +320,12 @@ export function Seats(data,jam, callbacks) {
             infoEle.querySelector('.number').innerHTML = info.designation;
             flightInfoWrapper.appendChild(infoEle);
         } else {
-            //const start = new Date(info.start.replace(/-/g, '\/').replace(/T.+/, ''));  // EShint uncessary escape character \/
-            //let startDate = start.getDate() + ' ' + month(start) + ' ' + start.getFullYear();
-            //const startTime = time(start.getHours()) + ':' + time(start.getMinutes());
+            const start = new Date(info.start.replace(/-/g, '\/').replace(/T.+/, ''));  // eslint-disable-line
+            let startDate = start.getDate() + ' ' + month(start) + ' ' + start.getFullYear();
+            const startTime = time(start.getHours()) + ':' + time(start.getMinutes());
             
-            //const end = new Date(info.end.replace(/-/g, '\/').replace(/T.+/, ''));  // EShint uncessary escape character
-            //const endTime = time(end.getHours()) + ':' + time(end.getMinutes());    
+            const end = new Date(info.end.replace(/-/g, '\/').replace(/T.+/, ''));  // eslint-disable-line
+            const endTime = time(end.getHours()) + ':' + time(end.getMinutes());    
             
             let infoEle;
 
@@ -336,9 +336,9 @@ export function Seats(data,jam, callbacks) {
             }
 
             infoEle.querySelector('.number').innerHTML = info.designation;
-            //infoEle.querySelector('.departure').innerHTML = startDate;
-            //infoEle.querySelector('.flight-departure-point .points').innerHTML = startTime + ' ' + AIRPORTS[info.origin].name + ' (' + info.origin + ')';
-            //infoEle.querySelector('.flight-arrival-point .points').innerHTML = endTime + ' ' + AIRPORTS[info.destination].name + ' (' + info.destination + ')';
+            infoEle.querySelector('.departure').innerHTML = startDate;
+            infoEle.querySelector('.flight-departure-point .points').innerHTML = `${startTime} ${AIRPORTS[info.origin].name} (${info.origin})`;
+            infoEle.querySelector('.flight-arrival-point .points').innerHTML = `${endTime} ${AIRPORTS[info.destination].name} (${info.destination})`;
             flightInfoWrapper.appendChild(infoEle);
         }
         
