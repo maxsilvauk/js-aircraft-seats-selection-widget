@@ -17,30 +17,31 @@ Think that's it for the time being
 import { getData } from './CacheServiceHelper.js';
 
 export function Seats(data, jam, callbacks, config) {
+    console.log(config.siteUrl);
+
     let _this = this;
     const planeBodyColor = 'white';
-    const AIRPORTS = getData(`${config.siteUrl}${config.airportsJam}`);
-    const SEAT_LANGUAGES = getData(`${config.siteUrl}${config.seatLangJam}`);
+    const AIRPORTS = getData(`${config.siteUrl}${config.airportsJam}`); // eslint-disable-line
+    const SEAT_LANGUAGES = getData(`${config.siteUrl}${config.seatLangJam}`); // eslint-disable-line
 
     const carriers = {
-        'FPO':  '/sharedimages/Suppliers/Suppliers - Flight/fpo',
-        'ENT':  '/sharedimages/Suppliers/Suppliers - Flight/ent',
-        'S5':   '/sharedimages/carriers/s5',
-        'EZY':  '/assets/img/carrier-logos/easyJet.svg',
-        'MN':   '/sharedimages/Suppliers/Suppliers - Flight/ent',
-        'ZB':   '/assets/img/seats/monarch-web.png',
+        'FPO':  `${config.siteUrl}/sharedimages/Suppliers/Suppliers - Flight/fpo`,
+        'ENT':  `${config.siteUrl}/sharedimages/Suppliers/Suppliers - Flight/ent`,
+        'S5':   `${config.siteUrl}/sharedimages/carriers/s5`,
+        'EZY':  `${config.siteUrl}/assets/img/carrier-logos/easyJet.svg`,
+        'MN':   `${config.siteUrl}/sharedimages/Suppliers/Suppliers - Flight/ent`,
+        'ZB':   `${config.siteUrl}/assets/img/seats/monarch-web.png`,
     };
 
-    let RESULT_ITEM = data;
+    let RESULT_ITEM = data[0];
     let jamResponse = {
-        "id":RESULT_ITEM.id,
-        "legs":[]
+        'id': RESULT_ITEM.id,
+        'legs': []
     };
 
     let pricing = {
-        "legs":[]
+        'legs': []
     };
-
 
     //const MAX_PAX = RESULT_ITEM.passengers.length-1; //max pax index
     let PAX_INDEX = 0; //current pax we are selecting for
@@ -49,13 +50,13 @@ export function Seats(data, jam, callbacks, config) {
     let BAND_CLASS = {};
     let bc = 1; //compute band class number (for colouring)
     let imagesToLoad = {
-        wing: '/assets/img/seats/wing.png'
+        wing: `${config.siteUrl}/assets/img/seats/wing.png`
     };
 
     let PARTY_HAS_INFANT = false;
     var legs = RESULT_ITEM.legs; // Get info we need from each leg before we can proceed
 
-    for (let leg of legs) {
+    for (let leg in legs) {
         pricing.legs[leg] = {
             'selections':[]
         };
@@ -67,13 +68,13 @@ export function Seats(data, jam, callbacks, config) {
         });
 
         for (let band of bands){
-            if (!BAND_CLASS[bands[band].id]){
-                BAND_CLASS[bands[band].id] = bc++;
+            if (!BAND_CLASS[band.id]){
+                BAND_CLASS[band.id] = bc++;
             }
         }
 
         let legCarrier = legs[leg].info.carrier;
-        imagesToLoad['leg' + leg + 'Carrier'] = carriers[legCarrier];
+        imagesToLoad[`leg${leg}Carrier`] = carriers[legCarrier];
     }
 
     this.nextPlane = function() {
@@ -115,7 +116,7 @@ export function Seats(data, jam, callbacks, config) {
 
             let selections = leg.selections;
             for (let selection of selections){
-                if (selections[selection] == null){
+                if (selection == null){
                     CURRENT_LEG = i;
                     flights[CURRENT_LEG].select();
                     return;
@@ -128,11 +129,11 @@ export function Seats(data, jam, callbacks, config) {
     let confirmValidation = document.querySelector('#accept-validation');
     
     confirmValidation.onclick = function() {
-        validationWarning.style.display = "none";
+        validationWarning.style.display = 'none';
     };
     
     confirmValidation.onclick = function() {
-        validationWarning.style.display = "none";
+        validationWarning.style.display = 'none';
     };
     
     this.validate = function(callback){
@@ -158,9 +159,11 @@ export function Seats(data, jam, callbacks, config) {
         //     }
         // );
 
-        fetch('/jam/seatvalidation', {
+        fetch(`${config.siteUrl}/jam/seatvalidation`, {
             method: 'POST',
+            credentials:'include',
             body: JSON.stringify({jamResponse})
+
         })
         .then(response => response.json())
         .then(response => {
@@ -213,13 +216,13 @@ export function Seats(data, jam, callbacks, config) {
     function selectNextPax(){
         //select first unallocated pax pax
         for (let pax of paxes) {
-            if (!paxes[pax].isAllocated()) {
-                paxes[pax].active();
+            if (!pax.isAllocated()) {
+                pax.active();
                 return;
             }
         }
 
-        //if we get here then the pax are all allocated for this flight
+        // If we get here then the pax are all allocated for this flight
         if (checkFullyAllocated()) {
             callbacks.allSelected();
         } else {
@@ -227,24 +230,23 @@ export function Seats(data, jam, callbacks, config) {
         }
     }
 
+    // Check to see if we are fully allocated
     function checkFullyAllocated() {
-        //check to see if we are fully allocated
         let legs = jamResponse.legs;
         for (let leg of legs) {
-            if (legs[leg].selections.length != paxes.length) {
+            if (legs.selections.length != paxes.length) {
                 return false;
             }
 
             let selections = leg.selections;
 
             for (let selection of selections) {
-                if (selections[selection] == null) {
+                if (selection == null) {
                     return false;
                 }
             }
             
         }
-
         return true;
     }
 
@@ -274,11 +276,11 @@ export function Seats(data, jam, callbacks, config) {
         let flightInfoWrapper = document.querySelector('#info .flightinfo');
         let bandsWrapper = document.querySelector('#info .flightBands div');
         
-        flightInfoWrapper.innerHTML = "";
-        bandsWrapper.innerHTML= "";
+        flightInfoWrapper.innerHTML = '';
+        bandsWrapper.innerHTML= '';
         
-        //flight info
-        //var infoTemplate = document.querySelector('#flightinfo');   
+        // Flight info
+        // let infoTemplate = document.querySelector('#flightinfo');   
         let infoTemplate = document.createElement('template');
         infoTemplate.innerHTML =    `<div>
                                         <div class="flight-number">
@@ -301,8 +303,9 @@ export function Seats(data, jam, callbacks, config) {
 
         let info = RESULT_ITEM.legs[CURRENT_LEG].info;
         
+        // Missing departure info, just show the designation 
+        // (the only bit we a sure to have)
         if (!info.start) {
-            //missing departure info, just show the designation (the only bit we a sure to have)
             let infoEle;
 
             if ('content' in document.createElement('template')) {
@@ -318,11 +321,11 @@ export function Seats(data, jam, callbacks, config) {
             flightInfoWrapper.appendChild(infoEle);
         } else {
             const start = new Date(info.start.replace(/-/g, '\/').replace(/T.+/, ''));  // eslint-disable-line
-            let startDate = start.getDate() + ' ' + month(start) + ' ' + start.getFullYear();
-            const startTime = time(start.getHours()) + ':' + time(start.getMinutes());
+            let startDate = `${start.getDate()} ${month(start)} ${start.getFullYear()}`;
+            const startTime = `${time(start.getHours())} : ${time(start.getMinutes())}`;
             
             const end = new Date(info.end.replace(/-/g, '\/').replace(/T.+/, ''));  // eslint-disable-line
-            const endTime = time(end.getHours()) + ':' + time(end.getMinutes());    
+            const endTime = `${time(end.getHours())} : ${time(end.getMinutes())}`;    
             
             let infoEle;
 
@@ -334,16 +337,17 @@ export function Seats(data, jam, callbacks, config) {
 
             infoEle.querySelector('.number').innerHTML = info.designation;
             infoEle.querySelector('.departure').innerHTML = startDate;
-            infoEle.querySelector('.flight-departure-point .points').innerHTML = `${startTime} ${AIRPORTS[info.origin].name} ${info.origin}`;
-            infoEle.querySelector('.flight-arrival-point .points').innerHTML = `${endTime} ${AIRPORTS[info.destination].name} ${info.destination}`;
+
+            infoEle.querySelector('.flight-departure-point .points').innerHTML = `${startTime} ${AIRPORTS[info.origin].name} (${info.origin})`;
+            infoEle.querySelector('.flight-arrival-point .points').innerHTML = `${endTime} ${AIRPORTS[info.destination].name} (${info.destination})`;
             flightInfoWrapper.appendChild(infoEle);
         }
         
-        //BANDS
-        //Static
-        const staticBandsTemplate = document.createElement('#static-bands');
+        // BANDS
+        // Static
+        const staticBandsTemplate = document.createElement('template');
         let staticBandEle;
-        if('content' in document.createElement('template')) {
+        if ('content' in document.createElement('template')) {
             staticBandEle = staticBandsTemplate.content.cloneNode(true);
         } else {
             staticBandEle = staticBandsTemplate.cloneNode(true).querySelector('*'); 
@@ -378,7 +382,7 @@ export function Seats(data, jam, callbacks, config) {
         
         //infant band
         if (PARTY_HAS_INFANT) {
-            //var infantBandsTemplate = document.querySelector('#infant-band');
+            // var infantBandsTemplate = document.querySelector('#infant-band');
             let infantBandsTemplate = document.createElement('template');
             infantBandsTemplate.innerHTML = `<div class="band">
                                                 <div class="seat infant" style="background-color: transparent;"></div>
@@ -420,9 +424,9 @@ export function Seats(data, jam, callbacks, config) {
                 bandEle = bandTemplate.cloneNode(true).querySelector('*');
             }
 
-            bandEle.querySelector('.seat').setAttribute('data-band', BAND_CLASS[bands[band].id]);
-            bandEle.querySelector('.name').innerHTML = bands[band].name;
-            //bandEle.querySelector('.price').innerHTML = SEAT_LANGUAGES['seatSelection.currency.symbol'] + parseFloat(bands[band].prices[PAX_INDEX].value).toFixed(2);
+            bandEle.querySelector('.seat').setAttribute('data-band', BAND_CLASS[band.id]);
+            bandEle.querySelector('.name').innerHTML = band.name;
+            //bandEle.querySelector('.price').innerHTML = `${SEAT_LANGUAGES['seatSelection.currency.symbol']}${parseFloat(bands[band].prices[PAX_INDEX].value).toFixed(2)}`;
             bandsWrapper.appendChild(bandEle);
         }
     }   
@@ -450,8 +454,8 @@ export function Seats(data, jam, callbacks, config) {
                             </div>`;
 
     let paxes = [];
-    for (let i = 0; i< RESULT_ITEM.passengers.length; i++) {
-        var pax = RESULT_ITEM.passengers[i];
+    for (let i = 0; i < RESULT_ITEM.passengers.length; i++) {
+        let pax = RESULT_ITEM.passengers[i];
         paxes.push(new Pax(i,pax));
     }
 
@@ -467,7 +471,7 @@ export function Seats(data, jam, callbacks, config) {
         let selection = false;
         let cost = 0;
         
-        for (let leg = 0; leg < pricing.legs.length;leg++) {
+        for (let leg = 0; leg < pricing.legs.length; leg++) {
             if (pricing.legs[leg].selections.length > 0) {
                 selection = true;
                 for (let i = 0; i < pricing.legs[leg].selections.length; i++) {
@@ -478,7 +482,7 @@ export function Seats(data, jam, callbacks, config) {
 
         if (selection === true) {
             document.querySelector('#info').classList.add('has-selections');
-            templateWrapper.querySelector('.total-cost').innerHTML = '£' + parseFloat(cost).toFixed(2);
+            templateWrapper.querySelector('.total-cost').innerHTML = `£${parseFloat(cost).toFixed(2)}`;
             templateWrapper.style.display = 'block';
         } else {
             templateWrapper.style.display = 'none';
@@ -491,7 +495,8 @@ export function Seats(data, jam, callbacks, config) {
 
         let paxWrapper = document.getElementById('paxes');
         //var paxTemplate = document.getElementById('pax');   
-        var paxTemplate = document.createElement('template');
+        let paxTemplate = document.createElement('template');
+
         paxTemplate.innerHTML = `<div class="passenger">
                                     <span class="pax-number">
                                         <span class="number"></span>
@@ -510,7 +515,8 @@ export function Seats(data, jam, callbacks, config) {
                                     <div class="clear-fix"></div>
                                 </div>`;
         
-        //SEAT_LANGUAGES['seatSelection.pax.type.' + pax.type.toLowerCase()];
+        SEAT_LANGUAGES[`seatSelection.pax.type.${pax.type.toLowerCase()}`];
+        
         let paxEle;
         
         if ('content' in document.createElement('template')) {
@@ -523,13 +529,13 @@ export function Seats(data, jam, callbacks, config) {
         
         paxEle.setAttribute('data-count', index+1);
         paxEle.querySelector('.number').innerHTML = (index+1);
-        paxEle.querySelector('.name').innerHTML = pax.firstName + " " + pax.surname;
+        paxEle.querySelector('.name').innerHTML = `${pax.firstName} ${pax.surname}`;
         
         if (pax.infant) {
            PARTY_HAS_INFANT = true;
-           //paxEle.querySelector('.type').innerHTML = paxType + ' ' + SEAT_LANGUAGES['seatSelection.pax.plusInfant']; 
+           paxEle.querySelector('.type').innerHTML = `${pax.type} ${SEAT_LANGUAGES['seatSelection.pax.plusInfant']}`; 
         } else {
-           //paxEle.querySelector('.type').innerHTML = paxType; 
+           paxEle.querySelector('.type').innerHTML = pax.type; 
         }
         
         paxWrapper.appendChild(paxEle);
@@ -541,7 +547,7 @@ export function Seats(data, jam, callbacks, config) {
         this.active = function(){
             PAX_INDEX = index;
             for (let pax of paxes){
-                paxes[pax].ele.classList.remove('selected');
+                pax.ele.classList.remove('selected');
             }
 
             _this.ele.classList.add('selected');
@@ -561,7 +567,7 @@ export function Seats(data, jam, callbacks, config) {
             //let price = pricing.legs[CURRENT_LEG].selections[index];
 
             if (seat == null){
-                paxEle.querySelector('.choice .selected-seat').innerHTML = "";
+                paxEle.querySelector('.choice .selected-seat').innerHTML = '';
                 //paxEle.querySelector('.choice .price').innerHTML = "";
                 //paxEle.classList.remove('selected');
             } else {
@@ -574,8 +580,8 @@ export function Seats(data, jam, callbacks, config) {
         };
 
         this.unallocateSeat = function() {
-            paxEle.querySelector('.choice .selected-seat').innerHTML = "";
-            paxEle.querySelector('.choice .price').innerHTML = "";
+            paxEle.querySelector('.choice .selected-seat').innerHTML = '';
+            paxEle.querySelector('.choice .price').innerHTML = '';
             totals();
         };
 
@@ -620,17 +626,16 @@ export function Seats(data, jam, callbacks, config) {
 
         this.ele = flightEle;
         
-        var carrier;
+        let carrier;
 
-        for (let key of carriers) {
-            if (flight.designation.substring(0, key.length) === key) {
-                carrier = carriers[key];
+        for (let carrierKey in carriers) {
+            if (flight.designation.substring(0, carriers[carrierKey].length) === carriers[carrierKey]) {
+                carrier = carriers[carrierKey];
             }
         }
 
-        console.log(flight.designation); // eslint-disable-line
         //imagesToLoad['carrierLogo'] = carrier;
-        flightEle.querySelector('.carrier').innerHTML = '<img src="' + carrier + '" />';
+        flightEle.querySelector('.carrier').innerHTML = `<img src="${carrier}"/>`;
         //flightEle.querySelector('.name .route .departure').innerHTML = AIRPORTS[flight.origin].name;
         flightEle.querySelector('.name .route .departure-code').innerHTML = flight.origin;
         //flightEle.querySelector('.name .route .arrival').innerHTML = AIRPORTS[flight.destination].name;
@@ -642,11 +647,11 @@ export function Seats(data, jam, callbacks, config) {
         this.select = function(){
             //highlight
             for (let flight of flights) {
-                flights[flight].ele.classList.remove("active");
+                flight.ele.classList.remove('active');
             }
 
             CURRENT_LEG = index;
-            flightEle.classList.add("active");
+            flightEle.classList.add('active');
             //show the plane
             plane.show();
 
@@ -655,7 +660,7 @@ export function Seats(data, jam, callbacks, config) {
             selectNextPax();
             //update pax info
             for (let pax of paxes) {
-                paxes[pax].update();
+                pax.update();
             }
 
             //update band info
@@ -673,8 +678,6 @@ export function Seats(data, jam, callbacks, config) {
 
     let images = [];
     let promises = [];
-    
-    console.log(imagesToLoad); // eslint-disable-line
 
     for (let id in imagesToLoad) {
         let img = new Image();
@@ -733,14 +736,14 @@ export function Seats(data, jam, callbacks, config) {
         let planeWrapper = planeEle.querySelector('.plane');
         
         //push the selctions object across onto our basket request object
-        jamResponse.legs.push({"selections":flight.selections});
+        jamResponse.legs.push({'selections':flight.selections});
         var seats = flight.options;
         //check for row numbers that contain no seats at all...
         var validRows = [];
 
         for (let s of seats) {
-            let seat = seats[s];
-            for (let selection = 0;selection < flight.selections.length;selection++) {
+            let seat = s;
+            for (let selection = 0; selection < flight.selections.length; selection++) {
                 if (seat.seat == flight.selections[selection]) {
                     updatePrice(seat, legNumber, selection);
                 }   
@@ -811,6 +814,7 @@ export function Seats(data, jam, callbacks, config) {
             }
 
             // mark seats with no avaibility at all
+
             if (seat.available == null || seat.available.length == 0) {
                 seatDiv.classList.add('unavailable');
             } else if (PARTY_HAS_INFANT) {
@@ -875,8 +879,8 @@ export function Seats(data, jam, callbacks, config) {
             let div = document.createElement('div');
             div.classList.add('letter-row');
             for (let letter of letters[i]){
-                let l = letters[i][letter];
-                div.innerHTML+="<span class='row-letter'>"+l+"<span>";
+                let l = letter;
+                div.innerHTML+=`<span class="row-letter">${l}<span>`;
             }
             firstrow.parentNode.insertBefore(div, firstrow);
         }
@@ -918,7 +922,6 @@ export function Seats(data, jam, callbacks, config) {
 
         let plane = planeEle.querySelector('canvas');
         let ctx = plane.getContext("2d");
-        console.log(legNumber); // eslint-disable-line
         plane.width = planeBody.width+ planeWalls.width*2 + planeWing.width*2; // 2* wall + TWO WINGS
         plane.mask = planeBody.width+ planeWalls.width*2 + planeWing.width*2;
         plane.height = planeBody.height+ planeNose.height+planeTail.height +planeWalls.height*2; // tail + nose
@@ -973,7 +976,6 @@ export function Seats(data, jam, callbacks, config) {
         ctx.globalCompositeOperation = 'source-atop';
         ctx.translate(-(planeWing.width-(planeWalls.width*1.5)), (planeNose.height+carrierLogo.width)-200); 
         ctx.rotate(270 * Math.PI/180);
-        console.log(images['leg'+legNumber+'Carrier']); // eslint-disable-line
         ctx.drawImage(images['leg'+legNumber+'Carrier'], -(planeNose.height/4), planeNose.height, carrierLogo.width, carrierLogo.height);
         // Restore the plan to correct rotation
         ctx.restore();
@@ -992,17 +994,17 @@ export function Seats(data, jam, callbacks, config) {
         //ctx.drawImage(images['tailBottom'], plane.width/2-planeTail.width/2, planeBody.height+ planeNose.height+planeWalls.height*2 -100);
         ctx.restore();
         //position the seats DOM element correctly
-        seatsWrapper.style.top = (planeNose.height+planeWalls.height) + "px";
-        seatsWrapper.style.left = (planeWalls.width + planeWing.width) + "px";
+        seatsWrapper.style.top = `(${planeNose.height}${planeWalls.height})px`;
+        seatsWrapper.style.left = `(${planeWalls.width}${planeWing.width})px`;
 
         //force the width of the parent elements to be correct
-        planeWrapper.style.width=plane.width+ "px";
-        planeEle.style.width = "100%";
-        planeEle.style.height = plane.height+ "px";
+        planeWrapper.style.width = `${plane.width}px`;
+        planeEle.style.width = '100%';
+        planeEle.style.height = `${plane.height}px`;
         
         this.selectSeat = function(seat){
             //grab the seat for this
-            let ele = planeEle.querySelector('.seat.selectable[data-id="'+seat.seat+'"]');
+            let ele = planeEle.querySelector(`.seat.selectable[data-id="${seat}${seat}"]`);
             
             if (ele == null) {
                 return;
@@ -1014,17 +1016,17 @@ export function Seats(data, jam, callbacks, config) {
             }
             
             //remove selection from this pax's previous seat (if there was one)
-            let oldSeat = planeEle.querySelector('.seat[data-pax="'+(PAX_INDEX+1)+'"]');
+            let oldSeat = planeEle.querySelector(`.seat[data-pax="${(PAX_INDEX+1)}"]`);
 
             if (oldSeat != null) {
                 oldSeat.classList.remove('selected');
-                oldSeat.removeAttribute("data-pax");
+                oldSeat.removeAttribute('data-pax');
             }
 
             updatePrice(seat, legNumber, PAX_INDEX);
             jamResponse.legs[CURRENT_LEG].selections[PAX_INDEX] = seat.seat;
             //mark seat as selected
-            ele.setAttribute("data-pax", (PAX_INDEX+1));
+            ele.setAttribute('data-pax', (PAX_INDEX+1));
             paxes[PAX_INDEX].update(seat);
 
             //selectNext pax
@@ -1034,7 +1036,7 @@ export function Seats(data, jam, callbacks, config) {
         this.unselectSeat = function(seat, seatDiv) {
             const currentPax = seatDiv.getAttribute('data-pax');
             seatDiv.classList.remove('selected');
-            seatDiv.removeAttribute("data-pax");
+            seatDiv.removeAttribute('data-pax');
             jamResponse.legs[legNumber].selections[currentPax-1] = null;
             pricing.legs[legNumber].selections[currentPax-1] = null;
             paxes[currentPax-1].unallocateSeat();
@@ -1045,13 +1047,15 @@ export function Seats(data, jam, callbacks, config) {
         this.highlightAvailble = function(){
             //update seat class list based on if they can be selected
             for (let s of seats){
-                let seat = seats[s];
+                let seat = s;
                 let ele = planeEle.querySelector('.seat[data-id="'+seat.seat+'"]');
+
+                //let ele = planeEle.querySelector(`.seat.selectable[data-id="${seat.seat}"]`);
                 
-                if (seat.available.indexOf((PAX_INDEX+1)+"")>=0){
-                    ele.classList.add("selectable");
+                if (seat.available.indexOf((PAX_INDEX+1)+'')>=0){
+                    ele.classList.add('selectable');
                 } else {
-                    ele.classList.remove("selectable");
+                    ele.classList.remove('selectable');
                 }
             }
         };
