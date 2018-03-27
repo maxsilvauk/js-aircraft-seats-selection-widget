@@ -2,124 +2,133 @@
    'use strict';
 }());
 
+
 /**
  * selectionRequired()
  *
- * Does something.
+ * @return
+ *
+ * Something about selection required goes here.
  **/
 export function selectionRequired() {
-	document.querySelector('#continueButton').style.display = 'none';
+	// document.querySelector('#continueButton').style.display = 'none';
 
-	/* 'seats' is not defined 
-	if(seats.isFirstLeg()){
-	    if(FLOW.active && FLOW.stepsVisited !== 1) {
-		    document.querySelector('.button__back').onclick = function(){
-			    window.history.back();
-		    };
-		    document.querySelector('.button__back').innerHTML = SEAT_LANGUAGES['seatSelection.nav.back'];
-	    } else {
-	        document.querySelector('.button__back').style.display = 'none';
-	    }
+	// if (seats.isFirstLeg()) {
+	//     if (FLOW.active && FLOW.stepsVisited !== 1) {
+	// 	    document.querySelector('.button__back').onclick = function(){
+	// 		    window.history.back();
+	// 	    };
 
-        if(!FLOW.active)
-            document.querySelector('.button__home__cta').style.display = 'block';
-	}
-	*/
+	// 	    document.querySelector('.button__back').innerHTML = SEAT_LANGUAGES['seatSelection.nav.back'];
+	//     } else {
+	//         document.querySelector('.button__back').style.display = 'none';
+	//     }
 
-	/* 'seats' is not defined 
-	if (!seats.isFirstLeg()) {
-	    document.querySelector('.button__back').style.display = 'block';
-	    document.querySelector('.button__back').onclick = function() {
-		    seats.prevPlane();
-	    };
-	    document.querySelector('.button__back').innerHTML = SEAT_LANGUAGES['seatSelection.nav.previous'];
-	}
-	*/
+ //        if (!FLOW.active)
+ //            document.querySelector('.button__home__cta').style.display = 'block';
+	// }
+	
+	// if (!seats.isFirstLeg()) {
+	//     document.querySelector('.button__back').style.display = 'block';
+	//     document.querySelector('.button__back').onclick = function() {
+	// 	    seats.prevPlane();
+	//     };
+
+	//     document.querySelector('.button__back').innerHTML = SEAT_LANGUAGES['seatSelection.nav.previous'];
+	// }
 }
 
 /**
  * allPaxSelected()
  *
- * Does something.
+ * @return
+ *
+ * Something about allPaxSelected goes here.
  **/
 export function allPaxSelected() {
-    var skipButton = document.querySelector('.button__skip__cta');
+ //    var skipButton = document.querySelector('.button__skip__cta');
 
-	if (skipButton)
-        skipButton.style.display = 'none';
+	// if (skipButton) {
+ //        skipButton.style.display = 'none';
+	// }
 
-	document.querySelector('#continueButton').style.display = 'block';
-	document.querySelector('#continueButton').onclick = function(){
-        /*	'seats' is not defined 
-        seats.validate(function(){
-            seats.nextIncompletePlane();
-		});
-		*/
-	};
+	// document.querySelector('#continueButton').style.display = 'block';
+	// document.querySelector('#continueButton').onclick = function(){
+ //    	seats.validate(function(){
+ //        	seats.nextIncompletePlane();
+	// 	});
+	// };
 
-	//  'SEAT_LANGUAGES' is not defined 
-	//document.querySelector('#continueButton').innerHTML = SEAT_LANGUAGES['seatSelection.nav.next'];
+	// document.querySelector('#continueButton').innerHTML = SEAT_LANGUAGES['seatSelection.nav.next'];
 }
 
 /**
  * allSelected()
  *
- * Does something.
+ * @return
+ *
+ * Something about allSelected goes here.
  **/
 export function allSelected() {
-	document.querySelector('#continueButton').style.display = 'block';
+	// document.querySelector('#continueButton').style.display = 'block';
 
-	/*  'seats' is not defined 
-	if (seats.isLastLeg()){
-		document.querySelector('#continueButton').onclick = function(){
-		    seats.validate(function(){
-			    seats.addToBasket();
-		    });
-		};
+	// if (seats.isLastLeg()){
+	// 	document.querySelector('#continueButton').onclick = function(){
+	// 	    seats.validate(function(){
+	// 		    seats.addToBasket();
+	// 	    });
+	// 	};
 
-		//  'SEAT_LANGUAGES' is not defined 
-		//document.querySelector('#continueButton').innerHTML = SEAT_LANGUAGES['seatSelection.nav.basketBtn'];
-	} else {
-		document.querySelector('#continueButton').onclick = function(){
+	// 	document.querySelector('#continueButton').innerHTML = SEAT_LANGUAGES['seatSelection.nav.basketBtn'];
+	// } else {
+	// 	document.querySelector('#continueButton').onclick = function(){
+	// 		seats.validate(function(){
+	// 			seats.nextPlane();
+	// 		});
+			
+	// 	};
 
-			/* 'seats' is not defined 
-			seats.validate(function(){
-				seats.nextPlane();
-			});
-			*/
-		//};
+	// 	var skipButton = document.querySelector('.button__skip__cta');
 
-		//var skipButton = document.querySelector('.button__skip__cta');
+	//     if (skipButton) {
+	// 	    skipButton.style.display = 'none';
+	// 	}
 
-	    //if (skipButton) {
-		    //skipButton.style.display = 'none';
-
-		// 'SEAT_LANGUAGES' is not defined 
-		//document.querySelector('#continueButton').innerHTML = SEAT_LANGUAGES['seatSelection.nav.next'];
-	//}
+	// 	document.querySelector('#continueButton').innerHTML = SEAT_LANGUAGES['seatSelection.nav.next'];
+	// }
 }
 
 /**
- * afterBaskset()
+ * afterBasket()
  *
- * Does something.
+ * @return
+ *
+ * Something about afterBasket goes here.
  **/
-export function afterBasket(){
-    console.log('After Basket'); // eslint-disable-line
+export function afterBasket() {
+ //var $http = angular.injector(['ng']).get('$http');
 
-    /* We need to place a fetch here
-    var $http = angular.injector(['ng']).get('$http');
+ //    $http.get('/jam/upsellFlow/next')
+ //    .success(
+ //        function(o){
+ //            console.log(o);
+ //            if (o.nextPage && o.active) {
+ //    	        window.location = "/" + o.nextPage;
+ //    	    } else {
+ //    		    window.location = "/index";
+ //    	    }
+ //        }
+ //	    );
 
-    $http.get('/jam/upsellFlow/next')
-    .success(
-        function(o){
-            console.log(o);
-            if (o.nextPage && o.active) {
-    	        window.location = "/" + o.nextPage;
-    	    } else {
-    		    window.location = "/index";
-    	    }
-        }
-	);
-	*/
+  //   fetch('/jam/upsellFlow/next', {credentials:'include'})
+  //   .then(response => response.json())
+  //   .then(response => {
+	 //    if (o.nextPage && o.active) {
+		//     window.location = `/${o.nextPage}`;
+		// } else {
+		//     window.location = `/index`;
+		// }
+  //   	console.log(`afterBasket: `, response); // eslint-disable-line
+  //   })
+  //   .catch((err) => console.log('error: ', err));  // eslint-disable-line
 }
