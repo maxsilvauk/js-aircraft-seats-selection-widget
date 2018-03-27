@@ -37,7 +37,7 @@ export function putData(fetchUrl, log) {
  **/
 export function getData(key) {
 	if (localStorage.getItem(key) !== null) {
-	   return localStorage.getItem(key);
+	   return JSON.parse(localStorage.getItem(key));
 	} else {
 	   console.error(`Error: data with key of '${key}' not found`); // eslint-disable-line
 	   return false;
