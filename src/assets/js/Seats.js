@@ -16,14 +16,49 @@ Think that's it for the time being
 
 import { getData } from './CacheServiceHelper.js';
 
+/**
+ * getAirportsData()
+ *
+ * @param { string } siteUrl
+ * @param { string } seatLangJam
+ * @return SeatsBuilder.Seats()
+ *
+ * Get the airports data.
+ **/
+export function getAirportsData(siteUrl, airportsJam){
+    return getData(`${siteUrl}${airportsJam}`);    
+}
+
+/**
+ * getAirportsData()
+ *
+ * @param { string } siteUrl
+ * @param { string } seatLangJam
+ * @return
+ *
+ * Get the airports data.
+ **/
+export function getSeatLanguagesData(siteUrl, seatLangJam){
+    return getData(`${siteUrl}${seatLangJam}`);   
+}
+
+/**
+ * Seats()
+ *
+ * @param { object } siteUrl
+ * @param { string } jam
+ * @param { object } callbacks
+ * @param { object } config
+ * @return void.
+ *
+ * Create the seating widet.
+ **/
 export function Seats(data, jam, callbacks, config) {
-    console.log(config.siteUrl);
-
     let _this = this;
-    const planeBodyColor = 'white';
-    const AIRPORTS = getData(`${config.siteUrl}${config.airportsJam}`); // eslint-disable-line
-    const SEAT_LANGUAGES = getData(`${config.siteUrl}${config.seatLangJam}`); // eslint-disable-line
 
+    const planeBodyColor = 'white';
+    const AIRPORTS = getAirportsData(`${config.siteUrl}`,`${config.airportsJam}`); // eslint-disable-line
+    const SEAT_LANGUAGES = getSeatLanguagesData(`${config.siteUrl}`,`${config.seatLangJam}`); // eslint-disable-line
     const carriers = {
         'FPO':  `${config.siteUrl}/sharedimages/Suppliers/Suppliers - Flight/fpo`,
         'ENT':  `${config.siteUrl}/sharedimages/Suppliers/Suppliers - Flight/ent`,
@@ -224,8 +259,10 @@ export function Seats(data, jam, callbacks, config) {
 
         // If we get here then the pax are all allocated for this flight
         if (checkFullyAllocated()) {
+            console.log('we get here');
             callbacks.allSelected();
         } else {
+            console.log('woooooo hoooooo');
             callbacks.allPaxSelected();
         }
     }
