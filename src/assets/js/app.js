@@ -9,5 +9,5 @@ import RetrieveAvailabilityClass from './RetrieveAvailabilityClass.js';
 window.addEventListener('load', () => new RetrieveAvailabilityClass({
 	surname: 	'Smith',
 	ref: 		'1111',
-	siteUrl: 	'merch.fabrix.xmltravel.com'
+	siteUrl: 	'merch-demo.webvoyage.co.uk'
 }));

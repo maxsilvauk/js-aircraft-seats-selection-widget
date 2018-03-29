@@ -55,7 +55,7 @@ export function getSeatLanguagesData(siteUrl, seatLangJam){
  **/
 export function Seats(data, jam, callbacks, config) {
     let _this = this;
-
+    console.log('seats');
     const planeBodyColor = 'white';
     const AIRPORTS = getAirportsData(`${config.siteUrl}`,`${config.airportsJam}`); // eslint-disable-line
     const SEAT_LANGUAGES = getSeatLanguagesData(`${config.siteUrl}`,`${config.seatLangJam}`); // eslint-disable-line
@@ -691,7 +691,6 @@ export function Seats(data, jam, callbacks, config) {
             flightEle.classList.add('active');
             //show the plane
             plane.show();
-
             callbacks.selectionRequired();
             //select a pax
             selectNextPax();

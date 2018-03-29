@@ -3,7 +3,7 @@
 }());
 
 import { putData } from './CacheServiceHelper.js';
-import * as SeatsCallBacksHelper from './SeatsCallBacksHelper.js';
+//import * as SeatsCallBacksHelper from './SeatsCallBacksHelper.js';
 import * as SeatsBuilder from './Seats.js';
 //import * as RequestServiceHelper from './RequestServiceHelper.js';
 
@@ -15,11 +15,12 @@ import * as SeatsBuilder from './Seats.js';
 export default class RetrieveAvailabilityClass {
 
     constructor(config) {
+        var self = this;
+        self.config = config;
         this.config = config;
         this.config.siteUrl = 'https://'+this.config.siteUrl;
         this.loader = document.getElementById('loader');
         this.seatResults = document.getElementById('seat-results');
-
         this.iFrame = document.createElement('iframe');
         this.iFrame.addEventListener('load', () => this.setHistoricBasketUrl());
         this.iFrame.style.display = 'none';
@@ -35,6 +36,7 @@ export default class RetrieveAvailabilityClass {
      * Create historic basket jam url.
      **/
     setHistoricBasketUrl() {
+        console.log(self.config);
         const fetchUrl = `${this.config.siteUrl}/jam/historicbasket?ref=${this.config.ref}&system=ATCORE&surname=${this.config.surname}`;
         this.getHistoricBasket(fetchUrl);
     }
@@ -103,6 +105,7 @@ export default class RetrieveAvailabilityClass {
         .then(response => response.json())
         .then(response => {
            console.log('getHistoricBasket: ', response); // eslint-disable-line
+           //this.setSearchUrl();
            this.setAirportsUrl();
         })
         .catch((err) => console.log('error: ', err));  // eslint-disable-line
@@ -147,6 +150,34 @@ export default class RetrieveAvailabilityClass {
         this.setSearchUrl();
     }
 
+    
+    /**
+     * getSearch()
+     *
+     * @param { string } fetchUrl
+     * @return SeatsBuilder.Seats()
+     *
+     * Get the search data.
+     **/
+    getSearch(fetchUrl) {
+        console.log('getSearch');
+        fetch(fetchUrl, {
+            credentials: 'include',
+            method: 'POST',
+            body: JSON.stringify({'journey':'seats'})
+        })
+        .then(response => response.json())
+        .then(response => {
+            console.log(response);
+            this.seats = new SeatsBuilder.Seats(response.results, null, {
+                selectionRequired: () => this.selectionRequired(),
+                allPaxSelected: () => this.allPaxSelected(),
+                allSelected: () => this.allSelected(), 
+                afterBasket: () => this.afterBasket()
+            }, this.config);
+        })
+        .catch((err) => console.log(`error: `, err)); // eslint-disable-line
+    }
     /**
      * selectionRequired()
      *
@@ -155,16 +186,18 @@ export default class RetrieveAvailabilityClass {
      * Something about selection required goes here.
      **/
     selectionRequired() {
+        console.log(this.config);
+        console.log('selection required mofo');
         document.querySelector('#continueButton').style.display = 'none';
-        const SEAT_LANGUAGES = SeatsBuilder.getAirportsData(this.config.siteUrl, this.config.airportsJam);
-
+        //const SEAT_LANGUAGES = SeatsBuilder.Seats.getAirportsData(this.config.siteUrl, this.config.airportsJam);
+        console.log('is first leg?', this.seats.isFirstLeg());
         // if (seats.isFirstLeg()) {
         //     if (FLOW.active && FLOW.stepsVisited !== 1) {
         //      document.querySelector('.button__back').onclick = function(){
         //          window.history.back();
         //      };
 
-              document.querySelector('.button__back').innerHTML = SEAT_LANGUAGES['seatSelection.nav.back'];
+              document.querySelector('.button__back').innerHTML = '< Back';
         //     } else {
         //         document.querySelector('.button__back').style.display = 'none';
         //     }
@@ -218,7 +251,7 @@ export default class RetrieveAvailabilityClass {
      **/
     allSelected() {
         document.querySelector('#continueButton').style.display = 'block';
-        const SEAT_LANGUAGES = SeatsBuilder.getAirportsData(this.config.siteUrl, this.config.airportsJam); // eslint-disable-line
+        const SEAT_LANGUAGES = SeatsBuilder.getAirportsData(RetrieveAvailabilityClass.config.siteUrl, RetrieveAvailabilityClass.config.airportsJam); // eslint-disable-line
 
         // if (seats.isLastLeg()){
         //     document.querySelector('#continueButton').onclick = function(){
@@ -280,29 +313,4 @@ export default class RetrieveAvailabilityClass {
         .catch((err) => console.log('error: ', err));  // eslint-disable-line
     }
 
-    /**
-     * getSearch()
-     *
-     * @param { string } fetchUrl
-     * @return SeatsBuilder.Seats()
-     *
-     * Get the search data.
-     **/
-    getSearch(fetchUrl) {
-        fetch(fetchUrl, {
-            credentials: 'include',
-            method: 'POST',
-            body: JSON.stringify({'journey':'seats'})
-        })
-        .then(response => response.json())
-        .then(response => {
-            SeatsBuilder.Seats(response.results, null, {
-                selectionRequired: SeatsCallBacksHelper.selectionRequired,
-                allPaxSelected: SeatsCallBacksHelper.allPaxSelected,
-                allSelected: SeatsCallBacksHelper.allSelected, 
-                afterBasket: SeatsCallBacksHelper.afterBasket
-            }, this.config);
-        })
-        .catch((err) => console.log(`error: `, err)); // eslint-disable-line
-    }
 }
