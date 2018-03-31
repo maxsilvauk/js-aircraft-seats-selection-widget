@@ -230,20 +230,21 @@ export default class RetrieveAvailabilityClass {
      * Something about allSelected goes here.
      **/
     allSelected() {
+        var _this = this;
         this.continueButton.style.display = 'block';
-        const SEAT_LANGUAGES = this.seats.getSeatLanguagesData(this.config.siteUrl, this.config.seatLangJam); // eslint-disable-line
+        const SEAT_LANGUAGES = SeatsBuilder.getSeatLanguagesData(this.config.siteUrl, this.config.seatLangJam); // eslint-disable-line
 
         if (this.seats.isLastLeg()){
             this.continueButton.onclick = function(){
-                this.seats.validate(function(){
-                    this.seats.addToBasket();
+                _this.seats.validate(function(){
+                    _this.seats.addToBasket();
                 });
             };
             this.continueButton.innerHTML = SEAT_LANGUAGES['seatSelection.nav.basketBtn'];
         } else {
             this.continueButton.onclick = function(){
-                this.seats.validate(function(){
-                    this.seats.nextPlane();
+                _this.seats.validate(function(){
+                    _this.seats.nextPlane();
                 });    
             };
             this.continueButton.innerHTML = SEAT_LANGUAGES['seatSelection.nav.next'];

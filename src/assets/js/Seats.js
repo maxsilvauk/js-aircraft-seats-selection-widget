@@ -194,25 +194,45 @@ export function Seats(data, jam, callbacks, config) {
         //         //nb probably in a nicer way....
         //     }
         // );
-        console.log(jamResponse);
-        fetch(`${config.siteUrl}/jam/seatvalidation`, jamResponse)
-        .then(response => response.json())
-        .then(response => {
-            if (response.status == 200) {
-                //hideAllSplashes();
-                //validation pass, call next step
-                callback();
-            } else {
-                //hideAllSplashes();
-                //validation failure show to the user
-                // if (o && o.errors){
-                //     validationWarning.querySelector('.error-message').innerHTML = o.errors[0];
-                //     validationWarning.style.display = "block";
-                // }
-                //nb probably in a nicer way....  
+        console.log(JSON.stringify( jamResponse ));
+        
+        var httpRequest = new XMLHttpRequest();
+        httpRequest.onreadystatechange = function() {
+            if (httpRequest.readyState === 4) {
+                if (httpRequest.status === 200) {
+                    if (callback) callback();
+                } else {
+                    var error = JSON.parse(httpRequest.statusText);
+                    console.log(error);
+                    // validatio
+                }
             }
-        })
-        .catch((err) => console.log(`error: `, err));  // eslint-disable-line
+        };
+        httpRequest.open('POST', `${config.siteUrl}/jam/seatvalidation`);
+        httpRequest.withCredentials = true;
+        httpRequest.send(JSON.stringify( jamResponse ));
+
+        // fetch(`${config.siteUrl}/jam/seatvalidation`, {
+        //     method: "POST",
+        //     body: JSON.stringify(jamResponse)
+        // })
+        // .then(response => response.json())
+        // .then(response => {
+        //     if (response.status == 200) {
+        //         //hideAllSplashes();
+        //         //validation pass, call next step
+        //         callback();
+        //     } else {
+        //         //hideAllSplashes();
+        //         //validation failure show to the user
+        //         // if (o && o.errors){
+        //         //     validationWarning.querySelector('.error-message').innerHTML = o.errors[0];
+        //         //     validationWarning.style.display = "block";
+        //         // }
+        //         //nb probably in a nicer way....  
+        //     }
+        // })
+        // .catch((err) => console.log(`error: `, err));  // eslint-disable-line
     };
 
     this.addToBasket = function(){
@@ -229,16 +249,34 @@ export function Seats(data, jam, callbacks, config) {
         //         //hideAllSplashes();
         //     }
         // );
+        var httpRequest = new XMLHttpRequest();
+        httpRequest.onreadystatechange = function() {
+            if (httpRequest.readyState === 4) {
+                if (httpRequest.status === 200) {
+                    callbacks.afterBasket();
+                } else {
+                    var error = JSON.parse(httpRequest.statusText);
+                    console.log(error);
+                    // validatio
+                }
+            }
+        };
+        httpRequest.open('POST', `${config.siteUrl}/jam/basket/swap`);
+        httpRequest.withCredentials = true;
+        httpRequest.send(JSON.stringify( jamResponse ));
+
+
         
-        fetch('/jam/basket/swap', {
-            method: 'POST',
-        })
-        .then(response => response.json())
-        .then(response => {
-            response.json();
-            callbacks.afterBasket();
-        })
-        .catch((err) => console.log(`error: `, err));  // eslint-disable-line
+        // fetch(`${config.siteUrl}/jam/basket/swap`, {
+        //     method: 'POST',
+        //     body: JSON.stringify(jamResponse)
+        // })
+        // .then(response => response.json())
+        // .then(response => {
+        //     response.json();
+        //     callbacks.afterBasket();
+        // })
+        // .catch((err) => console.log(`error: `, err));  // eslint-disable-line
     };
 
     /**
