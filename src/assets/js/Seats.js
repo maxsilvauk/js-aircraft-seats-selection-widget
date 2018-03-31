@@ -140,6 +140,7 @@ export function Seats(data, jam, callbacks, config) {
 
     // select the next incomplete plane!
     this.nextIncompletePlane = function () {
+        console.log('nextIncompletePlane');
         for (let i = 0; i < jamResponse.legs.length; i++) {
             let leg = jamResponse.legs[i];
             
@@ -193,13 +194,8 @@ export function Seats(data, jam, callbacks, config) {
         //         //nb probably in a nicer way....
         //     }
         // );
-
-        fetch(`${config.siteUrl}/jam/seatvalidation`, {
-            method: 'POST',
-            credentials:'include',
-            body: JSON.stringify({jamResponse})
-
-        })
+        console.log(jamResponse);
+        fetch(`${config.siteUrl}/jam/seatvalidation`, jamResponse)
         .then(response => response.json())
         .then(response => {
             if (response.status == 200) {
@@ -271,7 +267,7 @@ export function Seats(data, jam, callbacks, config) {
     function checkFullyAllocated() {
         let legs = jamResponse.legs;
         for (let leg of legs) {
-            if (legs.selections.length != paxes.length) {
+            if (leg.selections.length != paxes.length) {
                 return false;
             }
 
@@ -742,7 +738,7 @@ export function Seats(data, jam, callbacks, config) {
     });
 
     function Plane(legNumber, flight){
-        //let _this = this;
+        let _this = this;
         //var template = document.querySelector('#plane');
         var planeTemplate = document.createElement('template');
         planeTemplate.innerHTML =   `<div class="flipper result" data-count="">
@@ -765,9 +761,9 @@ export function Seats(data, jam, callbacks, config) {
         document.querySelector('#planes').appendChild(planeEle);
 
         let seatsWrapper = planeEle.querySelector('.seats');
-        //let restrictedWarning = document.querySelector('.restricted-seat-warning');
-        //let confirmRestriction = document.querySelector('#accept-seat-restrictions');
-        //let rejectRestriction = document.querySelector('#cancel-seat-selection');
+        let restrictedWarning = document.querySelector('.restricted-seat-warning');
+        let confirmRestriction = document.querySelector('#accept-seat-restrictions');
+        let rejectRestriction = document.querySelector('#cancel-seat-selection');
         
         let planeWrapper = planeEle.querySelector('.plane');
         
@@ -868,28 +864,29 @@ export function Seats(data, jam, callbacks, config) {
         
             // wire the onclick event
             // wrapper function to define fixed seat scope variable (as it is a loop var)
-            // seatDiv.onclick = function(_seat){
-            //     return function(){
-            //         // if($(this).attr('data-pax')){
-            //         //     _this.unselectSeat(_seat, this);
-            //         // } else {
-                        
-            //         //     if(_seat.access=="RESTRICTED") {
-            //         //         restrictedWarning.style.display = "block";
-            //         //         confirmRestriction.onclick = function() {
-            //         //             restrictedWarning.style.display = "none";
-            //         //              _this.selectSeat(_seat);
-            //         //         };
-            //         //         rejectRestriction.onclick = function() {
-            //         //             restrictedWarning.style.display = "none";
-            //         //         };
-            //         //         //_this.selectSeat(_seat);
-            //         //     } else {
-            //         //         _this.selectSeat(_seat);
-            //         //     }
-            //         // }
-            //     };
-            // }(seat);
+            seatDiv.onclick = function(_seat){
+                return function(){
+                    if(this.getAttribute('data-pax')){
+                        _this.unselectSeat(_seat, this);
+                    } else {
+                        if(_seat.access=="RESTRICTED") {
+                            console.log('Restricted Seat Selection');
+                            restrictedWarning.style.display = "block";
+                            confirmRestriction.onclick = function() {
+                                restrictedWarning.style.display = "none";
+                                 _this.selectSeat(_seat);
+                            };
+                            rejectRestriction.onclick = function() {
+                                restrictedWarning.style.display = "none";
+                            };
+                            //_this.selectSeat(_seat);
+                        } else {
+                            console.log('Seat Selection');
+                            _this.selectSeat(_seat);
+                        }
+                    }
+                };
+            }(seat);
 
             // highlight already selectd seats
             for (let idx = 0; idx < flight.selections.length; idx++){
@@ -1040,7 +1037,8 @@ export function Seats(data, jam, callbacks, config) {
         
         this.selectSeat = function(seat){
             //grab the seat for this
-            let ele = planeEle.querySelector(`.seat.selectable[data-id="${seat}${seat}"]`);
+            console.log('select seat');
+            let ele = planeEle.querySelector(`.seat.selectable[data-id="${seat.seat}"]`);
             
             if (ele == null) {
                 return;

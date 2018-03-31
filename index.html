@@ -7,122 +7,14 @@
         <title></title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link href="https://merch-demo.webvoyage.co.uk/assets/less/layout/components/seats.less" rel="stylesheet" />
+        <link href="https://merch-demo.webvoyage.co.uk/assets/less/layout/components/buttons" rel="stylesheet" />
     </head>
     <body>
         <h1>Seating Widget</h1>
         <div id="seat-selection">
             <img src="https://cdnjs.cloudflare.com/ajax/libs/galleriffic/2.0.1/css/loader.gif" id="loader" style="display:none;"/>
-            <div id="seat-results" style="display:none;">
-                <!-- Restricted Seat Warning -->
-                <div class="restricted-seat-warning pop-up">
-                    <div class="pop-up-message">
-                        <h3>
-                            Information about your seat
-                        </h3>
-                        <p>
-                            Information about your seat
-                        </p>
-                        <ul>
-                            <li>an infant</li>
-                            <li>sat with an infant on their lap</li>
-                            <li>pregnant</li>
-                            <li>under 16 years of age</li>
-                            <li>disabled</li>
-                            <li>mobility impaired</li>
-                            <li>requiring a seat belt extension</li>
-                        </ul>
-                        <p>
-                            If you choose this seat for a passenger in one of the above categories, they will be allocated another seat upon boarding.
-                        </p>
-                        <div class="buttons">
-                            <a href="#" id="cancel-seat-selection" class="button__close">
-                                I'll choose another seat
-                            </a>
-                            <a href="#" id="accept-seat-restrictions" class="button__accept__cta">
-                                I want this seat
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <!-- Restricted Seat Warning -->
-                <div class="validation-warning pop-up">
-                    <div class="pop-up-message" style="background-color:#ffeded; padding: 15px; display: flex;">
-                        <span class="info-icon">!</span>
-                        <span class="error-message"></span>
-                        <a href="#" id="accept-validation" class="icon-close"></a>
-                    </div>
-                </div>
-                <!-- THE actual plane elements -->
-                <div class="plane-container">
-                    <div class="flip-container">
-                        <div id="planes" class="flipper-card"></div>
-                    </div>
-                </div>
-
-                <div class="wrapper seats-container">
-                    <!--- THIS IS ALL THE TEMPLATES FOR THE UI -->
-                    <!-- top buttons for selecting flight legs -->
-                    <div id="flights" class="flip-navigation">
-                        <div class="flights-wrapper"></div>
-                    </div>
-                    <!-- info box-->
-                    <a href="javascript:void(0);" class="open-info">
-                        <i class="icon-info"></i> Show seat info
-                    </a>
-                    <div id="info" class="wow content-container" ng-controller="AirportsCtrl">
-                        <div class="flightinfo"></div>
-                        <div class="flightBands">
-                            <div></div>
-                        </div>
-                    </div>
-                    <div class="passenger-dropdown sub-header">
-                        <a href="javascript:void(0);" class="passenger sub-header-content"></a>
-                    </div>
-                    <div class="selection-wrapper">
-                        <div id="paxes" class="passenger-selection-container"></div>
-                        <div class="price-line total content-container" id="totals" style="display:none;">
-                            <span class="total-desc">
-                                <i class="icon-wallet"></i>
-                                Total Cost
-                            </span>
-                            <span class="total-cost">
-                                
-                            </span>
-                        </div>
-                        <cms:page href="/assets/templates/page_components/booking-fee"></cms:page>
-                    </div>
-                    <div class="button-container__fixed">
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
-                            <a href="#" onclick="window.history.back();" id="backButton" class="button__back">
-                                &lt; Back
-                            </a>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6 powered-by-wrapper">
-                            <cms:page href="/assets/templates/page_components/powered-by"></cms:page>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
-                            <div class="skip">
-                            <a href="javascript:void(0);" class="button__skip__cta skip-button" onclick="$('.skip .pop-up').addClass('active');">
-                                Skip &gt;
-                            </a>
-                            <div class="pop-up">
-                                <div class="pop-up-message">
-                                    You have not made a selection, are you sure you want to continue?
-                                    <div class="buttons">
-                                        <a href="#" onclick="$('.pop-up').removeClass('active');" class="button__close">No, go back</a>
-                                        <a href="/index" class="button__home__cta" style="display:none;">Yes, skip</a>
-                                        <brix:tile id="merch_skip_step" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                            <a href="#" id="continueButton" class="button__select__cta">
-                                Continue &gt;
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div id="seat-results"></div>
         </div>
         <script src="./dist/js/app.bundle.js"></script>
     </body>

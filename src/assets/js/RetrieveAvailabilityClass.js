@@ -3,6 +3,7 @@
 }());
 
 import { putData } from './CacheServiceHelper.js';
+import { buildSeatsWrapper } from './BuildWrapper.js';
 //import * as SeatsCallBacksHelper from './SeatsCallBacksHelper.js';
 import * as SeatsBuilder from './Seats.js';
 //import * as RequestServiceHelper from './RequestServiceHelper.js';
@@ -15,8 +16,7 @@ import * as SeatsBuilder from './Seats.js';
 export default class RetrieveAvailabilityClass {
 
     constructor(config) {
-        var self = this;
-        self.config = config;
+        buildSeatsWrapper('#seat-results');
         this.config = config;
         this.config.siteUrl = 'https://'+this.config.siteUrl;
         this.loader = document.getElementById('loader');
@@ -25,6 +25,9 @@ export default class RetrieveAvailabilityClass {
         this.iFrame.addEventListener('load', () => this.setHistoricBasketUrl());
         this.iFrame.style.display = 'none';
         this.iFrame.src = `${this.config.siteUrl}/jam/session/create?session=null`;
+        // Cache DOM
+        this.backButton = document.querySelector('.button__back');
+        this.continueButton = document.querySelector('#continueButton');
         document.body.appendChild(this.iFrame);
     }
 
@@ -186,35 +189,17 @@ export default class RetrieveAvailabilityClass {
      * Something about selection required goes here.
      **/
     selectionRequired() {
-        console.log(this.config);
-        console.log('selection required mofo');
-        document.querySelector('#continueButton').style.display = 'none';
-        //const SEAT_LANGUAGES = SeatsBuilder.Seats.getAirportsData(this.config.siteUrl, this.config.airportsJam);
-        console.log('is first leg?', this.seats.isFirstLeg());
-        // if (seats.isFirstLeg()) {
-        //     if (FLOW.active && FLOW.stepsVisited !== 1) {
-        //      document.querySelector('.button__back').onclick = function(){
-        //          window.history.back();
-        //      };
-
-              document.querySelector('.button__back').innerHTML = '< Back';
-        //     } else {
-        //         document.querySelector('.button__back').style.display = 'none';
-        //     }
-
-        //     if (!FLOW.active) {
-        //         document.querySelector('.button__home__cta').style.display = 'block';
-        //     }
-        // }
-        
-        // if (!seats.isFirstLeg()) {
-        //     document.querySelector('.button__back').style.display = 'block';
-        //     document.querySelector('.button__back').onclick = function() {
-        //      seats.prevPlane();
-        //     };
-
-        //     document.querySelector('.button__back').innerHTML = SEAT_LANGUAGES['seatSelection.nav.previous'];
-        // }
+        this.continueButton.style.display = 'none';
+        const SEAT_LANGUAGES = SeatsBuilder.getSeatLanguagesData(this.config.siteUrl, this.config.seatLangJam);
+        if (this.seats.isFirstLeg()) {
+            this.backButton.style.display = 'none';
+        } else {
+            this.backButton.style.display = 'block';
+            this.backButton.onclick = function() {
+                this.seats.prevPlane();
+            };
+            this.backButton.innerHTML = SEAT_LANGUAGES['seatSelection.nav.previous'];
+        }
     }
 
     /**
@@ -225,21 +210,16 @@ export default class RetrieveAvailabilityClass {
      * Something about allPaxSelected goes here.
      **/
     allPaxSelected() {
-        let skipButton = document.querySelector('.button__skip__cta');
-
-        if (skipButton) {
-            skipButton.style.display = 'none';
-        }
-
-        document.querySelector('#continueButton').style.display = 'block';
-        document.querySelector('#continueButton').onclick = function(){
-            // seats.validate(function(){
-            //     seats.nextIncompletePlane();
-            // });
+        var _this = this;
+        this.continueButton.style.display = 'block';
+        this.continueButton.onclick = function(){
+            _this.seats.validate(function(){
+                _this.seats.nextIncompletePlane();
+            });
         };
-
-        const SEAT_LANGUAGES = SeatsBuilder.getAirportsData(this.config.siteUrl, this.config.airportsJam);
-        document.querySelector('#continueButton').innerHTML = SEAT_LANGUAGES['seatSelection.nav.next'];
+        const SEAT_LANGUAGES = SeatsBuilder.getSeatLanguagesData(this.config.siteUrl, this.config.seatLangJam);
+        console.log(SEAT_LANGUAGES);
+        this.continueButton.innerHTML = SEAT_LANGUAGES['seatSelection.nav.next'];
     }
 
     /**
@@ -250,30 +230,24 @@ export default class RetrieveAvailabilityClass {
      * Something about allSelected goes here.
      **/
     allSelected() {
-        document.querySelector('#continueButton').style.display = 'block';
-        const SEAT_LANGUAGES = SeatsBuilder.getAirportsData(RetrieveAvailabilityClass.config.siteUrl, RetrieveAvailabilityClass.config.airportsJam); // eslint-disable-line
+        this.continueButton.style.display = 'block';
+        const SEAT_LANGUAGES = this.seats.getSeatLanguagesData(this.config.siteUrl, this.config.seatLangJam); // eslint-disable-line
 
-        // if (seats.isLastLeg()){
-        //     document.querySelector('#continueButton').onclick = function(){
-        //         // seats.validate(function(){
-        //         //     seats.addToBasket();
-        //         // });
-        //     };
-        //     document.querySelector('#continueButton').innerHTML = SEAT_LANGUAGES['seatSelection.nav.basketBtn'];
-        // } else {
-        //     document.querySelector('#continueButton').onclick = function(){
-        //         // seats.validate(function(){
-        //         //     seats.nextPlane();
-        //         // });    
-        //     };
-
-        //     let skipButton = document.querySelector('.button__skip__cta');
-
-        //     if (skipButton) {
-        //         skipButton.style.display = 'none';
-        //     }
-        //     document.querySelector('#continueButton').innerHTML = SEAT_LANGUAGES['seatSelection.nav.next'];
-        // }
+        if (this.seats.isLastLeg()){
+            this.continueButton.onclick = function(){
+                this.seats.validate(function(){
+                    this.seats.addToBasket();
+                });
+            };
+            this.continueButton.innerHTML = SEAT_LANGUAGES['seatSelection.nav.basketBtn'];
+        } else {
+            this.continueButton.onclick = function(){
+                this.seats.validate(function(){
+                    this.seats.nextPlane();
+                });    
+            };
+            this.continueButton.innerHTML = SEAT_LANGUAGES['seatSelection.nav.next'];
+        }
     }
 
     /**
@@ -284,33 +258,8 @@ export default class RetrieveAvailabilityClass {
      * Something about afterBasket goes here.
      **/
     afterBasket() {
-         // var $http = angular.injector(['ng']).get('$http');
-
-         //    $http.get('/jam/upsellFlow/next')
-         //    .success(
-         //        function(o){
-         //            console.log(o);
-         //            if (o.nextPage && o.active) {
-         //             window.location = "/" + o.nextPage;
-         //         } else {
-         //             window.location = "/index";
-         //         }
-         //        }
-         //     );
-
-        fetch(`${this.config.siteUrl}/jam/upsellFlow/next`, {
-            credentials:'include'
-        })
-        .then(response => response.json())
-        .then(response => {
-            if (response.nextPage && response.active) {
-                window.location = `/${response.nextPage}`;
-            } else {
-                window.location = `/index`;
-            }
-            console.log(`afterBasket: `, response); // eslint-disable-line
-        })
-        .catch((err) => console.log('error: ', err));  // eslint-disable-line
+        // N.B This should be config.
+        window.location = `${this.config.siteUrl}/checkout/basket`;
     }
 
 }
