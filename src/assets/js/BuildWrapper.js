@@ -3,30 +3,29 @@
 }());
 
 /**
- * putData
+ * buildSeatsWrapper()
  *
- * @param { string } fetchUrl
+ * @param { string } target
  * @return
  *
- * Check if the fetchUrl already exists in
- * local storage. If not set data. 
+ * The HTML that wraps around the seat map.
  **/
 export function buildSeatsWrapper(target) {
-  // CREATE ELEMENTS
 
-  var ele = {
+  console.log('target', target);
+
+  // Create Elements
+  let ele = {
     restricted: document.createElement('div'),
     validation: document.createElement('div'),
     plane: document.createElement('div'),
     info: document.createElement('div')
   };
   
-  // ADD IN ATTRIBUTES AND TEMPLATES
-
   // Restricted Popup
   ele.restricted.className = 'restricted-seat-warning';
   ele.restricted.className += 'pop-up';
-  ele.restricted .innerHTML = `<div class="pop-up-message">
+  ele.restricted.innerHTML = `<div class="pop-up-message">
                                 <h3>
                                   Information about your seat
                                 </h3>
@@ -140,13 +139,8 @@ export function buildSeatsWrapper(target) {
                         </div>`;
 
   // ADD WRAPPERS TO THE DOM
-
   document.querySelector(target).appendChild(ele.restricted);
   document.querySelector(target).appendChild(ele.validation);
   document.querySelector(target).appendChild(ele.plane);
   document.querySelector(target).appendChild(ele.info);
-
-  //ETC
-
-
 }
