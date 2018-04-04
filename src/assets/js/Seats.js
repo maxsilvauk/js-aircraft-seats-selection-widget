@@ -1,15 +1,3 @@
-/*
-NOTES
-- This still relies on some wrapper HTML to be on the page, so I think we need a class before this is called to handle building the wrapper?
-- Some of the templates I've swapped in use <wicket:messages> - we need to think about how we want do this - whether these string become configs (with defaults).
--- which reminds me, we need some sort of extend function at the top of the app
-- Once the above is done, most of the templating stuff should be done
--- then it's just a case of swapping $http for fetch and change relative links etc
---- relative links will need to have access to siteUrl config param.
-
-Think that's it for the time being
-*/
-
 (function () {
    'use strict';
 }());
@@ -232,7 +220,6 @@ export function Seats(data, jam, callbacks, config) {
                 } else {
                     var error = JSON.parse(httpRequest.statusText);
                     console.log(error);
-                    // validatio
                 }
             }
         };
@@ -268,10 +255,8 @@ export function Seats(data, jam, callbacks, config) {
 
         // If we get here then the pax are all allocated for this flight
         if (checkFullyAllocated()) {
-            console.log('we get here');
             callbacks.allSelected();
         } else {
-            console.log('woooooo hoooooo');
             callbacks.allPaxSelected();
         }
     }
@@ -867,7 +852,6 @@ export function Seats(data, jam, callbacks, config) {
                 //todo will be able to check seat.infant in the future (4.7?)
                 //const infant = false;
                 for (let idx = 0; idx < seat.available.length; idx++) {
-                  //  console.log(RESULT_ITEM.passengers, seat.available, idx, seat.available[idx]-1, RESULT_ITEM.passengers[seat.available[idx]-1]);
                     const pax = RESULT_ITEM.passengers[seat.available[idx]-1];
                     if (pax.infant) {
                         seatDiv.classList.add('infant');
@@ -883,7 +867,6 @@ export function Seats(data, jam, callbacks, config) {
                         _this.unselectSeat(_seat, this);
                     } else {
                         if(_seat.access=="RESTRICTED") {
-                            console.log('Restricted Seat Selection');
                             restrictedWarning.style.display = "block";
                             confirmRestriction.onclick = function() {
                                 restrictedWarning.style.display = "none";
@@ -892,9 +875,7 @@ export function Seats(data, jam, callbacks, config) {
                             rejectRestriction.onclick = function() {
                                 restrictedWarning.style.display = "none";
                             };
-                            //_this.selectSeat(_seat);
                         } else {
-                            console.log('Seat Selection');
                             _this.selectSeat(_seat);
                         }
                     }
