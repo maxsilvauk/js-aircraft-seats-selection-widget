@@ -5,7 +5,7 @@
 import { getRequestData } from './RequestServiceHelper.js';
 import { putData } from './CacheServiceHelper.js';
 import { buildSeatsWrapper } from './BuildWrapper.js';
-import * as SeatsBuilder from './Seats.js';
+import { getSeatLanguagesData, Seats } from './Seats.js';
 
 /**
  * Retrieve Availability Class
@@ -103,7 +103,7 @@ export default class RetrieveAvailabilityClass {
      * Get the historic basked data.
      **/
     async getHistoricBasket(fetchUrl) {
-        let response = await getRequestData(fetchUrl, 'GET', {});
+        let response = await getRequestData(fetchUrl);
         if (!response.errors) this.setAirportsUrl();
     }
 
@@ -157,7 +157,7 @@ export default class RetrieveAvailabilityClass {
     async getSearch(fetchUrl) {
         let response = await getRequestData(fetchUrl, 'POST', {'journey':'seats'});
         if (!response.errors) {
-            this.seats = new SeatsBuilder.Seats(response.results, null, {
+            this.seats = new Seats(response.results, null, {
                 selectionRequired: () => this.selectionRequired(),
                 allPaxSelected: () => this.allPaxSelected(),
                 allSelected: () => this.allSelected(), 
@@ -175,7 +175,7 @@ export default class RetrieveAvailabilityClass {
      **/
     selectionRequired() {
         this.continueButton.style.display = 'none';
-        const SEAT_LANGUAGES = SeatsBuilder.getSeatLanguagesData(this.config.siteUrl, this.config.seatLangJam);
+        const SEAT_LANGUAGES = getSeatLanguagesData(this.config.siteUrl, this.config.seatLangJam);
 
         if (this.seats.isFirstLeg()) {
             this.backButton.style.display = 'none';
@@ -203,7 +203,7 @@ export default class RetrieveAvailabilityClass {
                 _this.seats.nextIncompletePlane();
             });
         };
-        const SEAT_LANGUAGES = SeatsBuilder.getSeatLanguagesData(this.config.siteUrl, this.config.seatLangJam);
+        const SEAT_LANGUAGES = getSeatLanguagesData(this.config.siteUrl, this.config.seatLangJam);
         console.log(SEAT_LANGUAGES);
         this.continueButton.innerHTML = SEAT_LANGUAGES['seatSelection.nav.next'];
     }
@@ -218,7 +218,7 @@ export default class RetrieveAvailabilityClass {
     allSelected() {
         var _this = this;
         this.continueButton.style.display = 'block';
-        const SEAT_LANGUAGES = SeatsBuilder.getSeatLanguagesData(this.config.siteUrl, this.config.seatLangJam); // eslint-disable-line
+        const SEAT_LANGUAGES = getSeatLanguagesData(this.config.siteUrl, this.config.seatLangJam); // eslint-disable-line
 
         if (this.seats.isLastLeg()){
             this.continueButton.onclick = function(){
