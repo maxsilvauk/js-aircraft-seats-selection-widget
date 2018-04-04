@@ -55,7 +55,6 @@ export function getSeatLanguagesData(siteUrl, seatLangJam){
  **/
 export function Seats(data, jam, callbacks, config) {
     let _this = this;
-    console.log('seats');
     const planeBodyColor = 'white';
     const AIRPORTS = getAirportsData(`${config.siteUrl}`,`${config.airportsJam}`); // eslint-disable-line
     const SEAT_LANGUAGES = getSeatLanguagesData(`${config.siteUrl}`,`${config.seatLangJam}`); // eslint-disable-line
@@ -140,7 +139,6 @@ export function Seats(data, jam, callbacks, config) {
 
     // select the next incomplete plane!
     this.nextIncompletePlane = function () {
-        console.log('nextIncompletePlane');
         for (let i = 0; i < jamResponse.legs.length; i++) {
             let leg = jamResponse.legs[i];
             
@@ -174,28 +172,6 @@ export function Seats(data, jam, callbacks, config) {
     
     this.validate = function(callback){
         //showSplash(document.body, "Default Splash");
-        //console.log(jamResponse);
-        // $http.post('/jam/seatvalidation',jamResponse)
-        // .success(
-        //     function(){
-        //         hideAllSplashes();
-        //         //validation pass, call next step
-        //         callback();
-        //     }
-        // )
-        // .error(
-        //     function() {
-        //         hideAllSplashes();
-        //         //validation failure show to the user
-        //         if (o && o.errors){
-        //             validationWarning.querySelector('.error-message').innerHTML = o.errors[0];
-        //             validationWarning.style.display = "block";
-        //         }
-        //         //nb probably in a nicer way....
-        //     }
-        // );
-        console.log(JSON.stringify( jamResponse ));
-        
         var httpRequest = new XMLHttpRequest();
         httpRequest.onreadystatechange = function() {
             if (httpRequest.readyState === 4) {
@@ -204,7 +180,6 @@ export function Seats(data, jam, callbacks, config) {
                 } else {
                     var error = JSON.parse(httpRequest.statusText);
                     console.log(error);
-                    // validatio
                 }
             }
         };
