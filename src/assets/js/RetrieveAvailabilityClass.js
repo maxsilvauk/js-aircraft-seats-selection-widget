@@ -2,11 +2,10 @@
    'use strict';
 }());
 
+import { getRequestData } from './RequestServiceHelper.js';
 import { putData } from './CacheServiceHelper.js';
 import { buildSeatsWrapper } from './BuildWrapper.js';
-//import * as SeatsCallBacksHelper from './SeatsCallBacksHelper.js';
 import * as SeatsBuilder from './Seats.js';
-//import * as RequestServiceHelper from './RequestServiceHelper.js';
 
 /**
  * Retrieve Availability Class
@@ -25,6 +24,7 @@ export default class RetrieveAvailabilityClass {
         this.iFrame.addEventListener('load', () => this.setHistoricBasketUrl());
         this.iFrame.style.display = 'none';
         this.iFrame.src = `${this.config.siteUrl}/jam/session/create?session=null`;
+        
         // Cache DOM
         this.backButton = document.querySelector('.button__back');
         this.continueButton = document.querySelector('#continueButton');
@@ -39,7 +39,6 @@ export default class RetrieveAvailabilityClass {
      * Create historic basket jam url.
      **/
     setHistoricBasketUrl() {
-        console.log(self.config);
         const fetchUrl = `${this.config.siteUrl}/jam/historicbasket?ref=${this.config.ref}&system=ATCORE&surname=${this.config.surname}`;
         this.getHistoricBasket(fetchUrl);
     }
@@ -103,15 +102,9 @@ export default class RetrieveAvailabilityClass {
      *
      * Get the historic basked data.
      **/
-    getHistoricBasket(fetchUrl) {
-        fetch(fetchUrl, {credentials:'include'})
-        .then(response => response.json())
-        .then(response => {
-           console.log('getHistoricBasket: ', response); // eslint-disable-line
-           //this.setSearchUrl();
-           this.setAirportsUrl();
-        })
-        .catch((err) => console.log('error: ', err));  // eslint-disable-line
+    async getHistoricBasket(fetchUrl) {
+        let response = await getRequestData(fetchUrl, 'GET', {});
+        if (!response.errors) this.setAirportsUrl();
     }
 
     /**
@@ -153,7 +146,6 @@ export default class RetrieveAvailabilityClass {
         this.setSearchUrl();
     }
 
-    
     /**
      * getSearch()
      *
@@ -162,25 +154,18 @@ export default class RetrieveAvailabilityClass {
      *
      * Get the search data.
      **/
-    getSearch(fetchUrl) {
-        console.log('getSearch');
-        fetch(fetchUrl, {
-            credentials: 'include',
-            method: 'POST',
-            body: JSON.stringify({'journey':'seats'})
-        })
-        .then(response => response.json())
-        .then(response => {
-            console.log(response);
+    async getSearch(fetchUrl) {
+        let response = await getRequestData(fetchUrl, 'POST', {'journey':'seats'});
+        if (!response.errors) {
             this.seats = new SeatsBuilder.Seats(response.results, null, {
                 selectionRequired: () => this.selectionRequired(),
                 allPaxSelected: () => this.allPaxSelected(),
                 allSelected: () => this.allSelected(), 
                 afterBasket: () => this.afterBasket()
             }, this.config);
-        })
-        .catch((err) => console.log(`error: `, err)); // eslint-disable-line
+        }
     }
+
     /**
      * selectionRequired()
      *
@@ -191,6 +176,7 @@ export default class RetrieveAvailabilityClass {
     selectionRequired() {
         this.continueButton.style.display = 'none';
         const SEAT_LANGUAGES = SeatsBuilder.getSeatLanguagesData(this.config.siteUrl, this.config.seatLangJam);
+
         if (this.seats.isFirstLeg()) {
             this.backButton.style.display = 'none';
         } else {
@@ -256,11 +242,9 @@ export default class RetrieveAvailabilityClass {
      *
      * @return
      *
-     * Something about afterBasket goes here.
+     * Sets the afterBasket route.
      **/
     afterBasket() {
-        // N.B This should be config.
-        window.location = `${this.config.siteUrl}/checkout/basket`;
+        window.location = `${this.config.siteUrl}/${this.config.basketPath}`;
     }
-
 }

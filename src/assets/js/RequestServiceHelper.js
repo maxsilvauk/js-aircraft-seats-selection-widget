@@ -3,16 +3,20 @@
 }());
 
 // async function
-export async function getRequestData(url) {
-	console.log('we get here');
-	let data = await (await (fetch(url, {credentials:'include'})
-		.then(response => {
-  		return response.json();
-		})
-		.catch(error => {
-  			console.log('Error: ', error);
-		})
-	));
-  	
-  	return data;
+export async function getRequestData(fetchUrl, method, body) {
+	if (method == 'GET') { 
+		return await (
+			await (fetch(fetchUrl, {
+				credentials: 'include'
+			})
+		)).json();
+	} else {
+		return await (
+			await (fetch(fetchUrl, {
+				credentials: 'include',
+				method: 'POST',
+				body: JSON.stringify(body)
+			})
+		)).json();
+	}
 }

@@ -2,28 +2,29 @@
    'use strict';
 }());
 
+
+import { getRequestData } from './RequestServiceHelper.js';
+
 /**
  * putData
  *
  * @param { string } fetchUrl
+ * @param { method } string
+ * @param { body } object
+ * @param { log } boolean
  * @return
  *
  * Check if the fetchUrl already exists in
  * local storage. If not set data. 
  **/
-export function putData(fetchUrl, log) {
+export async function putData(fetchUrl,method='GET',body={},log=false) {
 	if (localStorage.getItem(fetchUrl) === null) {
-  		fetch(fetchUrl, {credentials:'include'})
-      .then(response => response.json())
-      .then(response => {
-         localStorage.setItem(fetchUrl, JSON.stringify(response));
-      })
-      .catch((err) => console.log(`error: `, err)); // eslint-disable-line
+      let response = await getRequestData(fetchUrl, method, body);
+      if (!response.errors) localStorage.setItem(fetchUrl, JSON.stringify(response));
   }
 
-  if (log) {
+  if (log)
     console.log(`${fetchUrl}:`, localStorage.getItem(fetchUrl)); // eslint-disable-line
-  }
 }
 
 /**
