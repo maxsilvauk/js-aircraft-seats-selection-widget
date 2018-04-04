@@ -9,7 +9,9 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'dist/js'),
-    filename: 'app.bundle.js'
+    filename: 'app.bundle.js',
+    libraryTarget: 'var',
+    library: 'EntryPoint'
   },
   module: {
     rules: [

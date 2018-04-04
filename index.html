@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html class="no-js" lang="">
     <head>
@@ -17,5 +16,15 @@
             <div id="seat-results"></div>
         </div>
         <script src="./dist/js/app.bundle.js"></script>
+        <script type="text/javascript">
+            window.onload = function(){
+                EntryPoint.run({
+                    surname:    'Smith',
+                    ref:        '1111',
+                    siteUrl:    'merch-demo.webvoyage.co.uk',
+                    basketPath: 'checkout/basket'                   
+                });
+            };
+        </script>
     </body>
 </html>
