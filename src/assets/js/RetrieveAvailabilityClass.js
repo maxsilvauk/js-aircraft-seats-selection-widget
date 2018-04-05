@@ -5,7 +5,7 @@
 import { getRequestData } from './RequestServiceHelper.js';
 import { putData } from './CacheServiceHelper.js';
 import { buildSeatsWrapper } from './BuildWrapper.js';
-import { getSeatLanguagesData, Seats } from './Seats.js';
+import { getSeatLanguagesData, Seats } from './SeatsHelper.js';
 
 /**
  * Retrieve Availability Class
@@ -15,7 +15,6 @@ import { getSeatLanguagesData, Seats } from './Seats.js';
 export default class RetrieveAvailabilityClass {
 
     constructor(config) {
-        buildSeatsWrapper('#seat-results');
         this.config = config;
         this.config.siteUrl = 'https://'+this.config.siteUrl;
         this.loader = document.getElementById('loader');
@@ -24,6 +23,9 @@ export default class RetrieveAvailabilityClass {
         this.iFrame.addEventListener('load', () => this.setHistoricBasketUrl());
         this.iFrame.style.display = 'none';
         this.iFrame.src = `${this.config.siteUrl}/jam/session/create?session=null`;
+
+        // Build seats wrapper.
+        buildSeatsWrapper('#seat-results', config.content);
         
         // Cache DOM
         this.backButton = document.querySelector('.button__back');
@@ -98,20 +100,22 @@ export default class RetrieveAvailabilityClass {
      * getHistoricBasket()
      *
      * @param { string } fetchUrl
-     * @return setSerachUrl()
+     * @return setSearchUrl()
      *
      * Get the historic basked data.
      **/
     async getHistoricBasket(fetchUrl) {
         let response = await getRequestData(fetchUrl);
-        if (!response.errors) this.setAirportsUrl();
+        if (!response.errors) {
+            this.setAirportsUrl();
+        }
     }
 
     /**
      * getAirports()
      *
      * @param { string } fetchUrl
-     * @return setSerachUrl()
+     * @return setSearchUrl()
      *
      * Get airports data.
      **/
@@ -137,7 +141,7 @@ export default class RetrieveAvailabilityClass {
      * getSplashes()
      *
      * @param { string } fetchUrl
-     * @return setSerachUrl()
+     * @return setSearchUrl()
      *
      * Get airports data.
      **/
@@ -150,7 +154,7 @@ export default class RetrieveAvailabilityClass {
      * getSearch()
      *
      * @param { string } fetchUrl
-     * @return SeatsBuilder.Seats()
+     * @return void
      *
      * Get the search data.
      **/
@@ -169,7 +173,7 @@ export default class RetrieveAvailabilityClass {
     /**
      * selectionRequired()
      *
-     * @return
+     * @return void
      *
      * Something about selection required goes here.
      **/
@@ -191,7 +195,7 @@ export default class RetrieveAvailabilityClass {
     /**
      * allPaxSelected()
      *
-     * @return
+     * @return void
      *
      * Something about allPaxSelected goes here.
      **/
@@ -211,7 +215,7 @@ export default class RetrieveAvailabilityClass {
     /**
      * allSelected()
      *
-     * @return
+     * @return void
      *
      * Something about allSelected goes here.
      **/
@@ -240,7 +244,7 @@ export default class RetrieveAvailabilityClass {
     /**
      * afterBasket()
      *
-     * @return
+     * @return void
      *
      * Sets the afterBasket route.
      **/

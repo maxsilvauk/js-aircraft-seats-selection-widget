@@ -17,14 +17,15 @@ import { getRequestData } from './RequestServiceHelper.js';
  * Check if the fetchUrl already exists in
  * local storage. If not set data. 
  **/
-export async function putData(fetchUrl,method='GET',body={},log=false) {
+export async function putData(fetchUrl, method='GET', body={}, log=false) {
 	if (localStorage.getItem(fetchUrl) === null) {
       let response = await getRequestData(fetchUrl, method, body);
       if (!response.errors) localStorage.setItem(fetchUrl, JSON.stringify(response));
   }
 
-  if (log)
+  if (log) {
     console.log(`${fetchUrl}:`, localStorage.getItem(fetchUrl)); // eslint-disable-line
+  }
 }
 
 /**

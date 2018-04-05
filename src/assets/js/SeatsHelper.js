@@ -7,9 +7,9 @@ import { getData } from './CacheServiceHelper.js';
 /**
  * getAirportsData()
  *
- * @param { string } siteUrl
- * @param { string } seatLangJam
- * @return SeatsBuilder.Seats()
+ * @param  { string } siteUrl
+ * @param  { string } seatLangJam
+ * @return { string }
  *
  * Get the airports data.
  **/
@@ -18,13 +18,13 @@ export function getAirportsData(siteUrl, airportsJam){
 }
 
 /**
- * getAirportsData()
+ * getSeatLanguagesData()
  *
- * @param { string } siteUrl
- * @param { string } seatLangJam
- * @return
+ * @param  { string } siteUrl
+ * @param  { string } seatLangJam
+ * @return { string }
  *
- * Get the airports data.
+ * Get the seat languages data.
  **/
 export function getSeatLanguagesData(siteUrl, seatLangJam){
     return getData(`${siteUrl}${seatLangJam}`);   
@@ -33,11 +33,11 @@ export function getSeatLanguagesData(siteUrl, seatLangJam){
 /**
  * Seats()
  *
- * @param { object } siteUrl
- * @param { string } jam
- * @param { object } callbacks
- * @param { object } config
- * @return void.
+ * @param  { object } siteUrl
+ * @param  { string } jam
+ * @param  { object } callbacks
+ * @param  { object } config
+ * @return { object } this
  *
  * Create the seating widet.
  **/
@@ -99,6 +99,14 @@ export function Seats(data, jam, callbacks, config) {
         imagesToLoad[`leg${leg}Carrier`] = carriers[legCarrier];
     }
 
+    /**
+     * this.nextPlane()
+     *
+     * @return void
+     *
+     * Returns if we are last leg or
+     * increments current leg.
+     **/
     this.nextPlane = function() {
         if (_this.isLastLeg()) {
             return;
@@ -108,6 +116,14 @@ export function Seats(data, jam, callbacks, config) {
         flights[CURRENT_LEG].select();
     };
 
+    /**
+     * this.prevPlane()
+     *
+     * @return void
+     *
+     * Returns if we are on the first leg
+     * decrements current leg.
+     **/
     this.prevPlane = function() {
         if (_this.isFirstLeg()) {
             return;
@@ -117,16 +133,36 @@ export function Seats(data, jam, callbacks, config) {
         flights[CURRENT_LEG].select();
     };
 
+    /**
+     * this.isLastLeg()
+     *
+     * @return { int }
+     *
+     * Returns last leg.
+     **/
     this.isLastLeg = function() {
         return CURRENT_LEG == flights.length-1;
     };
 
+    /**
+     * this.isFirstLeg()
+     *
+     * @return { int }
+     *
+     * Returns first leg.
+     **/
     this.isFirstLeg = function() {
         return CURRENT_LEG == 0;
     };
 
-    // select the next incomplete plane!
-    this.nextIncompletePlane = function () {
+    /**
+     * this.nextIncompletePlane()
+     *
+     * @return void
+     *
+     * Loop through legs.
+     **/
+    this.nextIncompletePlane = function() {
         for (let i = 0; i < jamResponse.legs.length; i++) {
             let leg = jamResponse.legs[i];
             
@@ -150,14 +186,25 @@ export function Seats(data, jam, callbacks, config) {
     let validationWarning = document.querySelector('.validation-warning');
     let confirmValidation = document.querySelector('#accept-validation');
     
+    /**
+     * confirmValidation.onclick()
+     *
+     * @return void
+     *
+     * Onclick event listener.
+     **/
     confirmValidation.onclick = function() {
         validationWarning.style.display = 'none';
     };
     
-    confirmValidation.onclick = function() {
-        validationWarning.style.display = 'none';
-    };
-    
+    /**
+     * this.validate()
+     *
+     * @param  { object } callback
+     * @return void
+     *
+     * Get seat validation.
+     **/
     this.validate = function(callback){
         //showSplash(document.body, "Default Splash");
         var httpRequest = new XMLHttpRequest();
@@ -166,7 +213,7 @@ export function Seats(data, jam, callbacks, config) {
                 if (httpRequest.status === 200) {
                     if (callback) callback();
                 } else {
-                    var error = JSON.parse(httpRequest.statusText);
+                    let error = JSON.parse(httpRequest.statusText);
                     console.log(error);
                 }
             }
@@ -174,51 +221,23 @@ export function Seats(data, jam, callbacks, config) {
         httpRequest.open('POST', `${config.siteUrl}/jam/seatvalidation`);
         httpRequest.withCredentials = true;
         httpRequest.send(JSON.stringify( jamResponse ));
-
-        // fetch(`${config.siteUrl}/jam/seatvalidation`, {
-        //     method: "POST",
-        //     body: JSON.stringify(jamResponse)
-        // })
-        // .then(response => response.json())
-        // .then(response => {
-        //     if (response.status == 200) {
-        //         //hideAllSplashes();
-        //         //validation pass, call next step
-        //         callback();
-        //     } else {
-        //         //hideAllSplashes();
-        //         //validation failure show to the user
-        //         // if (o && o.errors){
-        //         //     validationWarning.querySelector('.error-message').innerHTML = o.errors[0];
-        //         //     validationWarning.style.display = "block";
-        //         // }
-        //         //nb probably in a nicer way....  
-        //     }
-        // })
-        // .catch((err) => console.log(`error: `, err));  // eslint-disable-line
     };
 
+    /**
+     * this.addToBasket()
+     *
+     * @return void
+     *
+     * Add seat to basket.
+     **/
     this.addToBasket = function(){
-        //showSplash(document.body, "Default Splash");
-        //TODO check if valid?
-        // $http.post('/jam/basket/swap',jamResponse)
-        // .success(
-        //     function(){
-        //         callbacks.afterBasket();
-        //     }
-        // )
-        // .error(
-        //     function() {
-        //         //hideAllSplashes();
-        //     }
-        // );
         var httpRequest = new XMLHttpRequest();
         httpRequest.onreadystatechange = function() {
             if (httpRequest.readyState === 4) {
                 if (httpRequest.status === 200) {
                     callbacks.afterBasket();
                 } else {
-                    var error = JSON.parse(httpRequest.statusText);
+                    let error = JSON.parse(httpRequest.statusText);
                     console.log(error);
                 }
             }
@@ -226,26 +245,18 @@ export function Seats(data, jam, callbacks, config) {
         httpRequest.open('POST', `${config.siteUrl}/jam/basket/swap`);
         httpRequest.withCredentials = true;
         httpRequest.send(JSON.stringify( jamResponse ));
-
-
-        
-        // fetch(`${config.siteUrl}/jam/basket/swap`, {
-        //     method: 'POST',
-        //     body: JSON.stringify(jamResponse)
-        // })
-        // .then(response => response.json())
-        // .then(response => {
-        //     response.json();
-        //     callbacks.afterBasket();
-        // })
-        // .catch((err) => console.log(`error: `, err));  // eslint-disable-line
     };
 
     /**
-     *  Called after selecting/reselecting a seat for a pax
-     */
-    function selectNextPax(){
-        //select first unallocated pax pax
+     * selectNextPax()
+     *
+     * @return void
+     *
+     * Select first unallocated pax. If 
+     * checkFullyAllocated() then the pax 
+     * are all allocated for this flight.
+     **/
+    function selectNextPax() {
         for (let pax of paxes) {
             if (!pax.isAllocated()) {
                 pax.active();
@@ -253,7 +264,6 @@ export function Seats(data, jam, callbacks, config) {
             }
         }
 
-        // If we get here then the pax are all allocated for this flight
         if (checkFullyAllocated()) {
             callbacks.allSelected();
         } else {
@@ -261,7 +271,14 @@ export function Seats(data, jam, callbacks, config) {
         }
     }
 
-    // Check to see if we are fully allocated
+    /**
+     * checkFullyAllocated()
+     *
+     * @return { boolean }
+     *
+     * Check to see if we are fully
+     * allocated.
+     **/
     function checkFullyAllocated() {
         let legs = jamResponse.legs;
         for (let leg of legs) {
@@ -281,6 +298,14 @@ export function Seats(data, jam, callbacks, config) {
         return true;
     }
 
+    /**
+     * month()
+     *
+     * @param  { string } date
+     * @return { object }
+     *
+     * Get month.
+     **/
     function month(date) {
         let month = new Array();
         month[0] = SEAT_LANGUAGES['seatSelection.month.jan'];
@@ -298,11 +323,25 @@ export function Seats(data, jam, callbacks, config) {
         return month[date.getMonth()];
     }
 
+    /**
+     * time()
+     *
+     * @param  { string } time
+     * @return { string }
+     *
+     * Get time.
+     **/
     function time(time) {
         return (time<10?'0':'') + time;
     }
 
-    //BUILD bands box info
+    /**
+     * buildBands()
+     *
+     * @return void
+     *
+     * Build bands box info.
+     **/
     function buildBands(){
         let flightInfoWrapper = document.querySelector('#info .flightinfo');
         let bandsWrapper = document.querySelector('#info .flightBands div');
@@ -411,7 +450,7 @@ export function Seats(data, jam, callbacks, config) {
 
         bandsWrapper.appendChild(staticBandEle);
         
-        //infant band
+        // Infant band
         if (PARTY_HAS_INFANT) {
             // var infantBandsTemplate = document.querySelector('#infant-band');
             let infantBandsTemplate = document.createElement('template');
@@ -426,7 +465,7 @@ export function Seats(data, jam, callbacks, config) {
                                             </div>`;
             let infantBandEle;
 
-            if('content' in document.createElement('template')) {
+            if ('content' in document.createElement('template')) {
                 infantBandEle = infantBandsTemplate.content.cloneNode(true);
             } else {
                 infantBandEle = infantBandsTemplate.cloneNode(true).querySelector('*'); 
@@ -436,7 +475,7 @@ export function Seats(data, jam, callbacks, config) {
         }
         
         // Dynamic
-        //var bandTemplate = document.querySelector('#band'); 
+        // var bandTemplate = document.querySelector('#band'); 
         let bandTemplate = document.createElement('template');
         bandTemplate.innerHTML =    `<div class="band">
                                         <div class="seat"></div>
@@ -457,14 +496,14 @@ export function Seats(data, jam, callbacks, config) {
 
             bandEle.querySelector('.seat').setAttribute('data-band', BAND_CLASS[band.id]);
             bandEle.querySelector('.name').innerHTML = band.name;
-            //bandEle.querySelector('.price').innerHTML = `${SEAT_LANGUAGES['seatSelection.currency.symbol']}${parseFloat(bands[band].prices[PAX_INDEX].value).toFixed(2)}`;
+            // bandEle.querySelector('.price').innerHTML = `${SEAT_LANGUAGES['seatSelection.currency.symbol']}${parseFloat(bands[band].prices[PAX_INDEX].value).toFixed(2)}`;
             bandsWrapper.appendChild(bandEle);
         }
     }   
 
 
     // BUILD pax
-    //let paxWrapper = document.querySelector('#paxes');
+    // let paxWrapper = document.querySelector('#paxes');
     // var paxTemplate = document.querySelector('#pax');   
     let paxTemplate = document.createElement('template');
     paxTemplate.innerHTML = `<div class="passenger">
@@ -490,14 +529,31 @@ export function Seats(data, jam, callbacks, config) {
         paxes.push(new Pax(i,pax));
     }
 
+    /**
+     * updatePrice()
+     *
+     * @param  { int } seat
+     * @param  { int } leg
+     * @param  { object } pax
+     * @return void
+     *
+     * Update price.
+     **/
     function updatePrice(seat, leg, pax) {
         const band = BAND_CLASS[seat.band]-1; 
         const bandPrice = RESULT_ITEM.legs[leg].bands[band].prices[pax].value;
         pricing.legs[leg].selections[pax] = bandPrice;
     }
 
+    /**
+     * totals()
+     *
+     * @return void
+     *
+     * Get totals for each leg.
+     **/
     function totals() {
-        //let _this = this;
+        // let _this = this;
         let templateWrapper = document.getElementById('totals');
         let selection = false;
         let cost = 0;
@@ -521,11 +577,18 @@ export function Seats(data, jam, callbacks, config) {
         }
     }
 
+    /**
+     * Pax()
+     *
+     * @param  { int } index
+     * @param  { object } pax
+     * @return void
+     **/
     function Pax(index,pax){
         let _this = this;
 
         let paxWrapper = document.getElementById('paxes');
-        //var paxTemplate = document.getElementById('pax');   
+        // var paxTemplate = document.getElementById('pax');   
         let paxTemplate = document.createElement('template');
 
         paxTemplate.innerHTML = `<div class="passenger">
@@ -571,10 +634,24 @@ export function Seats(data, jam, callbacks, config) {
         
         paxWrapper.appendChild(paxEle);
 
+        /**
+         * this.isAllocated()
+         *
+         * @return object
+         **/
         this.isAllocated = function(){
             return jamResponse.legs[CURRENT_LEG].selections[index]!=null;
         };
 
+        /**
+         * this.active()
+         *
+         * @return void
+         *
+         * Inform flight so it can highlight
+         * the seats. Update band info (Prices
+         * can change per pax).
+         **/
         this.active = function(){
             PAX_INDEX = index;
             for (let pax of paxes){
@@ -584,15 +661,17 @@ export function Seats(data, jam, callbacks, config) {
             _this.ele.classList.add('selected');
             //PassengerDropdown.changeDropdown(_this.ele);
 
-            //update band info (prices can change per pax)
             buildBands();
-
-            //inform flight so it can highlight the seats
             flights[CURRENT_LEG].highlightAvailble();
         };
 
         this.ele.onclick = this.active;
 
+        /**
+         * this.update()
+         *
+         * @return void
+         **/
         this.update = function(){
             let seat = jamResponse.legs[CURRENT_LEG].selections[index];
             //let price = pricing.legs[CURRENT_LEG].selections[index];
@@ -610,6 +689,11 @@ export function Seats(data, jam, callbacks, config) {
             totals();
         };
 
+        /**
+         * this.unallocatedSeat()
+         *
+         * @return object
+         **/
         this.unallocateSeat = function() {
             paxEle.querySelector('.choice .selected-seat').innerHTML = '';
             paxEle.querySelector('.choice .price').innerHTML = '';
@@ -619,8 +703,7 @@ export function Seats(data, jam, callbacks, config) {
         return this;
     }
 
-    //BUILD flights picker
-    let flightWrapper = document.querySelector('#flights .flights-wrapper');
+    let flightWrapper = document.querySelector('#flights .flights-wrapper'); //Build flights picker
     //let flightTemplate = document.querySelector('#flight'); 
     let flightTemplate = document.createElement('template');
     flightTemplate.innerHTML =   `<div class="flight flip-trigger" data-count="">
@@ -638,14 +721,28 @@ export function Seats(data, jam, callbacks, config) {
 
     let flights = [];
 
+    /**
+     * buildFlights()
+     *
+     * @return void
+     *
+     * Loop through legs push new flight
+     * into array.
+     **/
     function buildFlights(){
-        for(let i = 0; i < RESULT_ITEM.legs.length; i++){
+        for (let i = 0; i < RESULT_ITEM.legs.length; i++){
             flights.push(new Flight(i,RESULT_ITEM.legs[i].info));
         }
 
         flights[CURRENT_LEG].select();
     }
 
+
+    /**
+     * Flight()
+     *
+     * @return void
+     **/
     function Flight(index, flight){
         let flightEle;
 
@@ -675,25 +772,31 @@ export function Seats(data, jam, callbacks, config) {
         
         let plane = new Plane(index, RESULT_ITEM.legs[index]);
             
+        /**
+         * this.select()
+         *
+         * @return void
+         *
+         * Highlight the flight. Show the plane,
+         * select a pax. Update the pax and band info
+         **/
         this.select = function(){
-            //highlight
             for (let flight of flights) {
                 flight.ele.classList.remove('active');
             }
 
             CURRENT_LEG = index;
             flightEle.classList.add('active');
-            //show the plane
+
             plane.show();
             callbacks.selectionRequired();
-            //select a pax
+
             selectNextPax();
-            //update pax info
+
             for (let pax of paxes) {
                 pax.update();
             }
 
-            //update band info
             buildBands();
             //Flipper.resetFlip(CURRENT_LEG+1);
         };
@@ -704,8 +807,7 @@ export function Seats(data, jam, callbacks, config) {
         flightWrapper.appendChild(flightEle);
     }
             
-    //preload images
-
+    // Preload images
     let images = [];
     let promises = [];
 
@@ -726,7 +828,7 @@ export function Seats(data, jam, callbacks, config) {
         }));                
     }
 
-    //when all the images have loaded, build planes!
+    // When all the images have loaded, build planes!
     Promise.all(promises).then(function(){
         setTimeout(function() {
             buildFlights(); 
@@ -735,6 +837,17 @@ export function Seats(data, jam, callbacks, config) {
         }, 200);
     });
 
+    /**
+     * Plane()
+     *
+     * @param  { int } legNumber
+     * @param  { object } flight
+     * @return void
+     *
+     * Clone the plane template, push the selctions object
+     * across onto our basket request object. Check for
+     * row numbers that contain no seats at all...
+     **/
     function Plane(legNumber, flight){
         let _this = this;
         //var template = document.querySelector('#plane');
@@ -745,7 +858,7 @@ export function Seats(data, jam, callbacks, config) {
                                     <canvas></canvas>
                                     </div>
                                     </div>`;
-        //clone the plane template
+
         let planeEle;
         
         if ('content' in document.createElement('template')) {
@@ -761,14 +874,11 @@ export function Seats(data, jam, callbacks, config) {
         let seatsWrapper = planeEle.querySelector('.seats');
         let restrictedWarning = document.querySelector('.restricted-seat-warning');
         let confirmRestriction = document.querySelector('#accept-seat-restrictions');
-        let rejectRestriction = document.querySelector('#cancel-seat-selection');
-        
+        let rejectRestriction = document.querySelector('#cancel-seat-selection');   
         let planeWrapper = planeEle.querySelector('.plane');
         
-        //push the selctions object across onto our basket request object
         jamResponse.legs.push({'selections':flight.selections});
         var seats = flight.options;
-        //check for row numbers that contain no seats at all...
         var validRows = [];
 
         for (let s of seats) {
@@ -782,7 +892,6 @@ export function Seats(data, jam, callbacks, config) {
         }
 
         var letters = [];
-        //build blocks and add row elements
         var blockrows = [];
         
         for (let b = 0; b < flight.layout.blocks; b++) {
@@ -807,18 +916,18 @@ export function Seats(data, jam, callbacks, config) {
 
                 blockrows[b].push(div2);
                 
-                //don't display rows with no seats at all
+                // don't display rows with no seats at all
                 if (!validRows[r+1]) {
                     continue;
                 }
 
                 div.appendChild(div2);
             }
-            //add it to the dom
+            // add it to the dom
             seatsWrapper.appendChild(div);
         }
 
-        //add the seats to the rows
+        // Add the seats to the rows
         for (var s in seats){
             //make the seat element
             let seat = seats[s];
@@ -826,31 +935,30 @@ export function Seats(data, jam, callbacks, config) {
             let rowEle = blockrows[seat.block-1][seat.row-1];
             seatDiv.classList.add('seat');
 
-            //set data attributes
+            // Set data attributes
             seatDiv.setAttribute("data-id", seat.seat);
             seatDiv.setAttribute("data-band", BAND_CLASS[seat.band]);
 
-            // add window class
+            // Add window class
             if (seat.type == "WINDOW"){
                 seatDiv.classList.add('window');
                 rowEle.classList.add('window');
             }
 
-            // add restricted class
+            // Add restricted class
             if (seat.access == "RESTRICTED"){
                 seatDiv.classList.add('restricted');
                 rowEle.classList.add('exit');
                 //rowEle.setAttribute('data-exit-text', SEAT_LANGUAGES['seatSelection.exit.text']);
             }
 
-            // mark seats with no avaibility at all
-
+            // Mark seats with no avaibility at all
             if (seat.available == null || seat.available.length == 0) {
                 seatDiv.classList.add('unavailable');
             } else if (PARTY_HAS_INFANT) {
-                //check if any pax has an infant, and they can sit here
-                //todo will be able to check seat.infant in the future (4.7?)
-                //const infant = false;
+                // Check if any pax has an infant, and they can sit here
+                // Todo will be able to check seat.infant in the future (4.7?)
+                // const infant = false;
                 for (let idx = 0; idx < seat.available.length; idx++) {
                     const pax = RESULT_ITEM.passengers[seat.available[idx]-1];
                     if (pax.infant) {
@@ -859,8 +967,8 @@ export function Seats(data, jam, callbacks, config) {
                 }
             }
         
-            // wire the onclick event
-            // wrapper function to define fixed seat scope variable (as it is a loop var)
+            // Wire the onclick event
+            // Wrapper function to define fixed seat scope variable (as it is a loop var)
             seatDiv.onclick = function(_seat){
                 return function(){
                     if(this.getAttribute('data-pax')){
@@ -882,14 +990,14 @@ export function Seats(data, jam, callbacks, config) {
                 };
             }(seat);
 
-            // highlight already selectd seats
+            // Highlight already selectd seats
             for (let idx = 0; idx < flight.selections.length; idx++){
                 if (flight.selections[idx]==seat.seat){
                     seatDiv.classList.add('selected');
                     seatDiv.setAttribute("data-pax", (idx+1));
                 }
             }
-            // actually add the seat to the dom
+            // Actually add the seat to the dom
             rowEle.appendChild(seatDiv);
             
             // Get the letter!
@@ -899,8 +1007,7 @@ export function Seats(data, jam, callbacks, config) {
             }
         }
 
-        //push out the letters
-        
+        // Push out the letters
         for (let i = 0; i < letters.length; i++){
             let firstrow = blockrows[i][0];
             let div = document.createElement('div');
@@ -912,17 +1019,15 @@ export function Seats(data, jam, callbacks, config) {
             firstrow.parentNode.insertBefore(div, firstrow);
         }
         
-
-        //DRAW THE PLANE BACKGROUND
+        // Draw the plane background
         const planeBody = {
             width: seatsWrapper.offsetWidth,
             height: seatsWrapper.offsetHeight - 300,
             color: planeBodyColor
         };
 
-        //we can hide this now
-        //planeEle.classList.add("inactive");
-
+        // We can hide this now
+        // planeEle.classList.add("inactive");
         const planeNose = {
             height:440
         };
@@ -953,16 +1058,16 @@ export function Seats(data, jam, callbacks, config) {
         plane.mask = planeBody.width+ planeWalls.width*2 + planeWing.width*2;
         plane.height = planeBody.height+ planeNose.height+planeTail.height +planeWalls.height*2; // tail + nose
         
-        // raw fuselage
+        // Raw fuselage
         ctx.fillStyle = planeBody.color;
         
         ctx.beginPath();
 
-        //left side
+        // Left side
         ctx.moveTo(plane.width/2-planeBody.width/2-planeWalls.width, planeNose.height);
         ctx.lineTo(plane.width/2-planeBody.width/2-planeWalls.width, planeNose.height+planeBody.height+planeWalls.height*2);
         
-        //tail
+        // Tail
         const tailheight = planeTail.height;
         const h = planeNose.height+planeBody.height+planeWalls.height*2;
         const x1 = planeBody.width/2+planeWalls.width;
@@ -974,11 +1079,11 @@ export function Seats(data, jam, callbacks, config) {
             plane.width/2 + x1*0.95, h+tailheight*0.2,
             plane.width/2 + x1,         h+tailheight*0.0);
 
-        //right side
+        // Right side
         ctx.lineTo(plane.width/2+planeBody.width/2+planeWalls.width, planeNose.height+planeBody.height+planeWalls.height*2);
         ctx.lineTo(plane.width/2+planeBody.width/2+planeWalls.width, planeNose.height);
         
-        //nose
+        // Nose
         const x = planeBody.width/2+planeWalls.width;
 
         ctx.bezierCurveTo(plane.width/2 + x, planeNose.height*0.75,
@@ -1008,7 +1113,6 @@ export function Seats(data, jam, callbacks, config) {
         ctx.restore();
         
         // And some more carrier logos
-        
         ctx.globalCompositeOperation = 'source-over';
         //draw some wings :)
         ctx.drawImage(images['wing'], 0, (planeBody.height+ planeNose.height)/2 - planeWing.height/4);
@@ -1017,33 +1121,40 @@ export function Seats(data, jam, callbacks, config) {
         ctx.drawImage(images['wing'], -plane.width, (planeBody.height+ planeNose.height)/2 - planeWing.height/4);
         ctx.setTransform(1, 0, 0, 1, 0, 0);
 
-        //draw the (bottom) tail fins
-        //ctx.drawImage(images['tailBottom'], plane.width/2-planeTail.width/2, planeBody.height+ planeNose.height+planeWalls.height*2 -100);
+        // Draw the (bottom) tail fins
+        // ctx.drawImage(images['tailBottom'], plane.width/2-planeTail.width/2, planeBody.height+ planeNose.height+planeWalls.height*2 -100);
         ctx.restore();
-        //position the seats DOM element correctly
+        // Position the seats DOM element correctly
         seatsWrapper.style.top = `(${planeNose.height}${planeWalls.height})px`;
         seatsWrapper.style.left = `(${planeWalls.width}${planeWing.width})px`;
 
-        //force the width of the parent elements to be correct
+        // Force the width of the parent elements to be correct
         planeWrapper.style.width = `${plane.width}px`;
         planeEle.style.width = '100%';
         planeEle.style.height = `${plane.height}px`;
         
+        /**
+         * this.selectSeat()
+         *
+         * @param  { string } seat
+         * @return void
+         *
+         * Grab the seat. Cannot select already
+         * selected seats. Remove selection from
+         * pax's previous seat if there was one.
+         * Then mark the seat as selected.
+         **/
         this.selectSeat = function(seat){
-            //grab the seat for this
-            console.log('select seat');
             let ele = planeEle.querySelector(`.seat.selectable[data-id="${seat.seat}"]`);
             
             if (ele == null) {
                 return;
             }
                 
-            //cannot select already slected seats
             if (ele.dataset.pax != null && ele.dataset.pax != '') {
                 return;
             }
             
-            //remove selection from this pax's previous seat (if there was one)
             let oldSeat = planeEle.querySelector(`.seat[data-pax="${(PAX_INDEX+1)}"]`);
 
             if (oldSeat != null) {
@@ -1053,14 +1164,21 @@ export function Seats(data, jam, callbacks, config) {
 
             updatePrice(seat, legNumber, PAX_INDEX);
             jamResponse.legs[CURRENT_LEG].selections[PAX_INDEX] = seat.seat;
-            //mark seat as selected
+            
             ele.setAttribute('data-pax', (PAX_INDEX+1));
             paxes[PAX_INDEX].update(seat);
 
-            //selectNext pax
             selectNextPax();
         };
 
+        /**
+         * this.unselectSeat()
+         *
+         * @param  { string } seat
+         * @param  { objet } seatDiv
+         * @return void
+         *
+         **/
         this.unselectSeat = function(seat, seatDiv) {
             const currentPax = seatDiv.getAttribute('data-pax');
             seatDiv.classList.remove('selected');
@@ -1072,14 +1190,21 @@ export function Seats(data, jam, callbacks, config) {
             //selectionRequired();
         };
 
+        /**
+         * this.highlightAvailable()
+         *
+         * @return void
+         *
+         * Update seat class list based
+         * on if they can be selected.
+         **/
         this.highlightAvailble = function(){
-            //update seat class list based on if they can be selected
             for (let s of seats){
                 let seat = s;
                 let ele = planeEle.querySelector('.seat[data-id="'+seat.seat+'"]');
 
                 //let ele = planeEle.querySelector(`.seat.selectable[data-id="${seat.seat}"]`);
-                
+             
                 if (seat.available.indexOf((PAX_INDEX+1)+'')>=0){
                     ele.classList.add('selectable');
                 } else {
@@ -1088,13 +1213,19 @@ export function Seats(data, jam, callbacks, config) {
             }
         };
 
+        /**
+         * this.show()
+         *
+         * @return { object }
+         *
+         * Mark all other planes as hidden
+         **/
         this.show = function(){
-            //mark all other planes as hidden
             const planes = document.querySelectorAll('#planes .plane');
             for (let i = 0; i < planes.length; i++) {
-                //let p = planes[i];
-                //p.classList.remove('active');
-                //p.classList.add('inactive');
+                // let p = planes[i];
+                // p.classList.remove('active');
+                // p.classList.add('inactive');
             }
         };
 
