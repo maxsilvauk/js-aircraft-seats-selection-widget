@@ -214,7 +214,7 @@ export function Seats(data, jam, callbacks, config) {
                     if (callback) callback();
                 } else {
                     let error = JSON.parse(httpRequest.statusText);
-                    console.log(error);
+                    console.error(`Error: ${error}`); // eslint-disable-line
                 }
             }
         };
@@ -238,7 +238,7 @@ export function Seats(data, jam, callbacks, config) {
                     callbacks.afterBasket();
                 } else {
                     let error = JSON.parse(httpRequest.statusText);
-                    console.log(error);
+                    console.error(`Error: ${error}`); // eslint-disable-line
                 }
             }
         };
