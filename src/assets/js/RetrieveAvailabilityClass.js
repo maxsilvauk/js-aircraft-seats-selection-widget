@@ -41,7 +41,7 @@ export default class RetrieveAvailabilityClass {
      * Create historic basket jam url.
      **/
     setHistoricBasketUrl() {
-        const fetchUrl = `${this.config.siteUrl}/jam/historicbasket?ref=${this.config.ref}&system=ATCORE&surname=${this.config.surname}`;
+        const fetchUrl = `${this.config.siteUrl}/jam/historicbasket?ref=${this.config.ref}&system=${this.config.system}&surname=${this.config.surname}`;
         this.getHistoricBasket(fetchUrl);
     }
 
@@ -167,6 +167,9 @@ export default class RetrieveAvailabilityClass {
                 allSelected: () => this.allSelected(), 
                 afterBasket: () => this.afterBasket()
             }, this.config);
+
+            const loader = document.querySelector('#loader');
+            loader.style.display = 'none';
         }
     }
 
@@ -208,7 +211,6 @@ export default class RetrieveAvailabilityClass {
             });
         };
         const SEAT_LANGUAGES = getSeatLanguagesData(this.config.siteUrl, this.config.seatLangJam);
-        console.log(SEAT_LANGUAGES);
         this.continueButton.innerHTML = SEAT_LANGUAGES['seatSelection.nav.next'];
     }
 
