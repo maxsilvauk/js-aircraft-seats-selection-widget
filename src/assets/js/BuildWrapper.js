@@ -23,12 +23,14 @@ export function buildSeatsWrapper(target, content) {
 
   // Restricted Popup
   ele.restricted.className = 'restricted-seat-warning';
-  ele.restricted.className += 'pop-up';
+  ele.restricted.className += ' pop-up';
+  ele.restricted.style.display = 'none';
   ele.restricted.innerHTML = content.restrictedPopup;
 
   // Validation Popup
   ele.validation.className = 'validation-warning';
-  ele.validation.className += 'pop-up';
+  ele.validation.className += ' pop-up';
+  ele.validation.style.display = 'none';
   ele.validation.innerHTML = content.validationPopup;
 
   // Plane Wrapper
