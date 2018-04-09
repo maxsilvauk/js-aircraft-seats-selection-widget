@@ -45,6 +45,7 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-0": "^6.24.1",
     "bluebird": "^3.5.1",
+    "compression-webpack-plugin": "^1.1.11",
     "eslint": "^4.19.1",
     "eslint-loader": "^2.0.0",
     "webpack": "^3.8.1",

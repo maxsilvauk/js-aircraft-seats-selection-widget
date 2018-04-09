@@ -1,6 +1,20 @@
 const path = require('path');
+const CompressionPlugin = require('compression-webpack-plugin');
 
 module.exports = {
+  plugins: [
+    new CompressionPlugin({
+      asset: "[path].gz[query]",
+      algorithm: "gzip",
+      test: /\.js$/,
+      threshold: 10240,
+      minRatio: 0.8
+    })
+  ],
+  devServer: {
+    compress: true,
+    open: true
+  },
   entry: {
     app: [
       'babel-polyfill',

@@ -31,6 +31,19 @@ export function getSeatLanguagesData(siteUrl, seatLangJam){
 }
 
 /**
+ * getSplashesData()
+ *
+ * @param  { string } siteUrl
+ * @param  { string } splashesJam
+ * @return { string }
+ *
+ * Get the splashes data.
+ **/
+export function getSplashesData(siteUrl, splashesJam){
+    return getData(`${siteUrl}${splashesJam}`);   
+}
+
+/**
  * Seats()
  *
  * @param  { object } siteUrl
@@ -45,6 +58,7 @@ export function Seats(data, jam, callbacks, config) {
     let _this = this;
     const planeBodyColor = 'white';
     const AIRPORTS = getAirportsData(`${config.siteUrl}`,`${config.airportsJam}`); // eslint-disable-line
+    const SPLASHES = getSplashesData(`${config.siteUrl}`,`${config.splashesJam}`); // eslint-disable-line
     const SEAT_LANGUAGES = getSeatLanguagesData(`${config.siteUrl}`,`${config.seatLangJam}`); // eslint-disable-line
     const carriers = {
         'FPO':  `${config.siteUrl}/sharedimages/Suppliers/Suppliers - Flight/fpo`,
@@ -198,6 +212,30 @@ export function Seats(data, jam, callbacks, config) {
     };
     
     /**
+     * showSplash()
+     *
+     * @param  { string } splash
+     * @return void
+     *
+     * shows a splash screen.
+     **/
+    this.showSplash = function(splash = 'Default Splash') {
+        let body = document.body;
+        body.innerHTML += `<div id="splash">${SPLASHES[splash].content}</div>`;
+    };
+
+    /**
+     * hideAllSplashes()
+     *
+     * @return void
+     *
+     * Hides all splash screens.
+     **/
+    this.hideSplash = function() {
+        console.log('we get here');
+    };
+
+    /**
      * this.validate()
      *
      * @param  { object } callback
@@ -206,12 +244,18 @@ export function Seats(data, jam, callbacks, config) {
      * Get seat validation.
      **/
     this.validate = function(callback){
-        //showSplash(document.body, "Default Splash");
+        this.showSplash(config.splashScreen);
+
         var httpRequest = new XMLHttpRequest();
         httpRequest.onreadystatechange = function() {
             if (httpRequest.readyState === 4) {
                 if (httpRequest.status === 200) {
-                    if (callback) callback();
+                    const splash = splash.parentNode.removeChild(document.getElementsByClassName('splash'));
+                    splash.parentNode.removeChild(splash);
+
+                    if (callback) {
+                        callback();
+                    }
                 } else {
                     let error = JSON.parse(httpRequest.statusText);
                     console.error(`Error: ${error}`); // eslint-disable-line
@@ -231,12 +275,17 @@ export function Seats(data, jam, callbacks, config) {
      * Add seat to basket.
      **/
     this.addToBasket = function(){
+        this.showSplash(config.splashScreen);
+
         var httpRequest = new XMLHttpRequest();
         httpRequest.onreadystatechange = function() {
             if (httpRequest.readyState === 4) {
                 if (httpRequest.status === 200) {
                     callbacks.afterBasket();
                 } else {
+                    const splash = splash.parentNode.removeChild(document.getElementsByClassName('splash'));
+                    splash.parentNode.removeChild(splash);
+
                     let error = JSON.parse(httpRequest.statusText);
                     console.error(`Error: ${error}`); // eslint-disable-line
                 }
@@ -757,16 +806,16 @@ export function Seats(data, jam, callbacks, config) {
         let carrier;
 
         for (let carrierKey in carriers) {
-            if (flight.designation.substring(0, carriers[carrierKey].length) === carriers[carrierKey]) {
+            if (flight.designation.substring(0, carrierKey.length) === carrierKey) {
                 carrier = carriers[carrierKey];
             }
         }
 
         //imagesToLoad['carrierLogo'] = carrier;
         flightEle.querySelector('.carrier').innerHTML = `<img src="${carrier}"/>`;
-        //flightEle.querySelector('.name .route .departure').innerHTML = AIRPORTS[flight.origin].name;
+        flightEle.querySelector('.name .route .departure').innerHTML = AIRPORTS[flight.origin].name;
         flightEle.querySelector('.name .route .departure-code').innerHTML = flight.origin;
-        //flightEle.querySelector('.name .route .arrival').innerHTML = AIRPORTS[flight.destination].name;
+        flightEle.querySelector('.name .route .arrival').innerHTML = AIRPORTS[flight.destination].name;
         flightEle.querySelector('.name .route .arrival-code').innerHTML = flight.destination;
         flightEle.setAttribute('data-count', index + 1);
         
