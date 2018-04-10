@@ -730,7 +730,6 @@ export function Seats(data, jam, callbacks, config) {
          **/
         this.unallocateSeat = function() {
             paxEle.querySelector('.choice .selected-seat').innerHTML = '';
-            paxEle.querySelector('.choice .price').innerHTML = '';
             totals();
         };
 
