@@ -179,7 +179,6 @@ export function Seats(data, jam, callbacks, config) {
     this.nextIncompletePlane = function() {
         for (let i = 0; i < jamResponse.legs.length; i++) {
             let leg = jamResponse.legs[i];
-            
             if (leg.selections.length != paxes.length) {
                 CURRENT_LEG = i;
                 flights[CURRENT_LEG].select();
@@ -220,7 +219,10 @@ export function Seats(data, jam, callbacks, config) {
      * shows a splash screen.
      **/
     this.showSplash = function(splash = 'Default Splash') {
-        document.body.innerHTML += `<div id="splash">${SPLASHES[splash].content}</div>`;
+        var splashEle = document.createElement('div');
+        splashEle.id = 'splash';
+        splashEle.innerHTML = `<div id="splash">${SPLASHES[splash].content}</div>`;
+        document.body.appendChild(splashEle);
     };
 
     /**
@@ -233,14 +235,11 @@ export function Seats(data, jam, callbacks, config) {
      **/
     this.validate = function(callback){
         this.showSplash(config.splashScreen);
-
         var httpRequest = new XMLHttpRequest();
         httpRequest.onreadystatechange = function() {
             if (httpRequest.readyState === 4) {
                 if (httpRequest.status === 200) {
                     document.querySelector('#splash').style.display = 'none';
-                    console.log('Removed Splash!');
-
                     if (callback) {
                         callback();
                     }
@@ -269,7 +268,6 @@ export function Seats(data, jam, callbacks, config) {
         httpRequest.onreadystatechange = function() {
             if (httpRequest.readyState === 4) {
                 //document.querySelector('#splash').style.display = 'none';
-                console.log('Removed Splash!');
                 
                 if (httpRequest.status === 200) {
                     callbacks.afterBasket();
@@ -294,13 +292,12 @@ export function Seats(data, jam, callbacks, config) {
      * are all allocated for this flight.
      **/
     function selectNextPax() {
-        for (let pax of paxes) {
-            if (!pax.isAllocated()) {
-                pax.active();
+        for(var pax in paxes){
+            if(!paxes[pax].isAllocated()){
+                paxes[pax].active();
                 return;
             }
         }
-
         if (checkFullyAllocated()) {
             callbacks.allSelected();
         } else {
@@ -806,7 +803,6 @@ export function Seats(data, jam, callbacks, config) {
         flightEle.querySelector('.name .route .arrival').innerHTML = AIRPORTS[flight.destination].name;
         flightEle.querySelector('.name .route .arrival-code').innerHTML = flight.destination;
         flightEle.setAttribute('data-count', index + 1);
-        
         let plane = new Plane(index, RESULT_ITEM.legs[index]);
             
         /**
@@ -824,14 +820,13 @@ export function Seats(data, jam, callbacks, config) {
 
             CURRENT_LEG = index;
             flightEle.classList.add('active');
-
             plane.show();
             callbacks.selectionRequired();
 
             selectNextPax();
 
-            for (let pax of paxes) {
-                pax.update();
+            for(var pax in paxes){
+                paxes[pax].update();
             }
 
             buildBands();
@@ -1258,12 +1253,12 @@ export function Seats(data, jam, callbacks, config) {
          * Mark all other planes as hidden
          **/
         this.show = function(){
-            const planes = document.querySelectorAll('#planes .plane');
+            const planes = document.querySelectorAll('#planes .result');
             for (let i = 0; i < planes.length; i++) {
-                // let p = planes[i];
-                // p.classList.remove('active');
-                // p.classList.add('inactive');
+                let p = planes[i];
+                p.classList.add('inactive');
             }
+            this.ele.classList.remove('inactive');
         };
 
         return this;
