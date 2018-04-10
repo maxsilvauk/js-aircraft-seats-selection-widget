@@ -46,7 +46,7 @@ export function buildSeatsWrapper(target, content) {
   ele.info.className += 'seats-container';
   ele.info.innerHTML =  `<!--- THIS IS ALL THE TEMPLATES FOR THE UI -->
                         <!-- top buttons for selecting flight legs -->
-                        <div id="flights" class="flip-navigation">
+                        <div id="flights" class="flip-navigation" style="color:black;top:0;">
                             <div class="flights-wrapper"></div>
                         </div>
                         <!-- info box-->
@@ -54,8 +54,8 @@ export function buildSeatsWrapper(target, content) {
                             <i class="icon-info"></i> Show seat info
                         </a>
                         <div id="info" class="wow content-container" ng-controller="AirportsCtrl">
-                            <div class="flightinfo"></div>
-                            <div class="flightBands">
+                            <div class="flightinfo" style="color:black;"></div>
+                            <div class="flightBands" style="color:black;">
                                 <div></div>
                             </div>
                         </div>
