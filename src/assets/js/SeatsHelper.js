@@ -220,19 +220,7 @@ export function Seats(data, jam, callbacks, config) {
      * shows a splash screen.
      **/
     this.showSplash = function(splash = 'Default Splash') {
-        let body = document.body;
-        body.innerHTML += `<div id="splash">${SPLASHES[splash].content}</div>`;
-    };
-
-    /**
-     * hideAllSplashes()
-     *
-     * @return void
-     *
-     * Hides all splash screens.
-     **/
-    this.hideSplash = function() {
-        console.log('we get here');
+        document.body.innerHTML += `<div id="splash">${SPLASHES[splash].content}</div>`;
     };
 
     /**
@@ -250,8 +238,8 @@ export function Seats(data, jam, callbacks, config) {
         httpRequest.onreadystatechange = function() {
             if (httpRequest.readyState === 4) {
                 if (httpRequest.status === 200) {
-                    const splash = splash.parentNode.removeChild(document.getElementsByClassName('splash'));
-                    splash.parentNode.removeChild(splash);
+                    document.querySelector('#splash').style.display = 'none';
+                    console.log('Removed Splash!');
 
                     if (callback) {
                         callback();
@@ -275,17 +263,17 @@ export function Seats(data, jam, callbacks, config) {
      * Add seat to basket.
      **/
     this.addToBasket = function(){
-        this.showSplash(config.splashScreen);
+        document.querySelector('#splash').style.display = 'block';
 
         var httpRequest = new XMLHttpRequest();
         httpRequest.onreadystatechange = function() {
             if (httpRequest.readyState === 4) {
+                //document.querySelector('#splash').style.display = 'none';
+                console.log('Removed Splash!');
+                
                 if (httpRequest.status === 200) {
                     callbacks.afterBasket();
                 } else {
-                    const splash = splash.parentNode.removeChild(document.getElementsByClassName('splash'));
-                    splash.parentNode.removeChild(splash);
-
                     let error = JSON.parse(httpRequest.statusText);
                     console.error(`Error: ${error}`); // eslint-disable-line
                 }
