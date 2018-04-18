@@ -82,7 +82,7 @@ export function Seats(data, jam, callbacks, config) {
     //const MAX_PAX = RESULT_ITEM.passengers.length-1; //max pax index
     let PAX_INDEX = 0; //current pax we are selecting for
     let CURRENT_LEG = 0;
-
+    let SAME_RETURN_SEATS = false;
     let BAND_CLASS = {};
     let bc = 1; //compute band class number (for colouring)
     let imagesToLoad = {
@@ -177,19 +177,29 @@ export function Seats(data, jam, callbacks, config) {
      * Loop through legs.
      **/
     this.nextIncompletePlane = function() {
+
         for (let i = 0; i < jamResponse.legs.length; i++) {
             let leg = jamResponse.legs[i];
             if (leg.selections.length != paxes.length) {
                 CURRENT_LEG = i;
-                flights[CURRENT_LEG].select();
+                // If this is not the first leg and previous leg selections are available on the next leg then offer the user to select same seats
+                if(CURRENT_LEG !== 0 && flights[CURRENT_LEG].checkSameReturnSeatsAvailable()) {
+                    sameReturnSeatsDialogue();
+                } else {
+                    flights[CURRENT_LEG].select();
+                }
                 return;
             }
-
             let selections = leg.selections;
             for (let selection of selections){
                 if (selection == null){
                     CURRENT_LEG = i;
-                    flights[CURRENT_LEG].select();
+                    // If this is not the first leg and previous leg selections are available on the next leg then offer the user to select same seats
+                    if(CURRENT_LEG !== 0 && flights[CURRENT_LEG].checkSameReturnSeatsAvailable()) {
+                        sameReturnSeatsDialogue();
+                    } else {
+                        flights[CURRENT_LEG].select();
+                    }
                     return;
                 }
             }
@@ -369,6 +379,32 @@ export function Seats(data, jam, callbacks, config) {
         return (time<10?'0':'') + time;
     }
 
+    function sameReturnSeatsDialogue() {
+        var dialogueTemplate = document.createElement('template');
+        dialogueTemplate.innerHTML =    `<div id="same-return-seats" style="position:fixed;">
+                                            <div>Do you want the same seats on the return leg?</div>
+                                            <a href="javascript:void(0);" class="same-seats" data-answer="y">Yes</a>
+                                            <a href="javascript:void(0);" class="same-seats" data-answer="n">No</a>
+                                        </div>`;
+        let dialogueEle;
+        if ('content' in document.createElement('template')) {
+            dialogueEle = dialogueTemplate.content.cloneNode(true).querySelector('*');
+        } else {
+            dialogueEle = dialogueTemplate.cloneNode(true).querySelector('*');   
+        }
+        let buttons = dialogueEle.querySelectorAll('.same-seats');
+        for(let i = 0; i < buttons.length; i++) {
+            buttons[i].onclick = function(){
+                let answer = this.getAttribute('data-answer');
+                if(answer == 'y') {
+                    SAME_RETURN_SEATS = true;
+                } 
+                flights[CURRENT_LEG].select();
+                dialogueEle.style.display = 'none';
+            };
+        }
+        document.getElementById('seat-results').appendChild(dialogueEle);
+    }
     /**
      * buildBands()
      *
@@ -668,6 +704,7 @@ export function Seats(data, jam, callbacks, config) {
         
         paxWrapper.appendChild(paxEle);
 
+
         /**
          * this.isAllocated()
          *
@@ -697,6 +734,8 @@ export function Seats(data, jam, callbacks, config) {
 
             buildBands();
             flights[CURRENT_LEG].highlightAvailble();
+            
+            // SAME SEAT SELECTION - Select Seat Here
         };
 
         this.ele.onclick = this.active;
@@ -829,11 +868,12 @@ export function Seats(data, jam, callbacks, config) {
             }
 
             buildBands();
+            
             //Flipper.resetFlip(CURRENT_LEG+1);
         };
 
         this.highlightAvailble = plane.highlightAvailble;
-
+        this.checkSameReturnSeatsAvailable = plane.checkSameReturnSeatsAvailable;
         flightEle.onclick = this.select;
         flightWrapper.appendChild(flightEle);
     }
@@ -1156,13 +1196,13 @@ export function Seats(data, jam, callbacks, config) {
         // ctx.drawImage(images['tailBottom'], plane.width/2-planeTail.width/2, planeBody.height+ planeNose.height+planeWalls.height*2 -100);
         ctx.restore();
         // Position the seats DOM element correctly
-        seatsWrapper.style.top = `(${planeNose.height}${planeWalls.height})px`;
-        seatsWrapper.style.left = `(${planeWalls.width}${planeWing.width})px`;
+        seatsWrapper.style.top = (planeNose.height+planeWalls.height) + "px";
+        seatsWrapper.style.left = (planeWalls.width + planeWing.width) + "px";
 
         // Force the width of the parent elements to be correct
-        planeWrapper.style.width = `${plane.width}px`;
+        planeWrapper.style.width = plane.width+ "px";
         planeEle.style.width = '100%';
-        planeEle.style.height = `${plane.height}px`;
+        planeEle.style.height = plane.height+ "px";
         
         /**
          * this.selectSeat()
@@ -1233,17 +1273,35 @@ export function Seats(data, jam, callbacks, config) {
             for (let s of seats){
                 let seat = s;
                 let ele = planeEle.querySelector('.seat[data-id="'+seat.seat+'"]');
-
                 //let ele = planeEle.querySelector(`.seat.selectable[data-id="${seat.seat}"]`);
-             
                 if (seat.available.indexOf((PAX_INDEX+1)+'')>=0){
                     ele.classList.add('selectable');
+                    if(SAME_RETURN_SEATS === true && seat.seat == jamResponse.legs[CURRENT_LEG-1].selections[PAX_INDEX]) {
+                        _this.selectSeat(seat);
+                    }
                 } else {
                     ele.classList.remove('selectable');
                 }
             }
         };
-
+        /**
+         * this.checkSameReturnSeatsAvailable()
+         *
+         * @return { bool }
+         *
+         * Check previous leg selection are available on next leg
+         **/
+        this.checkSameReturnSeatsAvailable = function() {
+            let selections = jamResponse.legs[CURRENT_LEG-1].selections;
+            for(const selection in selections) {
+                let pax = parseInt(selection)+1;
+                var obj = seats.find(function (obj) { return obj.seat == selections[selection]; });
+                if(obj.available.indexOf(pax + '') == -1) {
+                    return false;
+                }
+            }
+            return true;
+        };
         /**
          * this.show()
          *
