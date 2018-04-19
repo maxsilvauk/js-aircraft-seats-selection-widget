@@ -25,12 +25,22 @@ export function buildSeatsWrapper(target, content) {
   ele.restricted.className = 'restricted-seat-warning';
   ele.restricted.className += ' pop-up';
   ele.restricted.style.display = 'none';
+
+  if (!content.restrictedPopup) {
+    content.restrictedPopup = `<div class="pop-up-message"><h3>Information about your seat</h3><p>Information about your seat</p><ul><li>an infant</li><li>sat with an infant on their lap</li><li>pregnant</li><li>under 16 years of age</li><li>disabled</li><li>mobility impaired</li><li>requiring a seat belt extension</li></ul><p>If you choose this seat for a passenger in one of the above categories, they will be allocated another seat upon boarding.</p><div class="buttons"><a href="#" id="cancel-seat-selection" class="button__close">I'll choose another seat</a><a href="#" id="accept-seat-restrictions" class="button__accept__cta">I want this seat</a></div></div>`;
+  }
+
   ele.restricted.innerHTML = content.restrictedPopup;
 
   // Validation Popup
   ele.validation.className = 'validation-warning';
   ele.validation.className += ' pop-up';
   ele.validation.style.display = 'none';
+
+  if (!content.validationPopup) {
+    content.validationPopup = `<div class="validation-warning pop-up"><div class="pop-up-message" style="background-color:#ffeded; padding: 15px; display: flex;"><span class="info-icon">!</span><span class="error-message"></span><a href="#" id="accept-validation" class="icon-close"></a></div></div>`;
+  }
+
   ele.validation.innerHTML = content.validationPopup;
 
   // Plane Wrapper
