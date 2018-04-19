@@ -1316,6 +1316,9 @@ export function Seats(data, jam, callbacks, config) {
                 p.classList.add('inactive');
             }
             this.ele.classList.remove('inactive');
+            const skip = document.getElementsByClassName('skip')[0];
+            skip.style.display = 'none';
+
         };
 
         return this;
