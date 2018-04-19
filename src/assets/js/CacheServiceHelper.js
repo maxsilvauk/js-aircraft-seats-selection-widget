@@ -19,13 +19,13 @@ import { getRequestData } from './RequestServiceHelper.js';
  **/
 export async function putData(fetchUrl, method='GET', body={}, log=false) {
 	if (localStorage.getItem(fetchUrl) === null) {
-      let response = await getRequestData(fetchUrl, method, body);
-      if (!response.errors) localStorage.setItem(fetchUrl, JSON.stringify(response));
-  }
+    	let response = await getRequestData(fetchUrl, method, body);
+    	if (!response.errors) localStorage.setItem(fetchUrl, JSON.stringify(response));
+	}
 
-  if (log) {
-    console.log(`${fetchUrl}:`, localStorage.getItem(fetchUrl)); // eslint-disable-line
-  }
+	if (log) {
+ 		console.log(`${fetchUrl}:`, localStorage.getItem(fetchUrl)); // eslint-disable-line
+  	}
 }
 
 /**
