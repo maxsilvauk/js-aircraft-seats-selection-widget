@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const CompressionPlugin = require('compression-webpack-plugin');
 
 module.exports = {
   plugins: [
@@ -11,7 +10,7 @@ module.exports = {
       sourceMap: true,
       mangle: true,
       compress: {
-        warnings: false, // Suppress uglification warnings
+        warnings: false,
         pure_getters: true,
         unsafe: true,
         unsafe_comps: true,
@@ -23,20 +22,12 @@ module.exports = {
       exclude: [/\.min\.js$/gi] // skip pre-minified libs
     }),
     new webpack.IgnorePlugin(/^\.\/locale$/, [/moment$/]),
-    new webpack.NoEmitOnErrorsPlugin(),
-    new CompressionPlugin({
-      asset: "[path].gzip[query]",
-      algorithm: "gz",
-      test: /\.js$|\.html$/,
-      threshold: 10240,
-      minRatio: 0.8
-    }),
-    new webpack.optimize.AggressiveMergingPlugin()
+    new webpack.NoEmitOnErrorsPlugin()
   ],
   devtool: 'source-map',
   devServer: {
     compress: true,
-    open: true
+    open: true,
   },
   entry: {
     app: [
