@@ -425,12 +425,12 @@ export function Seats(data, jam, callbacks, config) {
         infoTemplate.innerHTML =    `<div>
                                         <div class="flight-number">
                                             <i class="icon-outbound-plane"></i>
-                                            <wicket:message key="seatSelection.flightInfo.flightNumber.label"></wicket:message>
+                                            ${SEAT_LANGUAGES['seatSelection.flightInfo.flightNumber.label']}
                                             <span class="number"></span>
                                         </div>
                                         <div class="flight-departure">
                                             <i class="icon-date-time"></i>
-                                            <wicket:message key="seatSelection.flightInfo.departure.label"></wicket:message>
+                                            ${SEAT_LANGUAGES['seatSelection.flightInfo.departure.label']}
                                             <span class="departure"></span>
                                         </div>
                                         <div class="flight-departure-point flight-point">
@@ -502,7 +502,7 @@ export function Seats(data, jam, callbacks, config) {
                                             <div class="seat selected"></div>
                                             <div class="details">
                                                 <span class="name">
-                                                    <wicket:message key="seatSelection.seat.selected"></wicket:message>
+                                                    ${SEAT_LANGUAGES['seatSelection.seat.selected']}
                                                 </span>
                                                 <span class="price"></span>
                                             </div>
@@ -528,7 +528,7 @@ export function Seats(data, jam, callbacks, config) {
                                                 <div class="seat infant" style="background-color: transparent;"></div>
                                                 <div class="details">
                                                     <span class="name">
-                                                        <wicket:message key="seatSelection.seat.infant"></wicket:message>
+                                                        ${SEAT_LANGUAGES['seatSelection.seat.infant']}
                                                     </span>
                                                     <span class="price"></span>
                                                 </div>
