@@ -1,0 +1,184 @@
+{
+  "price": {
+    "value": 0
+  },
+  "pax": [
+    [
+      {
+        "type": "ADULT",
+        "firstName": "George",
+        "surname": "Smith",
+        "dob": "1980-12-12 00:00:00",
+        "ref": "1"
+      },
+      {
+        "type": "ADULT",
+        "firstName": "Lucy",
+        "surname": "Smith",
+        "dob": "1981-01-01 00:00:00",
+        "ref": "2"
+      },
+      {
+        "type": "CHILD",
+        "firstName": "Oliver",
+        "surname": "Smith",
+        "dob": "2010-06-02 00:00:00",
+        "ref": "3"
+      }
+    ]
+  ],
+  "items": [
+    {
+      "itin": {
+        "id": 2187,
+        "supplier": {
+          "type": "ACCOM",
+          "name": "TT2",
+          "code": "TT2"
+        },
+        "baseCost": {
+          "currencyCode": "GBP",
+          "value": 0
+        },
+        "journey": "Hotels",
+        "party": [
+          "2,1,0:5"
+        ],
+        "product": "ACCOM",
+        "systemData": {
+          "created": "2018-04-25 10:40:09",
+          "component": "2",
+          "fabAccommodationId": "1471930",
+          "fabAccomCode": "H4U4347"
+        },
+        "info": "1471930",
+        "start": "2018-04-25 00:00:00",
+        "end": "2018-05-02 00:00:00",
+        "roomOptions": {
+          "selectedBasis": "BED_AND_BREAKFAST",
+          "isCompositeRooms": false,
+          "searchedParties": [
+            {
+              "adults": 2,
+              "children": 1,
+              "infants": 0,
+              "childAges": [
+                5
+              ]
+            }
+          ],
+          "isUseFixedOccupancy": false,
+          "options": [
+            {
+              "quantitySelected": 1,
+              "quantitySelectable": 0,
+              "party": {
+                "adults": 2,
+                "children": 1,
+                "infants": 0,
+                "childAges": [
+                  5
+                ]
+              },
+              "roomData": {
+                "quanaityAvailable": 0,
+                "quantitySelected": 1,
+                "roomsRemaining": 0,
+                "roomCode": "TWSV",
+                "roomName": "H10 Playa Meloneras Palace Room",
+                "minOccupancy": 1,
+                "maxOccupancy": 3,
+                "extraInfants": 0,
+                "extraChildren": 0,
+                "numRooms": 1,
+                "composite": false,
+                "boardBasis": "BED_AND_BREAKFAST"
+              },
+              "rateData": {
+                "supplierBasis": "BB",
+                "amount": 117.25,
+                "isFakeRate": false,
+                "boardBasis": "BED_AND_BREAKFAST"
+              },
+              "priceType": "TOTAL_PRICE"
+            }
+          ]
+        },
+        "fabAccommodationId": "1471930",
+        "location": {
+          "system": "fabResort",
+          "type": "resort",
+          "id": "3534",
+          "name": "Meloneras",
+          "countryCode": "ES"
+        },
+        "name": "H10 Playa Meloneras Palace",
+        "stars": 5,
+        "basis": "BED_AND_BREAKFAST",
+        "images": [
+          {
+            "src": "sharedimages\/Accommodation\/image_not_found"
+          }
+        ],
+        "accomType": "HOTEL"
+      }
+    },
+    {
+      "itin": {
+        "id": 2188,
+        "supplier": {
+          "type": "FLIGHT",
+          "name": "EZJ",
+          "code": "EZJ"
+        },
+        "baseCost": {
+          "value": 0
+        },
+        "journey": "Flights",
+        "party": "2,1,0:5",
+        "product": "FLIGHT",
+        "systemData": {
+          "created": "2018-04-25 10:40:09",
+          "component": "1"
+        },
+        "marketingCarrier": "EZY",
+        "legs": [
+          {
+            "duration": 0,
+            "segments": [
+              {
+                "designation": "EZY8691",
+                "carrier": "EZY",
+                "class": "ECONOMY",
+                "origin": "LGW",
+                "start": "2018-04-25 07:25:00",
+                "destination": "LPA",
+                "end": "2018-04-25 11:55:00",
+                "stops": 0
+              }
+            ]
+          },
+          {
+            "duration": 0,
+            "segments": [
+              {
+                "designation": "EZY8692",
+                "carrier": "EZY",
+                "class": "ECONOMY",
+                "origin": "LPA",
+                "start": "2018-05-09 12:35:00",
+                "destination": "LGW",
+                "end": "2018-05-09 16:55:00",
+                "stops": 0
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "bookingReference": {
+    "system": "ATCORE",
+    "thirdParty": "1111"
+  }
+}

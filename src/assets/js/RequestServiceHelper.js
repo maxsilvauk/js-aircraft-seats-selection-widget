@@ -3,7 +3,7 @@
 }());
 
 // async function
-export async function getRequestData(fetchUrl, method, body) {
+export async function getRequestData(fetchUrl, method='GET', body) {
 	if (method == 'GET') { 
 		return await (
 			await (fetch(fetchUrl, {

@@ -1,0 +1,42 @@
+{
+	"splashes" : [
+		{
+		  "_empty_": {
+		    "init": "appFunctions.splashScreenInit();",
+		    "callback": "",
+		    "content": "<div style='position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);opacity:1;filter: alpha(opacity=50);'>\n    <div class=\"splash-container\">\n        <div class=\"loader\"><\/div>\n    <\/div>\n<\/div>",
+		    "breakout": false
+		  },
+		  "filter": {
+		    "init": "",
+		    "callback": "",
+		    "content": "<div style='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);opacity:1;filter: alpha(opacity=50);'>\n\t<div class=\"splash-container content-container filter-splash\">\n        <div class=\"loader\"><\/div>\n    <\/div>\n<\/div>",
+		    "breakout": false
+		  },
+		  "Booking Retrieval": {
+		    "init": "",
+		    "callback": "",
+		    "content": "<div style='position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);opacity:1;filter: alpha(opacity=50);'>\n    <div class=\"splash-container\">\n        <div class=\"loader\"><\/div>\n        Please wait whilst we check your booking\n    <\/div>\n<\/div>",
+		    "breakout": false
+		  },
+		  "fallback_splash": {
+		    "init": "",
+		    "callback": "",
+		    "content": "<div style='position:fixed;width:100%;height:100%;z-index:1'><table style='vertical-align: middle;height: 100%;\tmargin: 0 auto; '><tr><td> <div style='background-color:#FFFFFF; padding: 20px 50px; border-radius:20px;'>\t\t<img src=' https:\/\/merch-demo.webvoyage.co.uk\/sharedimages\/Miscellaneous\/searching' style='display:block'\/>\t<\/div><\/td><\/tr><\/table><\/div><div style='position:fixed;top:0;left:0;width:100%;height:100%;background-color:#111111;opacity:0.4;filter: alpha(opacity=40);z-index:0'><\/div>",
+		    "breakout": false
+		  },
+		  "Standard": {
+		    "init": "",
+		    "callback": "",
+		    "content": "<div style='position:fixed;width:100%;height:100%;z-index:1'><table style='vertical-align: middle;height: 100%;\tmargin: 0 auto; '><tr><td> <div style='background-color:#FFFFFF; padding: 20px 50px; border-radius:20px;'>\t\t<img src=' https:\/\/merch-demo.webvoyage.co.uk\/sharedimages\/Miscellaneous\/searching' style='display:block'\/>\t<\/div><\/td><\/tr><\/table><\/div><div style='position:fixed;top:0;left:0;width:100%;height:100%;background-color:#111111;opacity:0.4;filter: alpha(opacity=40);z-index:0'><\/div>",
+		    "breakout": false
+		  },
+		  "Default Splash": {
+		    "init": "appFunctions.splashScreenInit();",
+		    "callback": "",
+		    "content": "<div style='position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);opacity:1;filter: alpha(opacity=50);'>\n    <div class=\"splash-container\">\n        <div class=\"loader\"><\/div>\n    <\/div>\n<\/div>",
+		    "breakout": false
+		  }
+		}
+	]
+}

@@ -1,0 +1,29 @@
+{
+	"seat_selection" : [
+		{
+		  "seatSelection.pax.type.child": "Child",
+		  "seatSelection.pax.type.adult": "Adult",
+		  "seatSelection.seat.infant": "Suitable for adult with infant",
+		  "seatSelection.month.nov": "November",
+		  "seatSelection.nav.previous": "< Previous flight",
+		  "seatSelection.month.jan": "January",
+		  "seatSelection.month.sep": "September",
+		  "seatSelection.month.mar": "March",
+		  "seatSelection.month.oct": "October",
+		  "seatSelection.month.apr": "April",
+		  "seatSelection.month.may": "May",
+		  "seatSelection.nav.basketBtn": "Add to basket",
+		  "seatSelection.month.aug": "August",
+		  "skip.selectionMessage": "You have not made a selection, are you sure you want to continue?",
+		  "seatSelection.exit.text": "EXIT",
+		  "seatSelection.currency.symbol": "\u00a3",
+		  "seatSelection.pax.plusInfant": "+ Infant",
+		  "seatSelection.nav.back": "< Back",
+		  "seatSelection.month.july": "July",
+		  "seatSelection.nav.next": "Continue >",
+		  "seatSelection.month.jun": "June",
+		  "seatSelection.month.feb": "February",
+		  "seatSelection.month.dec": "December"
+		}
+	]
+}

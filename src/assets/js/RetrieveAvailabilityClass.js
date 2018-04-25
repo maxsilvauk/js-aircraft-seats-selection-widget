@@ -17,6 +17,8 @@ export default class RetrieveAvailabilityClass {
     constructor(config) {
         this.config = config;
         this.config.siteUrl = 'https://'+this.config.siteUrl;
+        this.emulate = false;
+        this.emulateUrl = `${location.protocol}//${location.host}/json/`;
         this.loader = document.getElementById('loader');
         this.seatResults = document.getElementById('seat-results');
         this.iFrame = document.createElement('iframe');
@@ -42,7 +44,8 @@ export default class RetrieveAvailabilityClass {
      **/
     setHistoricBasketUrl() {
         const fetchUrl = `${this.config.siteUrl}/jam/historicbasket?ref=${this.config.ref}&system=${this.config.system}&surname=${this.config.surname}`;
-        this.getHistoricBasket(fetchUrl);
+        const emulateUrl = `${this.emulateUrl}historic_basket.json`;
+        this.getHistoricBasket(fetchUrl, emulateUrl);
     }
 
     /**
@@ -55,7 +58,8 @@ export default class RetrieveAvailabilityClass {
     setAirportsUrl() {
         this.config.airportsJam = `/jam/airports`;
         const fetchUrl = `${this.config.siteUrl}${this.config.airportsJam}`;
-        this.getAirports(fetchUrl);
+        const emulateUrl = `${this.emulateUrl}airports.json`;
+        this.getAirports(fetchUrl, emulateUrl);
     }
 
     /**
@@ -68,7 +72,8 @@ export default class RetrieveAvailabilityClass {
     setSeatLanguagesUrl() {
         this.config.seatLangJam = `/jam/languages/seat-selection/results`;
         const fetchUrl = `${this.config.siteUrl}${this.config.seatLangJam}`;
-        this.getSeatLanguages(fetchUrl);
+        const emulateUrl = `${this.emulateUrl}seat_selection.json`;
+        this.getSeatLanguages(fetchUrl, emulateUrl);
     }
 
     /**
@@ -81,7 +86,8 @@ export default class RetrieveAvailabilityClass {
     setSplashesUrl() {
         this.config.splashesJam = `/jam/splashes`;
         const fetchUrl = `${this.config.siteUrl}${this.config.splashesJam}`;
-        this.getSplashes(fetchUrl);
+        const emulateUrl = `${this.emulateUrl}splashes.json`;
+        this.getSplashes(fetchUrl, emulateUrl);
     }
 
     /**
@@ -93,19 +99,24 @@ export default class RetrieveAvailabilityClass {
      **/
     setSearchUrl() {
         const fetchUrl = `${this.config.siteUrl}/jam/search`;
-        this.getSearch(fetchUrl);
+        const emulateUrl = `${this.emulateUrl}search.json`;
+        this.getSearch(fetchUrl, emulateUrl);
     }
 
     /**
      * getHistoricBasket()
      *
      * @param { string } fetchUrl
-     * @return setSearchUrl()
+     * @param { string } emulateUrl
+     * @return setAirportsUrl()
      *
      * Get the historic basked data.
      **/
-    async getHistoricBasket(fetchUrl) {
-        let response = await getRequestData(fetchUrl);
+    async getHistoricBasket(fetchUrl, emulateUrl) {
+        let response = (!this.emulate) ?  
+            await getRequestData(fetchUrl) : 
+            await getRequestData(emulateUrl);
+
         if (!response.errors) {
             this.setAirportsUrl();
         }
@@ -115,11 +126,13 @@ export default class RetrieveAvailabilityClass {
      * getAirports()
      *
      * @param { string } fetchUrl
-     * @return setSearchUrl()
+     * @param { string } emulateUrl
+     * @return setSeatLanguagesUrl()
      *
      * Get airports data.
      **/
-    getAirports(fetchUrl) {
+    getAirports(fetchUrl, emulateUrl) {
+        fetchUrl = (!this.emulate) ? fetchUrl  : emulateUrl;
         putData(fetchUrl);
         this.setSeatLanguagesUrl();
     }
@@ -128,11 +141,13 @@ export default class RetrieveAvailabilityClass {
      * getSeatLanguages()
      *
      * @param { string } fetchUrl
+     * @param { string } emulateUrl
      * @return setSplashesUrl()
      *
      * Get airports data.
      **/
-    getSeatLanguages(fetchUrl) {
+    getSeatLanguages(fetchUrl, emulateUrl) {
+        fetchUrl = (!this.emulate) ? fetchUrl  : emulateUrl;
         putData(fetchUrl);
         this.setSplashesUrl();
     }
@@ -141,11 +156,13 @@ export default class RetrieveAvailabilityClass {
      * getSplashes()
      *
      * @param { string } fetchUrl
+     * @param { string } emulateUrl
      * @return setSearchUrl()
      *
      * Get airports data.
      **/
-    getSplashes(fetchUrl) {
+    getSplashes(fetchUrl, emulateUrl) {
+        fetchUrl = (!this.emulate) ? fetchUrl  : emulateUrl;
         putData(fetchUrl);
         this.setSearchUrl();
     }
@@ -154,12 +171,16 @@ export default class RetrieveAvailabilityClass {
      * getSearch()
      *
      * @param { string } fetchUrl
+     * @param { string } emulateUrl
      * @return void
      *
      * Get the search data.
      **/
-    async getSearch(fetchUrl) {
-        let response = await getRequestData(fetchUrl, 'POST', {'journey':'seats'});
+    async getSearch(fetchUrl, emulateUrl) {
+        let response = (!this.emulate) ? 
+            await getRequestData(fetchUrl, 'POST', {'journey':'seats'}) : 
+            await getRequestData(emulateUrl);
+        
         if (!response.errors) {
             this.seats = new Seats(response.results, null, {
                 selectionRequired: () => this.selectionRequired(),
