@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "echo \"Build: Building production env!\" && webpack -p --progress",
-    "start": "echo \"Start: Booting up web server and watch!\" && webpack-dev-server --output-public-path=/dist/js"
+    "start": "echo \"Start: Booting up web server and watch!\" && webpack-dev-server --output-public-path=/dist/js",
+    "test": "echo \"Test: Booting up Jest test cases!\" &&  jest"
   },
   "eslintConfig": {
     "extends": [
@@ -39,6 +40,7 @@
   "author": "Paxport",
   "license": "ISC",
   "devDependencies": {
+    "jest": "^22.4.3",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-polyfill": "^6.26.0",
