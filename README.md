@@ -1,11 +1,6 @@
 <h1 align="center">Seating Widget</h1>
 <br>
 <p align="center">
-  <a href="https://gitpoint.co/">
-    <img alt="Paxport" title="Paxport" src="http://resources.mynewsdesk.com/image/upload/t_open_graph_image/slgrkmbsgubxld6iwcoija.jpg" width="350">
-  </a>
-</p>
-<p align="center">
     <img src="https://img.shields.io/badge/node-8.0.0^-blue.svg" />
     <img src="https://img.shields.io/badge/npm-v5.5.1^-blue.svg" />
     <img src="https://img.shields.io/badge/webpack-v3.8.1^-blue.svg" />
